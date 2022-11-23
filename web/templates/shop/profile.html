@@ -1,0 +1,571 @@
+{% extends 'web/shop/base.html' %}
+{% load static %}
+{% block head %}
+
+{% endblock head %}
+{% block content %}
+
+{% include 'web/shop/navbar.html' %}
+
+<section id="profile">
+    <section class="wrapper">
+        <div class="p-left">
+            <div class="view-profile">
+                <div class="content">
+                    {% if app_user.firstname %}
+                    <h3>{{ app_user.name }}</h3>
+                    {% endif %}
+                    {% if app_user.email %}
+                    <p>{{ app_user.email }}</p>
+                    {% endif %}
+                    <p>+973 {{ user_phone }}</p>
+                </div>
+            </div>
+            <ul>
+                <li class="side-menu">
+                    <a href="#">
+                        <div class="img-icon">
+                            <img src="{% static 'web/shop/images/loc.png' %}" alt="Location-Image">
+                        </div>
+                        <span class="text">Address</span>
+                    </a>
+                </li>
+                <li class="active side-menu">
+                    <a href="#">
+                        <div class="img-icon">
+                            <img src="{% static 'web/shop/images/donation.png' %}" alt="Order-Image">
+                        </div>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="side-menu">
+                    <a href="#">
+                        <div class="img-icon">
+                            <img src="{% static 'web/shop/images/wallet.png' %}" alt="Wallet-Image">
+                        </div>
+                        <span class="text">My Wallet</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="cart">
+            {% if addresses %}
+            <form action="">
+                <ul>
+                    {% for address in addresses %}
+                    <li>
+                        <div class="first">
+                            <label class="container">
+                                {% if address.is_active %}
+                                <input type="radio" name="radio" checked value="{{ address.pk }}"
+                                    class="selected-address">
+                                {% else %}
+                                <input type="radio" name="radio" value="{{ address.pk }}" class="selected-address">
+                                {% endif %}
+                                <span class="check"></span>
+                            </label>
+                            <div class="address">
+                                <p>Road No: <span>{{address.road_number|default:"-"}}</span></p>
+                                <p>Block No: <span>{{address.block_number|default:"-"}}</span></p>
+                                <p>Building No: <span>{{address.building_number|default:"-"}}</span></p>
+                                <p>Villa/Flat No: <span>{{address.villa_or_flat_no|default:"-"}}</span></p>
+                                <p>Area/Additional directions: <span>{{ address.additional_directions|default:"-" }}</span></p>
+                            </div>
+                            <!-- <div class="close-icon">
+                                        <a href="{% url 'advertisers:delete_address' pk=address.pk %}" class="cancel address-remove" data-pk="{{address.pk}}"><span class="icon icon-cancel"></span></a>
+                                        <a href="" class="edit address-edit"><span class="icon icon-edit"></span></a>
+                                    </div> -->
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <input type="submit" value="" />
+            </form>
+            {% else %}
+            <div class="p-right empty-address">
+                <p>You don't have an Address</p>
+                <div class="img-container">
+                    <img src="{% static 'web/shop/images/empty-loc.png' %}" alt="Image" />
+                </div>
+                <!-- <a href="#" class="add">Add Location</a> -->
+            </div>
+            {% endif %}
+        </div>
+        <div class="status-product">
+            {% if orders %}
+            {% for order in orders %}
+            <div class="confirm-order order">
+                <div class="order-id">
+                    <span>Order I D:</span>
+                    <span>{{ order.order_id }}</span>
+                </div>
+                <ul>
+                    <li>
+                        <div class="left">
+                            <h3>{{ order.campaign }}</h3>
+                            <!-- <p>{{ order.date_updated }}</p> -->
+                            <p>{% for item in order.items %}{{ item.name }}*{{ item.qty }} &nbsp {% endfor %}</p>
+                        </div>
+                        <div class="right">
+                            <span class="qty">BD {{ order.total_amount }}</span>
+                            <!-- <a href="#">Reorder</a> -->
+                        </div>
+                    </li>
+                </ul>
+                {% if order.order_status == "cancelled" %}
+                <div class="total">
+                    <a href="#">
+                        <span>Order Status</span>
+                        <span style="color:red; font-size:14px;">Cancelled</span>
+                    </a>
+                </div>
+                {% else %}
+                <div class="total">
+                    <a href="#">
+                        <span>Order Status</span>
+                        <span class="zmdi zmdi-chevron-down"></span>
+                    </a>
+                </div>
+                <div class="slider">
+                    <div class="status-list">
+                        {% if order.order_status == "pending" %}
+                        <span class="active">Ordered</span>
+                        {% else %}
+                        <span>Ordered</span>
+                        {% endif %}
+                        {% if order.order_status == "shipped" %}
+                        <span class="active">Shipped</span>
+                        {% else %}
+                        <span>Shipped</span>
+                        {% endif %}
+                        {% if order.order_status == "delivered" %}
+                        <span class="active">Delivered</span>
+                        {% else %}
+                        <span>Delivered</span>
+                        {% endif %}
+                    </div>
+                    <div class="dots">
+                        {% if order.order_status == "delivered" %}
+                        <span class="d1 zmdi zmdi-check active"></span>
+                        <span class="d2 zmdi zmdi-check active"></span>
+                        <span class="d3 zmdi zmdi-check active"></span>
+                        {% elif order.order_status == "shipped" %}
+                        <span class="d1 zmdi zmdi-check active"></span>
+                        <span class="d2 zmdi zmdi-check active"></span>
+                        <span class="d3"></span>
+                        {% elif order.order_status == "pending" %}
+                        <span class="d1 zmdi zmdi-check active"></span>
+                        <span class="d2"></span>
+                        <span class="d3"></span>
+                        {% endif %}
+                    </div>
+                    <div class="confirm">
+                        {% if order.order_status == "pending" %}
+                        <div class="tri confirm-tri" style="left: 5%;"></div>
+                        {% elif order.order_status == "shipped" %}
+                        <div class="tri confirm-tri" style="left: 48%;"></div>
+                        {% elif order.order_status == "delivered" %}
+                        <div class="tri confirm-tri" style="left: 92%;"></div>
+                        {% endif %}
+                        <div class="c-left">
+                            <span>Your Order has been confirmed</span>
+                        </div>
+                        <div class="c-right">
+                            <span>Updated on: </span>
+                            <span>{{ order.date_updated }}</span>
+                        </div>
+                    </div>
+                    <div class="order-details">
+                        {% if order.cashback %}
+                        <div class="cashback">
+                            {% if order.amount_to_refer %}
+                            <div class="c-left">
+                                <span>{{ order.refer_name }} gets {{ order.amount_to_refer }}</span>
+                            </div>
+                            {% endif %}
+                            {% if order.amount_to_user %}
+                            <div class="c-right">
+                                <span>You get {{ order.amount_to_user }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        <hr>
+                        <div class="subtotal-text">
+                            <span>subtotal</span>
+                        </div>
+                        {% for item in order.items %}
+                        <div class="product-details">
+                            <div class="product-name">
+                                <a href="{% url 'web:product_details' pk=item.pk %}"><span>{{ item.name }} * {{ item.qty }}</span></a>
+                            </div>
+                            <div class="product-subtotal">
+                                <span>BD {{ item.sub_total }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <hr>
+                        <div class="total-">
+                            <div>Total</div>
+                            <div>BD {{ order.total }}</div>
+                        </div>
+                        <div class="delivery-charge">
+                            <div>Delivery Charge</div>
+                            <div>BD {{ order.delivery_charge }}</div>
+                        </div>
+                        {% if order.cashback_used > 0 %}
+                        <div class="cashback-used">
+                            <div>Cashback Used</div>
+                            <div>BD {{ order.cashback_used }}</div>
+                        </div>
+                        {% endif %}
+                        <hr>
+                        <div class="total-amount">
+                            <div>Total Amount</div>
+                            <div>BD {{ order.total_amount }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="p-right empty-order">
+                <p>You don't have any orders yet</p>
+                <div class="img-container">
+                    <img src="{% static 'web/shop/images/empaty-address.png' %}" alt="Image" />
+                </div>
+                <a href="{% if next_login %}{{ next_login }}{% else %}{% url 'web:public_index' %}{% endif %}"
+                    class="add">Continue Shopping</a>
+            </div>
+            {% endif %}
+        </div>
+        <div class="wallet">
+            <div class="top">
+                <div class="left">
+                    <div>
+                        <div class="image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="54.223" height="55.974"
+                                viewBox="0 0 54.223 55.974">
+                                <g id="wallet_3_" data-name="wallet(3)" transform="translate(-8.008 0)">
+                                    <g id="Group_20310" data-name="Group 20310" transform="translate(8.008 0)">
+                                        <g id="Group_20309" data-name="Group 20309" transform="translate(0)">
+                                            <path id="Path_37090" data-name="Path 37090"
+                                                d="M60.438,32.786H59.6V25.241a3.543,3.543,0,0,0-1.5-2.895V21.319a2.706,2.706,0,0,0-2.7-2.7H54.77L57.163,15.1a2.586,2.586,0,0,0-.68-3.589L40.245.45a2.583,2.583,0,0,0-3.589.68L22.64,21.7h-3.9l.941-9.525a.283.283,0,0,1,.178-.237,6.064,6.064,0,0,0,2.958-2.4.281.281,0,0,1,.265-.124l6.117.6a.8.8,0,1,0,.157-1.587l-6.117-.6a1.867,1.867,0,0,0-1.768.855A4.458,4.458,0,0,1,19.3,10.441a1.864,1.864,0,0,0-1.2,1.573L17.137,21.7H16.12L17.608,6.631a.988.988,0,0,1,1.08-.886L31.05,6.965a.8.8,0,0,0,.157-1.587L18.845,4.157a2.587,2.587,0,0,0-2.825,2.317l-1.2,12.143H12.778a2.706,2.706,0,0,0-2.7,2.7v.7a3.549,3.549,0,0,0-2.068,3.221V52.429a3.549,3.549,0,0,0,3.545,3.545h44.5A3.549,3.549,0,0,0,59.6,52.429V44.884h.838a1.8,1.8,0,0,0,1.793-1.793V34.579A1.8,1.8,0,0,0,60.438,32.786ZM55.4,20.212h0A1.108,1.108,0,0,1,56.5,21.319v.406a3.555,3.555,0,0,0-.447-.029H52.671l1.012-1.485ZM37.974,2.028a.982.982,0,0,1,.633-.414,1,1,0,0,1,.186-.018.982.982,0,0,1,.554.172L55.585,12.833a.989.989,0,0,1,.26,1.373l-5.1,7.489H49.516l2.5-3.672a1.865,1.865,0,0,0,.087-1.978,4.458,4.458,0,0,1-.534-2.751,1.865,1.865,0,0,0-.807-1.79L42.346,5.768a1.865,1.865,0,0,0-1.961-.1,4.459,4.459,0,0,1-2.756.509,1.888,1.888,0,0,0-1.809.8L25.8,21.7H24.57Zm.351,13.544A6.581,6.581,0,0,0,31.768,21.7H27.725L37.138,7.884h0a.285.285,0,0,1,.233-.125l.036,0a6.064,6.064,0,0,0,3.748-.692.281.281,0,0,1,.292.018l8.418,5.737a.282.282,0,0,1,.123.265,6.062,6.062,0,0,0,.727,3.742.283.283,0,0,1-.016.3L47.586,21.7h-2.7A6.582,6.582,0,0,0,38.325,15.572ZM43.283,21.7H33.367a4.978,4.978,0,0,1,9.915,0Zm-31.612-.377a1.109,1.109,0,0,1,1.107-1.107h1.885L14.517,21.7H11.671ZM9.6,25.241a1.952,1.952,0,0,1,1.95-1.95h44.5a1.952,1.952,0,0,1,1.95,1.95v2.213H9.6Zm48.4,27.188a1.952,1.952,0,0,1-1.95,1.95h-44.5a1.952,1.952,0,0,1-1.95-1.95V50.216h4.3a.8.8,0,1,0,0-1.6H9.6V29.049h48.4v3.737H50.422a6.056,6.056,0,0,0-5.441,3.409l-.01.02c-.008.017-.016.035-.024.052a6.015,6.015,0,0,0-.3.771v0a6.051,6.051,0,0,0,5.777,7.844H58v3.737H19.011a.8.8,0,1,0,0,1.6H58.005Zm2.631-9.338a.2.2,0,0,1-.2.2H50.422a4.458,4.458,0,0,1-3.916-2.333q-.051-.095-.1-.192-.094-.195-.169-.4a4.459,4.459,0,0,1,0-3.06q.075-.2.169-.4.047-.1.1-.192a4.458,4.458,0,0,1,3.916-2.333H60.438a.2.2,0,0,1,.2.2v8.512Z"
+                                                transform="translate(-8.008 0)" fill="#468e77" />
+                                        </g>
+                                    </g>
+                                    <g id="Group_20312" data-name="Group 20312" transform="translate(47.373 35.599)">
+                                        <g id="Group_20311" data-name="Group 20311">
+                                            <path id="Path_37091" data-name="Path 37091"
+                                                d="M371.317,325.627a3.236,3.236,0,1,0,3.236,3.236A3.24,3.24,0,0,0,371.317,325.627Zm0,4.877a1.641,1.641,0,1,1,1.641-1.641A1.643,1.643,0,0,1,371.317,330.5Z"
+                                                transform="translate(-368.081 -325.627)" fill="#468e77" />
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <h3>My Wallet</h3>
+                        <p>Total Balance</p>
+                    </div>
+                </div>
+                <div class="right">
+                    <h1>BD {{ app_user.balance }}</h1>
+                </div>
+            </div>
+            <div class="bottom">
+                <div>
+                    <div>
+                        <div class="image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="61.5" height="62.008"
+                                viewBox="0 0 61.5 62.008">
+                                <g id="earn" transform="translate(0 0.369)">
+                                    <g id="Group_20315" data-name="Group 20315" transform="translate(0 39.497)">
+                                        <g id="Group_20306" data-name="Group 20306">
+                                            <g id="Group_20305" data-name="Group 20305">
+                                                <path id="Path_37088" data-name="Path 37088"
+                                                    d="M60.748,311.767a4.364,4.364,0,0,0-3.548-1.914,4.319,4.319,0,0,0-2.038.513l-11.625,6.261a4.612,4.612,0,0,0-4.074-6.773H28.045a11.974,11.974,0,0,0-15.067,0H0v2.05H12.3v15.375H0v2.05H40.783a5.1,5.1,0,0,0,2.842-.861l15.959-10.639A4.363,4.363,0,0,0,60.748,311.767Zm-2.3,4.355L42.489,326.765a3.058,3.058,0,0,1-1.706.513H14.35V311.364a9.942,9.942,0,0,1,12.658.293,1.025,1.025,0,0,0,.667.246H39.462a2.562,2.562,0,1,1,0,5.125H28.7a1.025,1.025,0,1,0,0,2.05H43.05a1.025,1.025,0,0,0,.486-.122l12.6-6.784a2.294,2.294,0,0,1,2.313,3.95Z"
+                                                    transform="translate(0 -307.186)" fill="#468e77" />
+                                            </g>
+                                        </g>
+                                        <g id="Group_20308" data-name="Group 20308" transform="translate(4.101 11.894)">
+                                            <g id="Group_20307" data-name="Group 20307">
+                                                <path id="Path_37089" data-name="Path 37089"
+                                                    d="M35.075,400a3.075,3.075,0,1,0,3.075,3.075A3.075,3.075,0,0,0,35.075,400Zm0,4.1a1.025,1.025,0,1,1,1.025-1.025A1.025,1.025,0,0,1,35.075,404.1Z"
+                                                    transform="translate(-32 -400.002)" fill="#468e77" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                    <g id="Group_20314" data-name="Group 20314" transform="translate(17.421 -0.369)">
+                                        <g id="Group_20292" data-name="Group 20292"
+                                            transform="translate(13.329 21.011)">
+                                            <g id="Group_20291" data-name="Group 20291">
+                                                <path id="Path_37083" data-name="Path 37083"
+                                                    d="M247.175,160A7.183,7.183,0,0,1,240,167.177v2.05A9.235,9.235,0,0,0,249.225,160Z"
+                                                    transform="translate(-240 -160.002)" fill="#468e77" />
+                                            </g>
+                                        </g>
+                                        <g id="Group_20294" data-name="Group 20294" transform="translate(4.103 11.784)">
+                                            <g id="Group_20293" data-name="Group 20293">
+                                                <path id="Path_37084" data-name="Path 37084"
+                                                    d="M168,97.227h2.05a7.183,7.183,0,0,1,7.175-7.175V88A9.235,9.235,0,0,0,168,97.227Z"
+                                                    transform="translate(-168 -88.002)" fill="#468e77" />
+                                            </g>
+                                        </g>
+                                        <g id="Group_20296" data-name="Group 20296" transform="translate(9.225 15.885)">
+                                            <g id="Group_20295" data-name="Group 20295">
+                                                <path id="Path_37085" data-name="Path 37085"
+                                                    d="M213.925,124.909l-3.367-.561a.64.64,0,0,1,.1-1.271h2.821a.641.641,0,0,1,.64.64v.385h2.05v-.385a2.693,2.693,0,0,0-2.687-2.69H213.1V120h-2.05v1.025h-.385a2.69,2.69,0,0,0-.442,5.343l3.367.561a.64.64,0,0,1-.1,1.271h-2.823a.641.641,0,0,1-.64-.64v-.385h-2.05v.385a2.693,2.693,0,0,0,2.69,2.69h.385v1.025h2.05v-1.025h.385a2.69,2.69,0,0,0,.442-5.343Z"
+                                                    transform="translate(-207.969 -120.002)" fill="#468e77" />
+                                            </g>
+                                        </g>
+                                        <g id="Group_20298" data-name="Group 20298" transform="translate(0 0.51)">
+                                            <g id="Group_20297" data-name="Group 20297" transform="translate(0 0)">
+                                                <path id="Path_37086" data-name="Path 37086"
+                                                    d="M161.6,15.377v-8.2h-2.05V12a13.426,13.426,0,0,0-2.05-1.979V4.1h-2.05V8.693a13.222,13.222,0,0,0-6.15-1.516c-.346,0-.686.026-1.025.052V0h-2.05V7.549a13.3,13.3,0,0,0-2.05.653V6.152h-2.05V9.227h.1A13.425,13.425,0,0,0,139.052,12V4.1H137V15.377a13.325,13.325,0,1,0,24.6,0Zm-4.629,13.3a11.239,11.239,0,1,1-1.521-17.61V16.4h2.05V12.793A11.239,11.239,0,0,1,156.972,28.678Z"
+                                                    transform="translate(-135.973 -0.002)" fill="#468e77" />
+                                            </g>
+                                        </g>
+                                        <g id="Group_20300" data-name="Group 20300" transform="translate(19.168)">
+                                            <g id="Group_20299" data-name="Group 20299" transform="translate(0 0)">
+                                                <rect id="Rectangle_3846" data-name="Rectangle 3846" width="2.748"
+                                                    height="2.748" transform="translate(0)" fill="#468e77" />
+                                            </g>
+                                        </g>
+                                        <g id="Group_20302" data-name="Group 20302" transform="translate(5.428 2.748)">
+                                            <g id="Group_20301" data-name="Group 20301" transform="translate(0 0)">
+                                                <rect id="Rectangle_3847" data-name="Rectangle 3847" width="2.748"
+                                                    height="1.374" transform="translate(0 0)" fill="#468e77" />
+                                            </g>
+                                        </g>
+                                        <g id="Group_20304" data-name="Group 20304" transform="translate(27.68 2.563)">
+                                            <g id="Group_20303" data-name="Group 20303">
+                                                <path id="Path_37087" data-name="Path 37087"
+                                                    d="M362.245,20.974a1.025,1.025,0,0,0-.84-.84,3.965,3.965,0,0,1-3.258-3.257,1.025,1.025,0,0,0-2.021,0,3.965,3.965,0,0,1-3.258,3.257,1.025,1.025,0,0,0,0,2.021,3.965,3.965,0,0,1,3.258,3.257,1.025,1.025,0,0,0,2.021,0,3.965,3.965,0,0,1,3.258-3.257A1.025,1.025,0,0,0,362.245,20.974Zm-5.109,1.635a6.017,6.017,0,0,0-1.464-1.464,6.016,6.016,0,0,0,1.464-1.464,6.015,6.015,0,0,0,1.464,1.464A6.013,6.013,0,0,0,357.136,22.609Z"
+                                                    transform="translate(-352.013 -16.023)" fill="#468e77" />
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    <p>Total Cashback Earned</p>
+                    <h1>BD {{ app_user.earned }}</h3>
+                </div>
+                <div>
+                    <div class="image">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="58.23" height="58.232"
+                            viewBox="0 0 58.23 58.232">
+                            <g id="money_1_" data-name="money(1)" transform="translate(-0.007)">
+                                <g id="Group_20319" data-name="Group 20319" transform="translate(7.74 51.408)">
+                                    <g id="Group_20318" data-name="Group 20318">
+                                        <path id="Path_37092" data-name="Path 37092"
+                                            d="M69.944,452.334a1.136,1.136,0,1,0,.333.8A1.145,1.145,0,0,0,69.944,452.334Z"
+                                            transform="translate(-68.003 -452.001)" fill="#468e77" />
+                                    </g>
+                                </g>
+                                <g id="Group_20321" data-name="Group 20321" transform="translate(51.466 20.473)">
+                                    <g id="Group_20320" data-name="Group 20320">
+                                        <path id="Path_37093" data-name="Path 37093"
+                                            d="M454.4,180.341a1.134,1.134,0,1,0,.334.8A1.143,1.143,0,0,0,454.4,180.341Z"
+                                            transform="translate(-452.454 -180.008)" fill="#468e77" />
+                                    </g>
+                                </g>
+                                <g id="Group_20323" data-name="Group 20323" transform="translate(0.007)">
+                                    <g id="Group_20322" data-name="Group 20322">
+                                        <path id="Path_37094" data-name="Path 37094"
+                                            d="M57.9.333A1.138,1.138,0,0,0,57.1,0H29.122a1.137,1.137,0,0,0-1.137,1.137V4.391L17.2,7.28a1.137,1.137,0,0,0-.8,1.393l5.587,20.852-4.834,4.834a3.411,3.411,0,0,0-2.817-1.489H3.419A3.416,3.416,0,0,0,.007,36.282V54.82a3.416,3.416,0,0,0,3.412,3.412H14.337a3.418,3.418,0,0,0,3.311-2.591L19,56.82a5.73,5.73,0,0,0,3.767,1.412H57.1a1.137,1.137,0,0,0,1.137-1.137V1.137A1.138,1.138,0,0,0,57.9.333ZM15.474,54.82a1.139,1.139,0,0,1-1.137,1.137H3.419A1.139,1.139,0,0,1,2.281,54.82V36.282a1.139,1.139,0,0,1,1.137-1.137H7.741v13.1a1.137,1.137,0,1,0,2.275,0v-13.1h4.322a1.139,1.139,0,0,1,1.137,1.137V54.82ZM18.891,9.183l9.093-2.437v4.214l-.762.2a1.137,1.137,0,0,0-.8,1.393,3.066,3.066,0,0,1-2.165,3.751,1.137,1.137,0,0,0-.8,1.4L27.882,34.12H25.6l-1.176-4.6a1.136,1.136,0,0,0-.191-.4Zm9.093,6.994v9.6L25.91,18.092A5.328,5.328,0,0,0,27.985,16.176ZM44.324,55.957H22.767a3.456,3.456,0,0,1-2.272-.851l-2.747-2.4V36.98l4.965-4.965.9,3.523a1.137,1.137,0,0,0,1.1.856H47.077a1.592,1.592,0,0,1,0,3.185H35.62a1.137,1.137,0,1,0,0,2.275H50.637a1.592,1.592,0,1,1,0,3.185H35.62a1.137,1.137,0,1,0,0,2.275H48.2a1.592,1.592,0,1,1,0,3.185H35.62a1.137,1.137,0,1,0,0,2.275h8.7a1.592,1.592,0,1,1,0,3.184Zm11.639,0H47.847a3.853,3.853,0,0,0,0-3.185H48.2a3.864,3.864,0,0,0,3.456-5.6,3.864,3.864,0,0,0,2.081-6.032V26.728a1.137,1.137,0,1,0-2.275,0V39.67a3.868,3.868,0,0,0-.829-.09H50.6a3.864,3.864,0,0,0-3.522-5.459H45.249a5.443,5.443,0,1,0-4.276,0H34.755V12.5a5.354,5.354,0,0,0,4.078-4.078h8.555A5.354,5.354,0,0,0,51.466,12.5v3.536a1.137,1.137,0,1,0,2.275,0V11.48A1.137,1.137,0,0,0,52.6,10.342,3.066,3.066,0,0,1,49.541,7.28,1.137,1.137,0,0,0,48.4,6.143H37.818A1.137,1.137,0,0,0,36.68,7.28a3.066,3.066,0,0,1-3.062,3.062,1.137,1.137,0,0,0-1.137,1.137V34.121H30.259V2.276h25.7ZM43.111,32.284a3.168,3.168,0,1,1,3.168-3.168A3.172,3.172,0,0,1,43.111,32.284Z"
+                                            transform="translate(-0.007)" fill="#468e77" />
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <p>Cashback Used</p>
+                    <h1>BD {{ app_user.paid }}</h3>
+                </div>
+            </div>
+            <div class="transaction-history">
+                <div class="transaction">
+                    <div class="left">
+                        <span class="image"></span>
+                        <span class="content">
+                            Transaction History
+                        </span>
+                    </div>
+                    <div class="right">
+                        <span class="icon right-icon"><i class="zmdi zmdi-chevron-right button-right"></i></span>
+                        <span class="icon down-icon"><i class="zmdi zmdi-chevron-down button-down"></i></span>
+                    </div>
+                </div>
+                <div class="history">
+                    {% for cashback in cashbacks %}
+                        <div class="contents">
+                            <div class="first">
+                                {% if cashback.is_used %}
+                                    <span><i class="zmdi zmdi-long-arrow-up green"></i></span>
+                                {% else %}
+                                    <span><i class="zmdi zmdi-long-arrow-down red"></i></span>
+                                {% endif %}
+                                <span>{{ cashback.name }}</span>
+                            </div>
+                            <div class="second">
+                                <div class="type">
+                                    {{ cashback.transaction_type }}
+                                </div>
+                                <div class="date">
+                                    {{ cashback.date }}
+                                </div>
+                            </div>
+                            <div class="last">
+                                <div class="amount">
+                                    BD {{ cashback.amount }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- <div class="history">
+                <table id="data-table-basic" class="table table-striped table-vmiddle">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Cashback Type</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cashback in cashbacks %}
+                        <tr class="check_items_row">
+                            <td>{{cashback.name|default:"-"}}</td>
+                            <td>{{cashback.cashback_type|default:"-"}}</td>
+                            <td>{{cashback.amount|default:"-"}}</td>
+                            <td>{{cashback.date|default:"-"}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> -->
+        </div>
+    </section>
+</section>
+
+<script>
+    $("#profile div.p-left ul li:nth-child(2)").click(function (e) {
+        e.preventDefault();
+        $(this).addClass("active");
+        $("#profile div.p-left ul li:last-child").removeClass("active");
+        $("#profile div.p-left ul li:first-child").removeClass("active");
+        $("#profile div.cart").hide();
+        $("#profile div.status-product").show();
+        $("#profile div.wallet").hide();
+    });
+    $("#profile div.p-left ul li:first-child").click(function (e) {
+        e.preventDefault();
+        $("#profile div.p-left ul li:nth-child(2)").removeClass("active");
+        $("#profile div.p-left ul li:last-child").removeClass("active");
+        $(this).addClass("active");
+        $("#profile div.status-product").hide();
+        $("#profile div.wallet").hide();
+        $("#profile div.cart").show();
+    });
+    $("#profile div.p-left ul li:last-child").click(function (e) {
+        e.preventDefault();
+        $(this).addClass("active");
+        $("#profile div.p-left ul li:nth-child(2)").removeClass("active");
+        $("#profile div.p-left ul li:first-child").removeClass("active");
+        $("#profile div.status-product").hide();
+        $("#profile div.cart").hide();
+        $("#profile div.wallet").show();
+    });
+    $("#profile div.status-product div.deliver-order div.product-view div.right a.down").click(function (e) {
+        e.preventDefault();
+        $("#profile div.status-product div.deliver-order div.drop-down").show();
+    });
+    $("#profile div.status-product div.order div.total a").click(function (e) {
+        e.preventDefault();
+        var parent = $(this).parents(".status-product div.order")
+        parent.find('div.slider').slideToggle();
+    });
+
+    $("#profile div.wallet div.transaction-history div.transaction div.right .button-right").click(function (e) {
+        parent = $(this).parents('#profile div.wallet div.transaction-history div.transaction div.right')
+        parent.find(".right-icon").hide()
+        parent.find(".down-icon").show()
+        $('#profile div.wallet div.transaction-history div.history').show()
+
+    });
+    $("#profile div.wallet div.transaction-history div.transaction div.right .button-down").click(function (e) {
+        parent = $(this).parents('#profile div.wallet div.transaction-history div.transaction div.right')
+        parent.find(".right-icon").show()
+        parent.find(".down-icon").hide()
+        $('#profile div.wallet div.transaction-history div.history').hide()
+    });
+</script>
+
+<script>
+    $(document).on('click', '.selected-address', function () {
+        $this = $(this);
+        var url = '{% url "advertisers:choose_address" %}'
+        var address_pk = $(this).val()
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            data: {
+                address_pk: address_pk
+            },
+
+            success: function (data) {
+                var status = data['status'];
+                var message = data['message'];
+                if (status == "true") {
+                }
+            },
+
+            error: function (data) {
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later.";
+                swal(title, message, "error");
+            }
+        });
+    });
+    $(document).on('click', '.address-remove', function (e) {
+        e.preventDefault();
+        $this = $(this);
+        var url = $(this).attr("href");
+        var pk = $(this).attr("data-pk");
+        var isReload = $this.hasClass("reload");
+        parent = $(this).parents('#profile .wrapper .cart form ul li')
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            data: {
+                pk: pk
+            },
+
+            success: function (data) {
+                var status = data['status'];
+                if (status == "true") {
+                    parent.remove()
+                }
+
+            },
+
+            error: function (data) {
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later.";
+                swal(title, message, "error");
+            }
+        });
+    }); 
+</script>
+
+{% endblock content %}

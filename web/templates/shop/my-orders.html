@@ -1,0 +1,97 @@
+{% extends 'web/shop/base.html' %}
+{% load static %}
+{% block head %}
+
+{% endblock head %}
+{% block content %}
+
+{% include 'web/shop/navbar.html' %}
+
+<section id="order">
+    <section class="wrapper">
+        <div class="order-title">
+            <ul class="title">
+                <li>Items</li>
+                <li>Price</li>
+                <li>Status</li>
+            </ul> <!-- ( #order > section.wrapper > div.order-title > ul.title ) -->	
+        </div>	<!-- ( #order > section.wrapper > div.order-title ) -->	
+        <div class="order-content">
+            {% for item in items %}
+                <ul class="content">
+                    <li>
+                        <div class="img-container">
+                            {% if item.product.featured_image %}
+                                <a href="#">
+                                    <img src="{{ item.product.featured_image.url }}">
+                                </a>
+                            {% else %}
+                                <a href="#">
+                                    <img src="{% static 'web/shop/images/product-not-found.jpeg' %}" alt="Vel Metus">
+                                </a>
+                            {% endif %}
+                        </div>
+                        <span class="product-content name">{{ item.product.name }}</span>
+                    </li>
+                    <li>
+                        <span class="product-content price">BD {{ item.price }}</span>
+                    </li>
+                    <li>
+                        <span class="product-content status">{{ item.order_status }} on {{ item.date_updated }}</span>
+                        {% if item.order_status == "cancelled"%}
+                            <span class="color color-red"></span>
+                        {% elif item.order_status == "shipped"%}
+                            <span class="color color-green"></span>
+                        {% elif item.order_status == "pending"%}
+                            <span class="color color-orange"></span>
+                        {% elif item.order_status == "delivered"%}
+                            <span class="color color-blue"></span>
+                        {% endif %}
+                    </li>
+                </ul>	
+            {% endfor %}
+        </div>
+        <div class="next-order">
+            {% for item in items %}
+                <div class="second-order">
+                    <div class="img-container">
+                        {% if item.product.featured_image %}
+                            <a href="#">
+                                <img src="{{ item.product.featured_image.url }}">
+                            </a>
+                        {% else %}
+                            <a href="#">
+                                <img src="{% static 'web/shop/images/product-not-found.jpeg' %}" alt="Vel Metus">
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="product-content">
+                        <ul>
+                            <li>
+                                {{ item.product.name }}
+                            </li>
+                            <li>
+                                <span>Price :</span>
+                                <span>BD {{ item.price }}</span>
+                            </li>
+                            <li>
+                                {% if item.order_status == "cancelled" %}
+                                    <span class="color color-red"></span>
+                                {% elif item.order_status == "shipped" %}
+                                    <span class="color color-green"></span>
+                                {% elif item.order_status == "pending" %}
+                                    <span class="color color-orange"></span>
+                                {% elif item.order_status == "delivered" %}
+                                    <span class="color color-blue"></span>
+                                {% endif %}
+                                <span>{{ item.order_status }} on {{ item.date_updated }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}	
+        </div>			
+    </section>
+</section>
+
+{% endblock content %}

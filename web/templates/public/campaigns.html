@@ -1,0 +1,57 @@
+{% extends 'web/public/base.html' %}
+{% load static %}
+{% load el_pagination_tags %}
+{% block meta %}
+	<link rel="“canonical”" href="“{% url 'web:campaign_view' pk=instance.pk %}”">
+	<meta name="description" content="{{instance.description|truncatechars:140}}">
+	<meta name="keywords" content="OfferPedia,{{instance.title}},">
+	<meta name="robots" content="noodp">
+	<!-- <meta name="google-site-verification" content="2EIknjtmPaA5nE7j3noLXPah_x_bM2bFEHZRdqSYYMk">
+	<meta name="google-site-verification" content="ELX2btu3VElBKIdvkGj5ESBnJh_Dg9PnWjuCwVkPEkA"> -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="X-UA-Compatible" content="requiresActiveX=true">
+	<meta name="application-name" content="OfferPedia">
+	<meta name="msapplication-TileColor" content="#FFFFFF">
+	<meta name="msapplication-TileImage" content="{% static 'web/public/images/udacity_share.png' %}">
+	<!-- <meta name="msvalidate.01" content="4ADB80ADF9A5138C8BE3B23EE428B306"> -->
+	<meta name="theme-color" content="#294860">
+	<meta property="og:description" content="{{instance.description|truncatechars:140}}">
+	<meta property="og:image:height" content="">
+	<meta property="og:image:width" content="">
+	<meta property="og:image" content="https://in.udacity.com/">
+	<meta property="og:title" content="{{instance.title}} | OfferPedia">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="{% url 'web:campaign_view' pk=instance.pk %}">
+	<meta property="og:site_name" content="OfferPedia">
+	<meta name="twitter:description" content="">
+	<meta name="twitter:image:src" content="https://in.udacity.com/">
+	<meta name="twitter:title" content="{{instance.title}} | OfferPedia">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@udacity">
+	<meta name="twitter:creator" content="@udacity">
+{% endblock %}
+{% block content %}
+
+		<section id="list_main">
+			<section class="wrapper">
+				<div class="main_top">
+					<h3>Campaigns</h3>
+				</div>
+				<ul>
+					{% include page_template %}
+				</ul>
+				<br class="clear" />	
+			</section><!--#main > .wrapper-->			
+		</section><!--#main-->
+{% endblock %}
+{% block static %}
+	{% load static %}
+	<script src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
+    <script>
+    
+        $.endlessPaginate({
+            paginateOnScroll: true,
+        });
+    </script>
+    
+{% endblock %}

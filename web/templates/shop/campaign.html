@@ -1,0 +1,959 @@
+{% extends 'web/shop/base.html' %}
+{% load static %}
+{% block head %}
+<link rel="“canonical”" href="“{% url 'web:campaign_view' pk=instance.pk %}”">
+<meta name="description" content="{{instance.description|truncatechars:140}}">
+<meta name="keywords" content="OfferPedia,{{instance.title}},">
+<meta name="robots" content="noodp">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="X-UA-Compatible" content="requiresActiveX=true">
+<meta name="application-name" content="OfferPedia">
+<meta name="msapplication-TileColor" content="#FFFFFF">
+<meta name="msapplication-TileImage" content="{% static 'web/public/images/offerpedia_share.png' %}">
+<meta name="theme-color" content="#294860">
+<meta property="og:description" content="{{instance.description|truncatechars:140}}">
+<meta property="og:image:height" content="200">
+<meta property="og:image:width" content="200">
+<meta property="og:image"
+	content="{% if instance.featured_image %}{{root_url}}{{instance.featured_image.url}}{% endif %}">
+<meta property="og:title" content="{{instance.title}} | OfferPedia">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{% url 'web:campaign_view' pk=instance.pk %}">
+<meta property="og:site_name" content="OfferPedia">
+<meta name="twitter:description" content="{{instance.description}}">
+<meta name="twitter:title" content="{{instance.title}} | OfferPedia">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@offerpedia">
+<meta name="twitter:creator" content="@offerpedia">
+{% endblock head %}
+{% block content %}
+{% load main_template_tags %}
+
+<section id="home">
+	<section class="wrapper">
+		<header>
+			<div class="logo-container">
+				<h1 class="left"><a href="{{ index_page }}"><img src="{% static 'web/shop/images/logo.png' %}"
+							alt="Logo" /></a></h1>
+				<div class="search-container">
+					<form action="">
+						<input type="text" placeholder="search products" name="search" />
+						<button type="submit">
+							<i class="zmdi zmdi-search"></i>
+						</button>
+					</form>
+				</div>
+			</div>
+			<ul class="right">
+				{% if user.is_authenticated %}
+				<li>
+					<a href="#" class="profile">
+						<span class="icon icon-user"></span>
+						<span class="profile">Profile</span>
+					</a>
+				</li>
+				{% else %}
+				<li class="app-user-login">
+					<a href="" onclick="(function(e){e.preventDefault();})(event)" class="login-profile">
+						<span class="icon icon-user"></span>
+						<span class="profile">Profile</span>
+					</a>
+				</li>
+				{% endif %}
+				<li>
+					<a href="{% url 'orders:cart' %}?next={{ next_login }}" class="cart-icon">
+						<span class="icon icon-shopping-bag"></span>
+						<span class="cart-round cart-products-count">{{ cart_item_count|default:"0"}}</span>
+						<span class="bag">Bag</span></a>
+				</li>
+			</ul>
+			<div class="loginpop">
+				<div class="orders-placed">
+					<ul>
+						{% if not user.is_authenticated %}
+						<li class="app-user-login remove-loginpop">
+							<a href="#">
+								<span class="profile-view"><i class="zmdi zmdi-account-circle"></i></span>
+								<h1>Account</h1>
+							</a>
+						</li>
+						{% else %}
+						<li>
+							<a href="{% url 'web:my_profile' %}?next={{ next_login }}" class="remove-loginpop">
+								<span class="profile-view"><i class="zmdi zmdi-account-circle"></i></span>
+								<h1>Account</h1>
+							</a>
+						</li>
+						{% endif %}
+						{% if not user.is_authenticated %}
+						<li class="app-user-login remove-loginpop">
+							<a href="javascript:void(0)">
+								<span class="myorders"><i class="zmdi zmdi-mall"></i></span>
+								<h1>My Orders</h1>
+							</a>
+						</li>
+						{% else %}
+						<li>
+							<a href="{% url 'web:my_profile' %}?next={{next_login}}" class="remove-loginpop">
+								<span class="myorders"><i class="zmdi zmdi-mall"></i></span>
+								<h1>My Orders</h1>
+							</a>
+						</li>
+						{% endif %}
+
+						{% if not user.is_authenticated %}
+						<li class="app-user-login remove-loginpop">
+							<span class="logout"><i class="zmdi zmdi-square-right"></i></span>
+							<h1>Login</h1>
+						</li>
+						{% else %}
+						{% if is_not_redirect %}
+						<li>
+							<a href="{% url 'advertisers:logout' %}"
+								class="sbtn btn-default btn-icon waves-effect waves-circle waves-float remove-loginpop">
+								<span class="logout"><i class="zmdi zmdi-square-right"></i></span>
+								<h1>Logout</h1>
+							</a>
+						</li>
+						{% else %}
+						<li>
+							<a href="{% url 'advertisers:logout' %}?next={{next_login}}"
+								class="sbtn btn-default btn-icon waves-effect waves-circle waves-float remove-loginpop">
+								<span class="logout"><i class="zmdi zmdi-square-right"></i></span>
+								<h1>Logout</h1>
+							</a>
+						</li>
+						{% endif %}
+						{% endif %}
+					</ul>
+
+					<div class="tri"></div>
+				</div>
+			</div>
+		</header>
+		<section class="spotlight">
+			<div class="left">
+				<h1>{{ instance.title }}</h1>
+				<p>{{ instance.description }}</p>
+				{% if instance.contact_phone %}
+				<a href="tel:{{instance.contact_phone}}" class="button phone"><span class="phone"></span>
+					<b>Call</b></a>
+				{% endif %}
+				{% if instance.customizable_button_link %}
+				<a href="{{instance.customizable_button_link}}" class="button extra"><span
+						class="extra"></span><b>{{instance.customizable_button_text}}</b></a>
+				{% endif %}
+			</div>
+			<div class="right">
+				{% if instance.youtube_video_id %}
+					<div class="first_image">
+						<iframe height="400px" class="embed-responsive-item image1" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"
+							src="https://www.youtube.com/embed/{{instance.youtube_video_id}}/?autoplay=1"></iframe>
+					</div>
+				{% else %}
+					<div class="first_image">
+						<img class="overhero image1"
+							src='{% if instance.featured_image %} {{instance.featured_image.url}} {% else %} {% static "web/public/images/campaign-bg.jpg" %} {% endif %}'
+							alt="{{instance.title}}" />
+					</div>
+				{% endif %}
+			</div>
+		</section>
+	</section> <!-- ( #home > section.wrapper )  -->
+</section> <!-- ( #home ) -->
+
+{% if instance.user_benifit %}
+<section id="cashback-highlight">
+	<section class="wrapper">
+		<div class="cashback-details">
+			<div class="image">
+				<img src="{% static 'web/shop/images/cashback_get.png' %}" alt="">
+			</div>
+			<div class="content">
+				<p>Earn Cashback Every time when you and</p>
+				<p>your friends make a purchase</p>
+				<div class="button">
+					<a href="#campaign-product-list">Shop Now</a>
+				</div>
+			</div>
+			<div class="cashback">
+				<div class="you">
+					<span class="first">You Get</span>
+					<span class="amount">{{ instance.user_benifit }}</span>
+				</div>
+				{% if instance.referrer_benifit %}
+				<div class="friend">
+					{% if refferer %}
+					<span class="amount">{{ instance.referrer_benifit }}</span>
+					{% if refferer.firstname %}
+					<span class="second">{{ refferer.firstname }} gets</span>
+					{% elif refferer.name %}
+					<span class="second">{{ refferer.name }} gets</span>
+					{% else %}
+					<span class="second">friend gets</span>
+					{% endif %}
+					{% else %}
+					<span class="amount">{{ instance.referrer_benifit }}</span>
+					<span class="second">friend gets</span>
+					{% endif %}
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</section>
+</section>
+{% endif %}
+
+<section id="products">
+	<section class="wrapper">
+		<div class="title">
+			<small class="line"></small>
+			<h1>
+				<span class="our">Our Featured</span>
+				<span class="green">Products</span>
+			</h1>
+		</div>
+		<div class="round">
+			<ul class="category-list">
+				{% for category in categories %}
+				<li>
+					<!-- <img src="{{ category.image.url }}" alt=""> -->
+					<a href="#" class="product-category" category-pk="{{ category.pk }}" campaign-pk="{{instance.pk }}">
+						<img src="{{ category.get_image }}" alt="">
+						<!-- <svg viewBox="0 0 61.077 61.077" xmlns="http://www.w3.org/2000/svg"><g data-name="Group 20085"><g data-name="Group 20084"><path d="M30.536 38.889a1.193 1.193 0 101.193 1.193 1.193 1.193 0 00-1.193-1.193z" fill="#515151" data-name="Path 36849"/></g></g><g data-name="Group 20087"><g data-name="Group 20086"><path d="M61.077 32.924a3.583 3.583 0 00-3.1-3.546v-1.941a27.437 27.437 0 00-54.874 0v1.941a3.578 3.578 0 00.027 7.1A29.344 29.344 0 005.4 49.074a27.35 27.35 0 008.011 10.777 5.83 5.83 0 003.639 1.226h26.973a5.83 5.83 0 003.639-1.226 27.341 27.341 0 008.011-10.777 29.347 29.347 0 002.276-12.6 3.577 3.577 0 003.128-3.55zm-55.59-5.487a25.051 25.051 0 0150.1 0v1.909H53.2v-1.909a22.665 22.665 0 10-45.331 0v1.909H5.487zm17.894-2.863a1.193 1.193 0 001.193-1.193v-1.074a5.923 5.923 0 014.068 3.032 24.753 24.753 0 00-2.8 4.007h-8.306a5.968 5.968 0 014.652-7.037v1.073a1.193 1.193 0 001.193 1.192zm7.177 2.194q.054-.023.1-.05l4.232 1.411a1.193 1.193 0 00.755-2.263l-3.225-1.075a27.119 27.119 0 012.2-1.908l4.138 1.378a1.193 1.193 0 00.76-2.261l-2.4-.8c2.677-1.533 4.508-1.633 5.048-1.092.954.954-.213 4.887-4.216 9.24h-9.329a24.158 24.158 0 011.937-2.58zm13.572-2.444c1.045-2.583.947-4.681-.278-5.906-1.885-1.885-5.775-1.052-10.153 2.173l-.016.012-.008.006a29.426 29.426 0 00-3.319 2.869l-.031.031a8.29 8.29 0 00-5.442-3.572 6.988 6.988 0 011.727-2.871 1.193 1.193 0 00-1.687-1.687 9.388 9.388 0 00-2.488 4.477 8.345 8.345 0 00-7.319 9.489h-4.857v-1.908a20.279 20.279 0 1140.559 0v1.909h-9.734a21.067 21.067 0 003.046-5.022zM17.054 58.691a3.44 3.44 0 01-2.149-.7A26.464 26.464 0 015.518 36.5h9.557c.321 8.67 2.359 16.846 5.487 22.188zm14.678 0V44.853a1.193 1.193 0 00-2.386 0v13.838h-5.964c-3.3-4.812-5.573-13.342-5.919-22.2h26.15c-.346 8.858-2.614 17.388-5.919 22.2zm14.441-.7a3.44 3.44 0 01-2.149.7h-3.509C43.643 53.349 45.681 45.173 46 36.5h9.557a26.46 26.46 0 01-9.385 21.487zM57.5 34.117H3.579a1.193 1.193 0 010-2.386H57.5a1.193 1.193 0 110 2.386z" fill="#515151" data-name="Path 36850"/></g></g></svg> -->
+						<span>{{ category.name }}</span>
+					</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% if products %}
+		{% load el_pagination_tags %}
+		{% paginate 12 all_products %}
+		<div class="products-list new" id="campaign-product-list">
+			<ul>
+				{% if products %}
+				{% for product in products %}
+				<li data-pk="{{ product.pk }}">
+					<div class="left">
+						<a href="{% url 'web:product_details' pk=product.pk %}?next={{ next_login }}">
+							<div class="title">
+								<h5>{{ product.name }}</h5>
+								<div class="price">
+									{% if not product.free %}
+										<span>BD {{ product.price }}</span>
+										{% if product.mrp > 0 %}
+											<small class="mark">BD {{ product.mrp }}</small>
+										{% endif %}
+									{% else %}
+										<span>Free</span>
+									{% endif %}
+								</div>
+							</div>
+							<div class="content">
+								<!-- <p>{{ product.description }}</p> -->
+							</div>
+						</a>
+						{% if product.varients %}
+							{% if product.pk in user_cart_varients %}
+								<div class="radio-toolbar">
+									{% for varient in product.varients.all %}
+									{% if user_cart_varients|to_get_varient:product.pk == varient.varient_name %}
+										<input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}"
+											name="radio{{product.name}}" value="{{varient.varient_name}}" checked>
+									{% else %}
+										<input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}"
+											name="radio{{product.name}}" value="{{varient.varient_name}}">
+									{% endif %}
+										<label for="radio{{ varient.varient_name }}{{product.auto_id}}">{{ varient.varient_name}}</label>
+									{% endfor %}
+								</div>
+							{% else %}
+								<div class="radio-toolbar">
+									{% for varient in product.varients.all %}
+									{% if forloop.counter == 1 %}
+										<input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}"
+											name="radio{{product.name}}" value="{{varient.varient_name}}" checked>
+									{% else %}
+										<input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}"
+											name="radio{{product.name}}" value="{{varient.varient_name}}">
+									{% endif %}
+										<label for="radio{{ varient.varient_name }}{{product.auto_id}}">{{ varient.varient_name}}</label>
+									{% endfor %}
+								</div>
+							{% endif %}
+						{% endif %}
+					</div>
+					<div class="right">
+						<a href="{% url 'web:product_details' pk=product.pk %}?next={{ next_login }}">
+							{% if product.featured_image %}
+							<img src="{{ product.get_image }}" alt="Vel Metus">
+							{% else %}
+							<img src="{% static 'web/shop/images/product-not-found.jpeg' %}" alt="Vel Metus">
+							{% endif %}
+						</a>
+						{% if product.pk in user_cart_items %}
+						{% if product.stock >= 1 %}
+						<a href="{% url 'orders:add_to_cart' %}" data-id="add-to-cart" data-pk="{{ product.pk }}"
+							data-qty="1" class='add-to-cart btn btn-dark reload button' style="display: none;">Add to
+							Cart</a>
+						<div class="quantity" style="display: block;">
+							<a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus"
+								data-stock="{{ product.stock }}" data-pk="{{ product.pk }}"><span
+									class="icon icon-minus"></span></a>
+							<span class="number productQuantity">{{ user_cart_items|to_get_quantity:product.pk }}</span>
+							<a href="{% url 'orders:increment_quantity' %}" class="change-quantity" action="Plus"
+								data-stock="{{ product.stock }}" data-pk="{{ product.pk }}"><span
+									class="icon icon-plus"></span></a>
+						</div>
+						{% else %}
+						<a href="javascript:void(0)" class='button-stock' style="display: none;">No stock</a>
+						<div class="quantity" style="display: block;">
+							<a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus"
+								data-pk="{{ product.pk }}"><span class="icon icon-minus"></span></a>
+							<span class="number productQuantity">{{ user_cart_items|to_get_quantity:product.pk }}</span>
+							<a href="javascript:void(0)" class=""><span class="icon icon-plus"></span></a>
+						</div>
+						{% endif %}
+						{% else %}
+						{% if product.stock >= 1 %}
+						<a href="{% url 'orders:add_to_cart' %}" data-id="add-to-cart" data-pk="{{ product.pk }}"
+							data-qty="1" class='add-to-cart btn btn-dark reload button'>Add to Cart</a>
+						<div class="quantity">
+							<a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus"
+								data-pk="{{ product.pk }}"><span class="icon icon-minus"></span></a>
+							<span class="number productQuantity">1</span>
+							<a href="{% url 'orders:increment_quantity' %}" class="change-quantity" action="Plus"
+								data-stock="{{ product.stock }}" data-pk="{{ product.pk }}"><span
+									class="icon icon-plus"></span></a>
+						</div>
+						{% else %}
+						<a href="javascript:void(0)" class='button-stock'>No stock</a>
+						<div class="quantity">
+							<a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus"
+								data-pk="{{ product.pk }}"><span class="icon icon-minus"></span></a>
+							<span class="number productQuantity">1</span>
+							<a href="javascript:void(0)" class=""><span class="icon icon-plus"></span></a>
+						</div>
+						{% endif %}
+						{% endif %}
+					</div>
+				</li>
+				{% endfor %}
+				{% endif %}
+			</ul>
+		</div>
+
+		<div class="page" id="pagination">
+			{% get_pages %}
+			<ul class="pagination">
+				<li>{% show_pages %}</li>
+			</ul>
+		</div>
+		{% endif %}
+	</section>
+</section>
+
+<section id="view-cart-data">
+	<a href="{% url 'orders:cart' %}?next={{ next_login }}">
+		<div class="cart-data">
+			<div class="left"><span class="count">{{ cart_item_count }}</span><span class="price">{{ total }}</span>
+			</div>
+			<div class="right">View Cart</div>
+		</div>
+	</a>
+</section>
+
+{% if campaign_galleries %}
+	<section id="gallery">
+		<section class="wrapper">
+			<div class="title">
+				<small class="line"></small>
+				<h1>
+					<span class="our">Our</span>
+					<span class="green">Gallery</span>
+				</h1>
+			</div>
+			<ul class="gallery-images">
+				{% for gallery_image in campaign_galleries %}
+					<li><a href="#" class="image"><img src="{{ gallery_image.image.url }}" alt="Image1"></a></li>
+				{% endfor %}
+			</ul>
+		</section><!-- ( #gallery > section.wrapper)-->
+	</section> <!-- ( #gallery ) -->
+{% endif %}
+
+<section id="cashback-modal" class="model">
+	<div class="cancel">
+		<span class="cancel zmdi zmdi-close"></span>
+	</div>
+	<div class="form">
+		<p>Promocode <span>{{campaign_view.cashback_promocode}}</span></p>
+		<form class="address-form cashback ajax reload {% if redirect %}redirect{% endif %} form" method="post"
+			action="{% url 'web:submit_cashback' pk=campaign_view.pk %}" autocomplete="off">
+			{% csrf_token %}
+			<h3>Enter your details to claim cashback</h3>
+			<ul class="form-list">
+				<li class="form-list__row">
+					<label for="{{ cashback_form.name.id_for_label }}">{{ cashback_form.name.label }}
+						{% if cashback_form.name.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{cashback_form.name}}
+				</li>
+				<li class="form-list__row">
+					<label for="{{ cashback_form.phone.id_for_label }}">{{ cashback_form.phone.label }}
+						{% if cashback_form.phone.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{cashback_form.phone}}
+				</li>
+				<li class="form-list__row">
+					<label for="{{ cashback_form.cashback_code.id_for_label }}">{{ cashback_form.cashback_code.label }}
+						{% if cashback_form.cashback_code.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{cashback_form.cashback_code}}
+				</li>
+				<li>
+					<button type="button" class="button cancel">Cancel</button>
+					<button type="submit" class="button">Submit</button>
+				</li>
+			</ul>
+		</form>
+		{% if highlights %}
+		<h6>High Lights</h6>
+		<ul>
+			{% for highlight in highlights %}
+			<li>{{highlight}}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div>
+</section>
+
+<section id="voucher-modal" class="model">
+	<div class="cancel">
+		<span class="cancel zmdi zmdi-close"></span>
+	</div>
+	<div class="form">
+		<form class="address-form voucher-claim ajax reset {% if redirect %}redirect{% endif %} form" method="post"
+			action="{% url 'web:submit_voucher' pk=campaign_view.pk %}" autocomplete="off">
+			{% csrf_token %}
+			<h3>Enter your details to claim voucher</h3>
+			<ul class="form-list">
+				<li class="form-list__row">
+					<label for="{{ voucher_form.name.id_for_label }}">{{ voucher_form.name.label }}
+						{% if voucher_form.name.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{voucher_form.name}}
+				</li>
+				<li class="form-list__row">
+					<label for="{{ voucher_form.phone.id_for_label }}">{{ voucher_form.phone.label }}
+						{% if voucher_form.phone.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{voucher_form.phone}}
+				</li>
+				<li class="form-list__row">
+					<label for="{{ voucher_form.voucher_code.id_for_label }}">{{ voucher_form.voucher_code.label }}
+						{% if voucher_form.voucher_code.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{voucher_form.voucher_code}}
+				</li>
+				<li>
+					<button type="button" class="button cancel">Cancel</button>
+					<button type="submit" class="button">Submit</button>
+				</li>
+			</ul>
+		</form>
+		{% if voucher_highlights %}
+		<h6>High Lights</h6>
+		<ul>
+			{% for highlight in voucher_highlights %}
+			<li>{{highlight}}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div>
+</section>
+
+{% if instance.need_bill_amount_promo_code %}
+<section id="bill-modal" class="model">
+	<div class="cancel">
+		<span class="cancel zmdi zmdi-close"></span>
+	</div>
+	<div class="form">
+		<form class="address-form bill_amount_form ajax reset {% if redirect %}redirect{% endif %} form" method="post"
+			action="{% url 'web:submit_bill_amount_cashback' pk=campaign_view.pk %}" autocomplete="off">
+			{% csrf_token %}
+			<h3>Enter your details to claim cashback</h3>
+			<ul class="form-list">
+				<li class="form-list__row">
+					<label for="{{ bill_amount_cashback_form.name.id_for_label }}">{{bill_amount_cashback_form.name.label }}
+						{% if bill_amount_cashback_form.name.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{bill_amount_cashback_form.name}}
+				</li>
+				<li class="form-list__row">
+					<label for="{{ bill_amount_cashback_form.phone.id_for_label }}">{{bill_amount_cashback_form.phone.label }}
+						{% if bill_amount_cashback_form.phone.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{bill_amount_cashback_form.phone}}
+				</li>
+				<li>
+					<button type="button" class="button cancel">Cancel</button>
+					<button type="submit" class="button submit">Submit</button>
+				</li>
+			</ul>
+		</form>
+		{% if bill_amount_highlights %}
+		<h6>High Lights</h6>
+		<ul>
+			{% for highlight in bill_amount_highlights %}
+			<li>* {{highlight}}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div>
+</section>
+{% endif %}
+
+<section id="enquiry-modal" class="model">
+	<div class="cancel">
+		<span class="cancel zmdi zmdi-close"></span>
+	</div>
+	<div class="form">
+		<form class="address-form enquiry-form ajax reset {% if redirect %}redirect{% endif %} form" method="post"
+			action="" autocomplete="off">
+			{% csrf_token %}
+			<h3>Enquiry Form</h3>
+			<ul class="form-list">
+				<li class="form-list__row">
+					<label for="{{ enquiry_form.name.id_for_label }}">{{ enquiry_form.name.label }}
+						{% if enquiry_form.name.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{enquiry_form.name}}
+				</li>
+				<li class="form-list__row">
+					<label for="{{ enquiry_form.phone.id_for_label }}">{{ enquiry_form.phone.label }}
+						{% if enquiry_form.phone.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{enquiry_form.phone}}
+				</li>
+				<li class="form-list__row">
+					<label for="{{ enquiry_form.email.id_for_label }}">{{ enquiry_form.email.label }}
+						{% if enquiry_form.email.field.required %}
+						<small class="star">*</small>
+						{% endif %}
+					</label>
+					{{enquiry_form.email}}
+				</li>
+				<li>
+					<button type="button" class="button cancel">Cancel</button>
+					<button type="submit" class="button">Submit</button>
+				</li>
+			</ul>
+		</form>
+	</div>
+</section>
+
+{% include 'web/shop/side-cart.html' %}
+
+<!-- Modal -->
+<script>
+	function modalCashbackHight() {
+		let modal_hei = $("section#cashback-modal").innerHeight();
+		modal_hei = 0 - modal_hei - 200;
+		$("section#cashback-modal").css("top", modal_hei);
+		$("#overlay_page").css("display", "none");
+	}
+	$("section#cashback-modal .cancel").click(function () {
+		modalCashbackHight();
+	});
+	$("#modal_cashback_button").on("click", function (event) {
+		event.stopPropagation();
+		event.preventDefault();
+		$("section#cashback-modal").animate({ top: "20%" });
+	}
+	);
+	function modalVoucherHight() {
+		let modal_hei = $("section#voucher-modal").innerHeight();
+		modal_hei = 0 - modal_hei - 200;
+		$("section#voucher-modal").css("top", modal_hei);
+		$("#overlay_page").css("display", "none");
+	}
+	$("section#voucher-modal .cancel").click(function () {
+		modalVoucherHight();
+	});
+	$("#modal_voucher_button").on("click", function (event) {
+		event.stopPropagation();
+		event.preventDefault();
+		$("section#voucher-modal").animate({ top: "20%" });
+	}
+	);
+	function modalBillHight() {
+		let modal_hei = $("section#bill-modal").innerHeight();
+		modal_hei = 0 - modal_hei - 200;
+		$("section#bill-modal").css("top", modal_hei);
+		$("#overlay_page").css("display", "none");
+	}
+	$("section#bill-modal .cancel").click(function () {
+		modalBillHight();
+	});
+	$("#modal_bill_button").on("click", function (event) {
+		event.stopPropagation();
+		event.preventDefault();
+		$("section#bill-modal").animate({ top: "20%" });
+	}
+	);
+	function modalEnquiryHight() {
+		let modal_hei = $("section#enquiry-modal").innerHeight();
+		modal_hei = 0 - modal_hei - 200;
+		$("section#enquiry-modal").css("top", modal_hei);
+		$("#overlay_page").css("display", "none");
+	}
+	$("section#enquiry-modal .cancel").click(function () {
+		modalEnquiryHight();
+	});
+	$("#modal_enquiry_button").on("click", function (event) {
+		event.stopPropagation();
+		event.preventDefault();
+		$("section#enquiry-modal").animate({ top: "20%" });
+	}
+	);
+</script>
+
+<!-- Bill Amount -->
+<script>
+	$(document).on('submit', 'form.bill_amount_form', function (e) {
+		e.preventDefault();
+		var $this = $(this);
+		var url = $this.attr('action');
+		var method = $this.attr('method');
+
+		var data = $this.serialize();
+		show_loader();
+
+		jQuery.ajax({
+			type: method,
+			url: url,
+			dataType: 'json',
+			data: data,
+			success: function (data) {
+
+				var message = data['message'];
+				var status = data['status'];
+				var title = data['title'];
+				var stable = data['stable'];
+				var pk = data['pk'];
+				var code = data['code'];
+
+				if (status == 'true') {
+					if (title) {
+						title = title;
+					} else {
+						title = "Success";
+					}
+					remove_popup();
+					$("#popup-section2").removeClass('open')
+					$("#popup-section2").removeClass('open')
+					$('#cashback_code').addClass('open');
+					$('#cashback_code').find('.code').text(code);
+
+					timer = setInterval(function () {
+						jQuery.ajax({
+							type: "get",
+							url: "{% url 'campaigns:get_cashback_amount_details' %}",
+							dataType: 'json',
+							data: {
+								pk: pk
+							},
+							success: function (data) {
+								var message = data['message'];
+								var status = data['status'];
+								if (status == "true") {
+									$("#cashback_receipt").addClass("open");
+									$("#cashback_code").removeClass("open");
+									$('.overlay_main').css('display', 'block');
+
+									var title = data['title'];
+									var result = data['data'];
+									var date = result['date'];
+									var phone = result['phone'];
+									var name = result['name'];
+									var bill_number = result['bill_number'];
+									var referrer = result['referrer'];
+									var bill_amount = result['bill_amount'];
+									var user_amount = result['user_amount'];
+									var referrer_amount = result['referrer_amount'];
+									var cashback_code = result['cashback_code'];
+
+
+									$("#cashback_receipt .date").text(date);
+									$("#cashback_receipt .phone").text(phone);
+									$("#cashback_receipt .name").text(name);
+									$("#cashback_receipt .bill_no").text(bill_number);
+									$("#cashback_receipt .referrer").text(referrer);
+									$("#cashback_receipt .bill_amount").text(bill_amount);
+									$("#cashback_receipt .user_amount").text(user_amount);
+									$("#cashback_receipt .ref_amount").text(referrer_amount);
+									$("#cashback_receipt .cashback_code").text(cashback_code);
+
+									clearInterval(timer);
+								}
+							},
+							error: function (data) {
+
+							}
+						});
+					}, 5000);
+
+				} else {
+					remove_popup();
+
+					if (title) {
+						title = title;
+					} else {
+						title = "An Error Occurred";
+					}
+
+					var html_content = '<section class="popup errorPopup"><div class="top"><h4>' + title + '</h4></div><div class="bottom"><p>' + message + '</p><span class="cancel">Cancel</span></div></section><span class="popupbg"></span>';
+					$('body').append(html_content);
+
+					if (stable != "true") {
+						window.setTimeout(function () {
+						}, 2000);
+					}
+				}
+			},
+			error: function (data) {
+				remove_popup();
+				var title = "An error occurred";
+				var message = "An error occurred. Please try again later.";
+				var html_content = '<section class="popup errorPopup"><div class="top"><h4>' + title + '</h4></div><div class="bottom"><p>' + message + '</p><span class="cancel">Cancel</span></div></section><span class="popupbg"></span>';
+
+				$('body').append(html_content);
+
+			}
+		});
+
+	});
+</script>
+
+<!-- Pagination etc -->
+<script>
+
+	$(document).ready(function () {
+		$("ul.pagination li a").each(function () {
+			var href = $(this).attr("href")
+			href = href + '#products'
+			$(this).attr("href", href)
+		});
+
+		var window_width = $(window).width();
+		var categories_count = "{{ categories.count }}";
+		var gallery_count = "{{ campaign_galleries.count }}";
+		categories_count = parseInt(categories_count)
+
+		if (window_width >= 1423) {
+			if (categories_count >= 9) {
+				$("#products .wrapper div.round ul").addClass("slick-category")
+			}
+			if (gallery_count >= 8) {
+				$("#gallery .wrapper ul").addClass("slick-gallery")
+
+			}
+		}
+		else if (window_width >= 1067) {
+			if (categories_count >= 7) {
+				$("#products .wrapper div.round ul").addClass("slick-category")
+			}
+			if (gallery_count >= 6) {
+				$("#gallery .wrapper ul").addClass("slick-gallery")
+
+			}
+		}
+		else if (window_width >= 578) {
+			if (categories_count >= 5) {
+				$("#products .wrapper div.round ul").addClass("slick-category")
+			}
+			if (gallery_count >= 4) {
+				$("#gallery .wrapper ul").addClass("slick-gallery")
+
+			}
+		}
+		else if (window_width <= 577) {
+			if (categories_count >= 3) {
+				$("#products .wrapper div.round ul").addClass("slick-category")
+			}
+			if (gallery_count >= 3) {
+				$("#gallery .wrapper ul").addClass("slick-gallery")
+
+			}
+		}
+		$('.slick-category').slick({
+			slidesToShow: 7,
+			dots: true,
+			slidesToScroll: 2,
+			responsive: [
+				{
+					breakpoint: 1280,
+					settings: {
+						slidesToShow: 5,
+						slidesToScroll: 1,
+					}
+				},
+				{
+					breakpoint: 980,
+					settings: {
+						slidesToShow: 4,
+						slidesToScroll: 1,
+					}
+				},
+				{
+					breakpoint: 640,
+					settings: {
+						slidesToShow: 3,
+						slidesToScroll: 1,
+					}
+				}
+				// You can unslick at a given breakpoint now by adding:
+				// settings: "unslick"
+				// instead of a settings object
+			]
+		});
+		$('.slick-gallery').slick({
+			slidesToShow: 5,
+			dots: true,
+			slidesToScroll: 2,
+			responsive: [
+				{
+					breakpoint: 1280,
+					settings: {
+						slidesToShow: 4,
+						slidesToScroll: 1,
+					}
+				},
+				{
+					breakpoint: 640,
+					settings: {
+						slidesToShow: 3,
+						slidesToScroll: 1,
+					}
+				},
+				{
+					breakpoint: 480,
+					settings: {
+						slidesToShow: 2,
+						slidesToScroll: 1
+					}
+				},
+
+				// You can unslick at a given breakpoint now by adding:
+				// settings: "unslick"
+				// instead of a settings object
+			]
+		});
+	});
+</script>
+
+<!-- View-cart_data in bottom -->
+<script>
+	$(document).ready(function () {
+		var window_width = $(window).width();
+		var cart_items = 0
+		var price = 0
+		python = "{% if user.is_authenticated %}";
+		var url = "{% url 'web:take_user_cart_details' %}";
+		$.ajax({
+			type: "GET",
+			url: url,
+			dataType: 'json',
+
+			success: function (data) {
+				var status = data['status'];
+				var message = data['message'];
+				cart_item_count = data['cart_items_count'];
+				cart_items = parseInt(cart_item_count)
+				var total = data['total'];
+				price = total
+				if (window_width <= 550) {
+					if (cart_items >= 1) {
+						if (cart_items >= 2) {
+							cart_items = cart_items + " Items: BD ";
+						}
+						else {
+							cart_items = cart_items + " Item: BD ";
+						}
+						$("#view-cart-data ").show()
+						$('#view-cart-data .cart-data .left span.count').html(cart_items)
+						$('#view-cart-data .cart-data .left span.price').html(price)
+					}
+				}
+			}
+		});
+		python = "{% else %}";
+		if (localStorage.getItem("productDict") !== null) {
+			var products = localStorage.getItem('productDict');
+			if (products != {}) {
+				var url = python = "{% url 'web:anonymous_user_cart' %}";
+				$.ajax({
+					type: "GET",
+					url: url,
+					dataType: 'json',
+					data: {
+						products: products
+					},
+
+					success: function (data) {
+						var status = data['status'];
+						var message = data['message'];
+						var items = data['cart_items'];
+						var total = data['total'];
+						var cart_items = items.length
+						price = total
+						if (window_width <= 550) {
+							if (cart_items >= 1) {
+								if (cart_items >= 2) {
+									cart_items = cart_items + " Items: BD ";
+								}
+								else {
+									cart_items = cart_items + " Item: BD ";
+								}
+								$("#view-cart-data ").show()
+								$('#view-cart-data .cart-data .left span.count').html(cart_items)
+								$('#view-cart-data .cart-data .left span.price').html(price)
+							}
+							else {
+								$("#view-cart-data ").hide()
+							}
+						}
+					}
+				});
+			}
+			else {
+				$("#view-cart-data ").hide()
+			}
+		}
+		python = "{% endif %}";
+	});
+</script>
+
+{% endblock content %}

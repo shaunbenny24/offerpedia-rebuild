@@ -1,0 +1,450 @@
+{% extends 'web/shop/base.html' %}
+{% load static %}
+{% block content %}
+{% load main_template_tags %}
+{% include 'web/shop/navbar.html' %}
+
+<section id="details">
+    <section class="wrapper">
+        <div class="left">
+            <div class="featured-image">
+                {% if product.featured_image %}
+                    <img src="{{ product.get_image }}" class="active" data-pk='{{ product.pk }}'>
+                {% else %}
+                    <img src="{% static 'web/shop/images/product-not-found.jpeg' %}" alt="Vel Metus" class="active">
+                {% endif %}
+                {% for image in product_images %}
+                    <img src="{{ image.image.url }}" alt="" data-pk='{{ image.pk }}'>
+                {% endfor %}
+                {% if product.youtube_video %}
+                    <iframe class="embed-responsive-item image1"
+                        src="https://www.youtube.com/embed/{{product.youtube_video}}/?autoplay=1"></iframe>
+                {% endif %}
+            </div>
+            <div class="images">
+                <div class="image-width">
+                    <div class="image active" data-pk='{{ product.pk }}'>
+                        {% if product.featured_image %}
+                            <img src="{{ product.get_image }}">
+                        {% else %}
+                            <img src="{% static 'web/shop/images/product-not-found.jpeg' %}" alt="Vel Metus">
+                        {% endif %}
+                    </div>
+                    {% for image in product_images %}
+                        <div class="image" data-pk='{{ image.pk }}'>
+                            <img src="{{ image.get_image }}" alt="">
+                        </div>
+                    {% endfor %}
+                    {% if product.youtube_video %}
+                        <div class="image" data-pk='video-player'>
+                            <img src="{% static 'web/shop/images/video-player.png' %}" alt="">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="top">
+                <h2>{{ product.category }}</h2>
+                <h1>{{ product.name }}</h1>
+                <span class="price">
+                    {% if not product.free %}
+                        <h2 class="offer">BD {{ product.price }}</h2>
+                        {% if product.mrp > 0 %}
+                            <h2 class="mrp">BD {{ product.mrp }}</h2>
+                        {% endif %}
+                    {% else %}
+                        <h2 class="offer">Free</h2>
+                    {% endif %}
+                </span>
+                <p>
+                    <ul style="list-style: initial;">
+                        {% for description in descriptions %}
+                            <li>{{ description }}.</li>
+                        {% endfor %}
+                    </ul>
+                </p>
+                {% if product.varients %}
+                {% if product.pk in user_cart_varients %}
+                <div class="radio-toolbar">
+                    {% for varient in product.varients.all %}
+                    {% if user_cart_varients|to_get_varient:product.pk == varient.varient_name %}
+                    <input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}" class="change-varient"
+                        name="radio{{product.name}}" value="{{varient.varient_name}}" checked>
+                    {% else %}
+                    <input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}" class="change-varient"
+                        name="radio{{product.name}}" value="{{varient.varient_name}}">
+                    {% endif %}
+                    <label for="radio{{ varient.varient_name }}{{product.auto_id}}">{{ varient.varient_name }}</label>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="radio-toolbar">
+                    {% for varient in product.varients.all %}
+                    {% if forloop.counter == 1 %}
+                    <input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}" class="change-varient"
+                        name="radio{{product.name}}" value="{{varient.varient_name}}" checked>
+                    {% else %}
+                    <input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}" class="change-varient"
+                        name="radio{{product.name}}" value="{{varient.varient_name}}">
+                    {% endif %}
+                    <label for="radio{{ varient.varient_name }}{{product.auto_id}}">{{ varient.varient_name }}</label>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="quantity">
+                <a href="" data="change-qty" action="Minus"><span class="icon icon-minus"></span></a>
+                {% if user.is_authenticated %}
+                    <span class="number totalCount">{{ product_quantity }}</span>
+                {% else %}
+                    <span class="number totalCount readyCount">1</span>
+                {% endif %}
+                <a href="" data="change-qty" action="Plus"><span class="icon icon-plus"></span></a>
+            </div>
+            <div class="available-stock">
+                <p>Only <span class="stock">1</span> Available</p>
+            </div>
+            <div class="bottom">
+                <div class="num"></div>
+                {% if user.is_authenticated %}
+                    {% if product.stock >= 1 %}
+                        <a href="{% url 'orders:add_to_cart' %}" data-id="add-to-cart" data-pk="{{ product.pk }}"
+                            data-qty="{{ product_quantity }}" data-varient="{{ product_varient }}"
+                            class='add-to-cart btn btn-dark reload button-single'>Add to Cart
+                        </a>
+                    {% else %}
+                        <a href="javascript:void(0)" class='button-stock'>No Stock</a>
+                    {% endif %}
+                {% else %}
+                    {% if product.stock >= 1 %}
+                        <a href="{% url 'orders:add_to_cart' %}" data-id="add-to-cart" data-pk="{{ product.pk }}" data-qty="1"
+                            data-varient="{{ product_varient }}"
+                            class='add-to-cart btn btn-dark reload button-single readyCart'>Add to Cart
+                        </a>
+                    {% else %}
+                        <a href="javascript:void(0)" class='button-stock'>No Stock</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</section>
+
+<section id="view-cart-data">
+    <a href="{% url 'orders:cart' %}?next={{ next_login }}">
+        <div class="cart-data">
+            <div class="left"><span class="count">{{ cart_item_count }}</span><span class="price">{{ total }}</span>
+            </div>
+            <div class="right">View Cart</div>
+        </div>
+    </a>
+</section>
+
+{% include 'web/shop/side-cart.html' %}
+
+{% if related_products %}
+<section id="products">
+    <section class="wrapper">
+        <div class="heading">
+            <small></small>
+            <h1>
+                <span class="our">Similar</span>
+                <span class="green">Produts</span>
+            </h1>
+        </div>
+
+        <div class="products-list" id="campaign-product-list">
+            <ul>
+                {% for product in related_products %}
+                <li data-pk="{{ product.pk }}">
+                    <div class="left">
+                        <a href="{% url 'web:product_details' pk=product.pk %}?next={{ next_login }}">
+                            <div class="title">
+                                <h5>{{ product.name }}</h5>
+                                <div class="price">
+                                    <span>BD {{ product.price }}</span>
+                                    <small class="mark">BD {{ product.mrp }}</small>
+                                </div>
+                            </div>
+                            <div class="content">
+                                <p>{{ product.description }}</p>
+                            </div>
+                        </a>
+                        {% if product.varients %}
+                        {% if product.pk in user_cart_varients %}
+                        <div class="radio-toolbar">
+                            {% for varient in product.varients.all %}
+                            {% if user_cart_varients|to_get_varient:product.pk == varient.varient_name %}
+                            <input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}"
+                                name="radio{{product.name}}" value="{{varient.varient_name}}" checked>
+                            {% else %}
+                            <input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}"
+                                name="radio{{product.name}}" value="{{varient.varient_name}}">
+                            {% endif %}
+                            <label for="radio{{ varient.varient_name }}{{product.auto_id}}">{{ varient.varient_name }}</label>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="radio-toolbar">
+                            {% for varient in product.varients.all %}
+                            {% if forloop.counter == 1 %}
+                            <input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}"
+                                name="radio{{product.name}}" value="{{varient.varient_name}}" checked>
+                            {% else %}
+                            <input type="radio" id="radio{{ varient.varient_name }}{{product.auto_id}}"
+                                name="radio{{product.name}}" value="{{varient.varient_name}}">
+                            {% endif %}
+                            <label for="radio{{ varient.varient_name }}{{product.auto_id}}">{{ varient.varient_name }}</label>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="right">
+                        <a href="{% url 'web:product_details' pk=product.pk %}?next={{ next_login }}">
+                            {% if product.featured_image %}
+                            <img src="{{ product.get_image }}" alt="Vel Metus">
+                            {% else %}
+                            <img src="{% static 'web/shop/images/product-not-found.jpeg' %}" alt="Vel Metus">
+                            {% endif %}
+                        </a>
+                        {% if product.pk in user_cart_items %}
+                        {% if product.stock >= 1 %}
+                        <a href="{% url 'orders:add_to_cart' %}" data-id="add-to-cart" data-pk="{{ product.pk }}"
+                            data-qty="1" class='add-to-cart btn btn-dark reload button' style="display: none;">Add to
+                            Cart</a>
+                        <div class="quantity" style="display: block;">
+                            <a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus"
+                                data-stock="{{ product.stock }}" data-pk="{{ product.pk }}"><span
+                                    class="icon icon-minus"></span></a>
+                            <span class="number productQuantity">{{ user_cart_items|to_get_quantity:product.pk }}</span>
+                            <a href="{% url 'orders:increment_quantity' %}" class="change-quantity" action="Plus"
+                                data-stock="{{ product.stock }}" data-pk="{{ product.pk }}"><span
+                                    class="icon icon-plus"></span></a>
+                        </div>
+                        {% else %}
+                        <a href="javascript:void(0)" class='button-stock' style="display: none;">No Stock</a>
+                        <div class="quantity" style="display: block;">
+                            <a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus"
+                                data-pk="{{ product.pk }}"><span class="icon icon-minus"></span></a>
+                            <span class="number productQuantity">{{ user_cart_items|to_get_quantity:product.pk }}</span>
+                            <a href="javascript:void(0)" class=""><span class="icon icon-plus"></span></a>
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        {% if product.stock >= 1 %}
+                        <a href="{% url 'orders:add_to_cart' %}" data-id="add-to-cart" data-pk="{{ product.pk }}"
+                            data-qty="1" class='add-to-cart btn btn-dark reload button'>Add to Cart</a>
+                        <div class="quantity">
+                            <a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus"
+                                data-pk="{{ product.pk }}"><span class="icon icon-minus"></span></a>
+                            <span class="number productQuantity">1</span>
+                            <a href="{% url 'orders:increment_quantity' %}" class="change-quantity" action="Plus"
+                                data-stock="{{ product.stock }}" data-pk="{{ product.pk }}"><span
+                                    class="icon icon-plus"></span></a>
+                        </div>
+                        {% else %}
+                        <a href="javascript:void(0)" class='button-stock'>No Stock</a>
+                        <div class="quantity">
+                            <a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus"
+                                data-pk="{{ product.pk }}"><span class="icon icon-minus"></span></a>
+                            <span class="number productQuantity">1</span>
+                            <a href="javascript:void(0)" class=""><span class="icon icon-plus"></span></a>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+</section>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+
+        pk = python = "{{ product.pk }}";
+        python = "{% if not user.is_authenicated %}";
+        if (localStorage.getItem("productDict") !== null) {
+            const products = JSON.parse(localStorage.getItem('productDict'));
+            for (const [key, value] of Object.entries(products)) {
+                product_pk = key
+                if (product_pk == pk) {
+                    var varient = value[1]
+                    $('span.readyCount').text(value[0])
+                    $('.bottom a.readyCart').attr("data-qty", value[0])
+                    $("div.radio-toolbar input").each(function () {
+                        checked_value = $(this).val()
+                        if (varient !== null) {
+                            if (varient == checked_value) {
+                                $(this).prop("checked", true);
+                            }
+                            else {
+                                $(this).prop("checked", false);
+                            }
+                            $('.bottom a.add-to-cart').attr("data-varient", varient)
+                        }
+                    })
+                }
+            }
+            if ((Object.keys(products).length) === 0) {
+                localStorage.removeItem("products")
+                localStorage.removeItem("campaign")
+            }
+        }
+        python = "{% endif %}"
+
+    });
+
+    $(document).on('click', 'a[data="change-qty"]', function (e) {
+        e.preventDefault()
+        let action = $(this).attr("action");
+        var product_count = $('span.totalCount').text()
+        var stock = "{{ stock }}"
+        product_count = parseInt(product_count)
+        if (action == "Plus") {
+            if (product_count < stock){
+                product_count += 1;
+                $('div.available-stock').hide()
+            }
+            else{
+                $('div.available-stock').show()
+                $('div.available-stock p span.stock').html(product_count)
+            }
+        }
+        else {
+            product_count -= 1;
+            $('div.available-stock').hide()
+        }
+        if (product_count <= 0) {
+            product_count = 1
+        }
+        $('span.totalCount').text(product_count)
+        $('.bottom a.add-to-cart').attr("data-qty", product_count)
+    })
+    $(document).on('click', '.change-varient', function (e) {
+        var varient = $(this).val()
+        $('.bottom a.add-to-cart').attr("data-varient", varient)
+    })
+</script>
+
+<!-- View-cart_data in bottom -->
+<script>
+    $(document).ready(function () {
+        var window_width = $(window).width();
+        var cart_items = 0
+        var price = 0
+        python = "{% if user.is_authenticated %}";
+        var url = "{% url 'web:take_user_cart_details' %}";
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+
+            success: function (data) {
+                var status = data['status'];
+                var message = data['message'];
+                cart_item_count = data['cart_items_count'];
+                cart_items = parseInt(cart_item_count)
+                var total = data['total'];
+                price = total
+                if (window_width <= 550) {
+                    if (cart_items >= 1) {
+                        if (cart_items >= 2) {
+                            cart_items = cart_items + " Items: BD ";
+                        }
+                        else {
+                            cart_items = cart_items + " Item: BD ";
+                        }
+                        $("#view-cart-data ").show()
+                        $('#view-cart-data .cart-data .left span.count').html(cart_items)
+                        $('#view-cart-data .cart-data .left span.price').html(price)
+                    }
+                }
+            }
+        });
+        python = "{% else %}";
+        if (localStorage.getItem("productDict") !== null) {
+            var products = localStorage.getItem('productDict');
+            if (products != {}) {
+                var url = python = "{% url 'web:anonymous_user_cart' %}";
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: 'json',
+                    data: {
+                        products: products
+                    },
+
+                    success: function (data) {
+                        var status = data['status'];
+                        var message = data['message'];
+                        var items = data['cart_items'];
+                        var total = data['total'];
+                        var cart_items = items.length
+                        price = total
+                        if (window_width <= 550) {
+                            if (cart_items >= 1) {
+                                if (cart_items >= 2) {
+                                    cart_items = cart_items + " Items: BD ";
+                                }
+                                else {
+                                    cart_items = cart_items + " Item: BD ";
+                                }
+                                $("#view-cart-data ").show()
+                                $('#view-cart-data .cart-data .left span.count').html(cart_items)
+                                $('#view-cart-data .cart-data .left span.price').html(price)
+                            }
+                            else {
+                                $("#view-cart-data ").hide()
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                $("#view-cart-data ").hide()
+            }
+        }
+        python = "{% endif %}";
+    });
+</script>
+
+<!-- product image change -->
+<script>
+    $(document).on('click', '#details div.left div.images div.image', function (e) {
+        e.preventDefault()
+        $this = $(this);
+        var parent = $(this).parents('div.images')
+        var pk = $(this).attr('data-pk')
+        console.log("pk",pk)
+        parent.find("div.image").each(function(){ 
+            $(this).removeClass("active")
+        })
+        $(this).addClass('active')
+
+        $('#details div.featured-image img').each(function(){
+            $(this).removeClass('active')
+        })
+
+        $('#details div.featured-image img').each(function(){
+            var data_pk = $(this).attr('data-pk')
+            if (pk === data_pk){
+                $(this).addClass("active")
+                $('#details div.featured-image iframe').hide()
+            }
+        })
+        if (pk === "video-player"){
+            $(this).addClass("active")
+            $('#details div.featured-image iframe').show()
+        }
+
+    });
+</script>
+
+{% endblock content %}

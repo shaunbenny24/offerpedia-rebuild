@@ -1,0 +1,35 @@
+{% load static %}
+<div class="empty">
+	<div class="content">
+		<h3 class="title">No results found.</h3>
+		<a href="{% url 'web:dashboard' %}" class="button">Back to Home</a>
+	</div>
+</div>
+<style>
+	div.empty {
+		width: 100%;
+		text-align: center;
+		padding:10%;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	div.empty h3.title {
+		font-size: 18px;
+		margin: 0 0 20px 0;
+		color: #009688;
+	}
+	div.empty p {
+		font-size: 15px;
+	}
+	div.empty a.button {
+		font-size: 14px;
+		padding: 10px 30px;
+		border: 1px solid #009688;
+		border-radius: 20px;
+		color: #009688;
+		display: inline-block;
+		margin-top: 20px;
+	}
+
+</style>

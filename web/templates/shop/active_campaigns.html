@@ -1,0 +1,162 @@
+{% extends 'web/shop/base.html' %}
+{% load static %}
+{% load social_share %}
+{% block head %}
+
+{% endblock head %}
+{% block content %}
+
+{% include 'web/shop/navbar.html' %}
+
+<section id="active-campaigns">
+    <section class="wrapper">
+        <div class="campaigns">
+            {% if campaigns %}
+                <div class="content-title">
+                    <p>Earn cashback every time you and your friends purchase!</p>
+                    <a href="#CampaignActive" class="active">Share Campaigns</a>
+                </div>
+                <div class="campaign" id="CampaignActive">
+                    {% for campaign in campaigns %}
+                        <div class="card">
+                            <div class="image">
+                                {% if campaign.company_logo %}
+                                    <img src="{{ campaign.company_logo.url }}" alt="">
+                                {% elif campaign.featured_image %}
+                                    <img src="{{ campaign.featured_image.url }}" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="share">
+                                {% if app_user %}
+                                    <i class="zmdi zmdi-share share-button" data-pk="{{ campaign.pk }}"></i>
+                                {% else %}
+                                    <i class="zmdi zmdi-share app-user-login"></i>
+                                {% endif %}
+                            </div>
+                            <div class="share-buttons">
+                                <div class="facebook">
+                                    <a class="resp-sharing-button__link" 
+                                        href="https://facebook.com/sharer/sharer.php?u={{scheme}}://{{domain}}/campaign/{{campaign.pk}}/?ref_id={{ app_user.pk }}" target="_blank" rel="noopener" aria-label="Share on Facebook">
+                                        <i class="zmdi zmdi-facebook"></i>
+                                    </a>
+                                </div>
+                                <div class="instagram">
+                                    <a href="{{scheme}}://{{domain}}/campaign/{{campaign.pk}}/?ref_id={{ app_user.pk }}" class="shareAnyway">
+                                        <img src="{% static 'web/shop/images/3dots.png' %}" alt="">
+                                    </a>
+                                </div>
+                                <div class="whatsapp">
+                                    <a target="_blank" href="https://wa.me/?text={{scheme}}://{{domain}}/campaign/{{campaign.pk}}/?ref_id={{ app_user.pk }}" rel="noopener noreferrer"
+                                        class="button btn-submit submit-newsletter">
+                                        <i class="zmdi zmdi-whatsapp"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="equal-card">
+                                <div class="title">
+                                    <h5>{{ campaign.title }}</h5>
+                                </div>
+                                <div class="cashback">
+                                    {% if campaign.user_benifit %}
+                                        <div class="you">
+                                            <span>You Get</span>
+                                            <span>{{ campaign.user_benifit }}</span>
+                                        </div>
+                                    {% endif %}
+                                    {% if campaign.referrer_benifit %}
+                                        <div class="you">
+                                            <span>Friend Gets</span>
+                                            <span>{{ campaign.referrer_benifit }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="button">
+                                <a href="{% url 'web:campaign_view' pk=campaign.pk %}">Shop Now</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</section>
+<section id="campaign-share-link">
+    <section class="wrapper">
+        <div class="share">
+            <div class="link">
+                <input type="text" value="http://121.0.0.1.8000/campaign/" id="shareLink">
+                <span class="copy">Copy</span>
+                <span class="close"><a href="#" id="close" class="zmdi zmdi-close-circle-o"></a></span>
+            </div>
+        </div>
+    </section>
+</section>
+<script>
+    $(document).ready(function(){
+        function equalcard(s) {
+            var h = 0;
+            var line_height = 0;
+            $(s).css('display', 'block').css('height', 'auto');
+            $(s).each(function () {
+                var height = $(this).outerHeight(true);
+                if (height > h) {
+                    h = height;
+                }
+            });
+            $(s).height(h);
+        }
+        equalcard('#active-campaigns .campaigns .campaign .card .equal-card');
+
+        $("#active-campaigns .share-button").click(function(){
+            parent = $(this).parents('#active-campaigns div.campaign div.card')
+            var campaign_pk = $(this).attr("data-pk")
+            var url = `/social-share-link/${campaign_pk}/`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+                
+                success: function (data) {
+                    var status = data['status'];
+                    var message = data['message'];
+                    var link = data['link'];
+                    if (status == "true"){
+                        parent.find('div.facebook a').attr('href',`https://facebook.com/sharer.php?u=${link}`)
+                        parent.find('div.instagram a').attr('href',link)
+                        parent.find('div.whatsapp a').attr('href',`https://wa.me/?text=${link}`)
+                    }
+                }
+            });
+            parent.find("div.share-buttons").toggle();
+        });
+
+        $("div.instagram a.shareAnyway").click(function(e){
+            e.preventDefault();
+            var link = $(this).attr('href')
+            $("#campaign-share-link").show()
+            $("#campaign-share-link div.share div.link input#shareLink").val(link)
+        });
+
+        $("#campaign-share-link div.share span.close").click(function(){
+            $("#campaign-share-link").hide()
+        });
+
+        $("#campaign-share-link div.share span.copy").click(function(){
+            var copyText = document.getElementById("shareLink");
+
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+            /* Copy the text inside the text field */
+            document.execCommand("copy");
+
+            /* Alert the copied text */
+            alert("Copied the text: " + copyText.value);
+        });
+    });
+    
+</script>
+
+{% endblock content %}

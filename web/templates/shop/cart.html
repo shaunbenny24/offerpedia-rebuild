@@ -1,0 +1,1110 @@
+{% extends 'web/shop/base.html' %}
+{% load static %}
+{% block head %}
+
+{% endblock head %}
+{% block content %}
+
+{% include 'web/shop/navbar.html' %}
+
+<section id="view-products">
+    <section class="wrapper">
+        <div class="products-list">
+            <ul>
+                {% if items %}
+                {% for item in items %}
+                <li class="cart-product">
+                    <div class="left">
+                        {% if item.product.featured_image %}
+                        <img src="{{ item.product.featured_image.url }}">
+                        {% else %}
+                        <img src="{% static 'web/shop/images/product-not-found.jpeg' %}" alt="Vel Metus">
+                        {% endif %}
+                    </div>
+                    <div class="right">
+                        <div class="title">
+                            <h5>{{ item.product.name }}{% if item.varient %}(<span>{{ item.varient }}</span>){% endif %}
+                            </h5>
+                            <div class="price">
+                                <span class="item-price">BD {{ item.price }}</span>
+                            </div>
+                        </div>
+                        <div class="quantity">
+                            <a class="quantity-update" href="{% url 'orders:decrement_cart_item' %}"
+                                category="{{ item.product.category }}" data-pk="{{ item.pk }}"
+                                data-stock="{{ item.product.stock }}" action="Minus"><span
+                                    class="icon icon-minus"></span></a>
+                            <a href="#"><span class="number productQuantity">{{ item.qty }}</span></a>
+                            {% if item.product.stock >= item.qty %}
+                            <a class="quantity-update" href="{% url 'orders:increment_cart_item' %}"
+                                data-pk="{{ item.pk }}" data-stock="{{ item.product.stock }}" action="Plus"><span
+                                    class="icon icon-plus"></span></a>
+                            {% else %}
+                            <a class="" href="javascript:void(0)" data-pk=""" action=" Plus"><span
+                                    class="icon icon-plus"></span></a>
+                            {% endif %}
+                        </div>
+                        <div class="category">
+                            {% if item.product.stock < 1 %} 
+                                <span style="color: red;">No stock</span>
+                            {% else %}
+                                {% if item.product.stock < item.qty %} 
+                                    <span style="color: red;">Only {{item.product.stock }} available</span>
+                                {% else %}
+                                    <span>{{ item.product.category }}</span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="close-icon">
+                            <a href="{% url 'orders:delete_cart_item'%}"
+                                class="item-remove remove btn btn-default btn-icon waves-effect waves-circle waves-float"
+                                data-pk="{{ item.pk }}">
+                                <span class="icon icon-cancel"></span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+        <div class="container-cart proceedCheckout">
+            {% if not user.is_authenticated %}
+            <div class="login-shopping">
+                <div class="top">
+                    <h3>To place your order now,<a href="#" class="log">Login</a></h3>
+                    <div class="img-container">
+                        <img src="{% static 'web/shop/images/Mobile-login.gif' %}" alt="Login" />
+                    </div>
+                    <form action="">
+                        <span>+973</span>
+                        <input type="number" placeholder="Enter Phone Number" name="phone-number" required
+                            class="phone-number-in-cart">
+                        <input type="submit" value="Login" class="login-from-cart" />
+                    </form>
+                </div>
+                <div class="price-details">
+                    <span class="sub-total">Subtotal</span>
+                    <span class="totalPrice cart-total">BD 25,062</span>
+                </div>
+            </div>
+            <div class="otp-details">
+                <div class="login-otp">
+                    <div class="title">
+                        <p>Enter the OTP we have send to your <span class="mobileNumber">+973 00000000</span> mobile
+                            number</p>
+                    </div>
+                    <div class="otp">
+                        <form action="#">
+                            <div class="otp-input">
+                                <div class="form-input">
+                                    <input type="number" id="otp_no1" placeholder="" min="0" max="9" required>
+                                    <input type="number" id="otp_no2" placeholder="" min="0" max="9" required>
+                                    <input type="number" id="otp_no3" placeholder="" min="0" max="9" required>
+                                    <input type="number" id="otp_no4" placeholder="" min="0" max="9" required>
+                                    <input type="hidden" value="" name="app_user_pk" class="appUserPk">
+                                </div>
+                            </div>
+                            <div class="resend">
+                                <span><a href="" class="resendOtp">Resend OTP</a></span>
+                            </div>
+                            <div class="form-button">
+                                <input type="submit" value="Login" class="verify-otp-in-cart" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="price-details">
+                    <span class="a subtotal">Subtotal</span>
+                    <span class="b totalPrice">BD 25,062</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="delivery-details">
+                <div class="address">
+                    <h3>Delivery Address</h3>
+                    {% if address %}
+                    <div class="view-address">
+                        <div class="view">
+                            <div class="content">
+                                <p>Road No : <span>{{address.road_number|default:'-'}}</span></p>
+                                <p> Block No : <span>{{address.block_number|default:'-'}}</span></p>
+                                <p>Building No : <span>{{address.building_number|default:'-'}}</span></p>
+                                <p>Villa/Flat No : <span>{{address.villa_or_flat_no|default:'-'}}</span></p>
+                                <p>Area/Additional Directions : <span>{{ address.additional_directions|default:'-' }}</span></p>
+                            </div>
+                            <div class="change">
+                                {% if is_addresses %}
+                                <a href="#" class="chooseAddress">Address</a>
+                                {% else %}
+                                <a href="#" class="addNewAddress">New Address</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="add-address">
+                        <div class="form-address">
+                            <form action="{% url 'advertisers:address' %}" class="ajax reload reset" method="POST">
+                                {% csrf_token %}
+                                {% if app_user %}
+                                {% if not app_user.firstname %}
+                                <div class="form-input">
+                                    {{ form.name }}
+                                    {% if form.name.errors %}
+                                    <label class="error">{{ form.name.errors.as_text }}</label>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                {% endif %}
+                                <div class="form-input">
+                                    {{ form.road_number }}
+                                    {% if form.road_number.errors %}
+                                    <label class="error">{{ form.road_number.errors.as_text }}</label>
+                                    {% endif %}
+                                </div>
+                                <div class="form-input">
+                                    {{ form.block_number }}
+                                    {% if form.block_number.errors %}
+                                    <label class="error">{{ form.block_number.errors.as_text }}</label>
+                                    {% endif %}
+                                </div>
+                                <div class="parts">
+                                    <div class="form-input">
+                                        {{ form.building_number }}
+                                        {% if form.building_number.errors %}
+                                        <label class="error">{{ form.building_number.errors.as_text }}</label>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-input">
+                                        {{ form.villa_or_flat_no }}
+                                        {% if form.villa_or_flat_no.errors %}
+                                        <label class="error">{{ form.villa_or_flat_no.errors.as_text }}</label>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <!-- <div class="form-input">
+                                        {{ form.zip_code }}
+                                        {% if form.zip_code.errors %}
+                                            <label class="error">{{ form.zip_code.errors.as_text }}</label>
+                                        {% endif %}
+                                    </div> -->
+                                <div class="form-input">
+                                    {{ form.additional_directions }}
+                                    {% if form.additional_directions.errors %}
+                                    <label class="error">{{ form.additional_directions.errors.as_text }}</label>
+                                    {% endif %}
+                                </div>
+                                <div class="form-button">
+                                    <input type="submit" value="Save">
+                                    <button class="cancel addressFormCancel">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="bill">
+                    <h3>Bill Details</h3>
+                    <div class="amount-details">
+                        <div class="price">
+                            <span class="sub-total">Subtotal</span>
+                            <span class="totalPrice">BD {{ total }}</span>
+                        </div>
+                        {% if address %}
+                        {% if not cashback_amount == 0 %}
+                        <div class="cashback">
+                            <span>Wallet</span>
+                            <span class="cashbackApply"> BD {{ cashback_amount }} &nbsp;&nbsp;
+                                <label class="switch">
+                                    <input type="checkbox" class="cashback-button">
+                                    <span class="slider round"></span>
+                                </label>
+                            </span>
+                        </div>
+                        {% endif %}
+                        <div class="delivery">
+                            <span>Delivery Charge</span>
+                            <span class="deliveryCharge">{{ delivery_charge }}</span>
+                        </div>
+                        <div class="amount">
+                            <span>Amount Payable</span>
+                            <span class="amountPayable">BD {{ amount_payable }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if address %}
+                <div class="order">
+                    <div class="left">
+                        <span class="a">Payment method:</span>
+                        <span class="b">Cash On Delivery</span>
+                    </div>
+                    <div class="right">
+                        <a href="{% url 'orders:checkout' %}?next={{ next_login }}"
+                            class="success-button redirect">Place Order</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            <div class="cart">
+                <div class="bottom">
+                    <h2>Deliver Address</h2>
+                    <form action="">
+                        <ul>
+                            {% for address in addresses %}
+                            <li class="userAddress">
+                                <div class="first">
+                                    <label class="container">
+                                        {% if address.is_active %}
+                                        <input type="radio" name="radio" checked value="{{ address.pk }}"
+                                            class="selected-address">
+                                        {% else %}
+                                        <input type="radio" name="radio" value="{{ address.pk }}"
+                                            class="selected-address">
+                                        {% endif %}
+                                        <span class="check"></span>
+                                    </label>
+                                    <div class="address">
+                                        <p>Road No: <span class="road">{{address.road_number|default:"-"}}</span></p>
+                                        <p>Block No: <span class="block">{{address.block_number|default:"-"}}</span></p>
+                                        <p>Building No: <span class="building">{{address.building_number|default:"-"}}</span></p>
+                                        <p>Villa/Flat No: <span class="villa">{{address.villa_or_flat_no|default:"-"}}</span></p>
+                                        <p>Area/Additional directions: <span class="directions">{{ address.additional_directions|default:"-" }}</span></p>
+                                        <!-- <p class="road">{{address.road_number}}</p>
+                                        <p class="block">{{address.block_number}}</p>
+                                        <p class="building">{{address.building_number}}</p>
+                                        <p class="directions">{{ address.additional_directions }}</p> -->
+                                    </div>
+                                    <div class="close-icon">
+                                        <a href="{% url 'advertisers:delete_address' pk=address.pk %}"
+                                            class="cancel address-remove " data-pk="{{address.pk}}"><span
+                                                class="icon icon-cancel"></span></a>
+                                        <a href="{% url 'advertisers:edit_address' pk=address.pk %}"
+                                            class="edit address-edit"><span class="icon icon-edit"></span></a>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="form-button">
+                            <button class="cancel cart-add-address">Add Address</button>
+                            <input type="submit" value="Continue" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="edit-address">
+                <h3>Delivery Address</h3>
+                <div class="edit">
+                    <form action="" class="address-form">
+                        {% if app_user %}
+                        {% if not app_user.firstname %}
+                        <div class="form-input">
+                            <input type="text" placeholder="Name" value="" class="name" required />
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        <div class="form-input">
+                            <input type="text" placeholder="Road Number" value="" class="road_number" required />
+                        </div>
+                        <div class="form-input">
+                            <input type="text" placeholder="Block Number" value="" class="block_number" required />
+                        </div>
+                        <div class="form-input">
+                            <input type="text" placeholder="Building Number" value="" class="building_number"
+                                required />
+                        </div>
+                        <div class="form-input">
+                            <input type="text" placeholder="Villa/Flat No" value="" class="villa_number"/>
+                        </div>
+                        <div class="form-input">
+                            <input type="text" placeholder="Area/Additional Directions" value=""
+                                class="additional_directions" />
+                        </div>
+                        <div class="form-button">
+                            <input type="submit" value="Submit" />
+                            <button class="cancel">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </section> <!-- (#view-products > section.wrapper) -->
+</section> <!-- (#view-products) -->
+
+<section id="empty-cart">
+    <section class="wrapper">
+        <div class="em-cart">
+            <p>Your cart is empty.Continue shopping and add some products to your cart.</p>
+            <div class="img-container">
+                <img src="{% static 'web/shop/images/empty-cart.png' %}" alt="Image" />
+            </div>
+            <a href="{% if next_login %}{{ next_login }}{% else %}{% url 'web:public_index' %}{% endif %}"
+                class="add">Continue Shopping</a>
+        </div>
+    </section>
+</section>
+
+<script>
+    $(document).ready(function () {
+
+        python = "{% if address %}";
+        var address = true
+        python = "{% else %}";
+        var address = false
+        python = "{% endif %}"
+        if (!address) {
+            $("#view-products div.delivery-details .address .add-address").show();
+        }
+
+        var is_cart_items = false;
+        python = "{% if user.is_authenticated %}";
+        python = "{% if items %}";
+        is_cart_items = true;
+        python = "{% endif %}";
+        python = "{% else %}";
+        if (localStorage.getItem("productDict") !== null) {
+            var cartItems = JSON.parse(localStorage.getItem('productDict'));
+            var propOwn = Object.getOwnPropertyNames(cartItems);
+            var length = propOwn.length;
+            if (length >= 1) {
+                is_cart_items = true;
+            }
+        }
+        python = "{% endif %}";
+
+        if (!is_cart_items) {
+            $('#empty-cart').show();
+            $('#view-products').hide();
+            $('#cashback-show').hide();
+        }
+
+
+        $("#view-products div.delivery-details .address .add-address .addressFormCancel").click(function (e) {
+            e.preventDefault();
+            location.reload()
+        });
+        $("#view-products div.address-form div.bottom form div.form-button button").click(function (e) {
+            e.preventDefault();
+            $("#view-products div.address-form").hide();
+            $("#view-products div.cart").show();
+        });
+        $("#view-products div.delivery-details div.address div.view-address div.view div.change a.chooseAddress").click(function (e) {
+            e.preventDefault();
+            $("#view-products div.delivery-details").hide();
+            $("#view-products div.cart").show();
+        });
+        $("#view-products div.delivery-details div.address div.view-address div.view div.change a.addNewAddress").click(function (e) {
+            e.preventDefault();
+            $("#view-products div.delivery-details .address .view-address").hide();
+            $("#view-products div.delivery-details .address .add-address").show();
+        });
+        $("#view-products div.cart div.bottom div.form-button button").click(function (e) {
+            e.preventDefault();
+            $("#view-products div.delivery-details").show();
+            $("#view-products div.delivery-details .address .view-address").hide();
+            $("#view-products div.delivery-details .address .add-address").show();
+            $("#view-products div.cart").hide()
+        });
+        $("#view-products div.edit-address div.form-button button.cancel").click(function (e) {
+            e.preventDefault();
+            $("#view-products div.cart").show()
+            $("#view-products div.edit-address").hide()
+        });
+        $("#view-products div.cart div.bottom div.form-button input").click(function (e) {
+            e.preventDefault();
+            location.reload()
+        });
+        $('#view-products div.otp-details div.login-otp div.otp form div.otp-input div.form-input input').keyup(function () {
+            var key = $(this).val();
+            var len = key.length;
+            if (len > 1) {
+                var val = key % 10;
+                $(this).val(val)
+            }
+            var KeyID = event.keyCode;
+            if (KeyID == 8) {
+                $(this).prev().focus();
+            }
+            else {
+                $(this).next().focus();
+            }
+        });
+        $("#view-products div.products-list div.amount-details div.amount div.b a").click(function (e) {
+            e.preventDefault();
+            $("#view-products div.products-list div.amount-details").hide();
+            $(".container-cart").show();
+        });
+
+        $(document).on('click', '.selected-address', function () {
+            $this = $(this);
+            var url = '{% url "advertisers:choose_address" %}'
+            var address_pk = $(this).val()
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+                data: {
+                    address_pk: address_pk
+                },
+
+                success: function (data) {
+                    var status = data['status'];
+                    var message = data['message'];
+                },
+
+                error: function (data) {
+                    var title = "An error occurred";
+                    var message = "An error occurred. Please try again later.";
+                    swal(title, message, "error");
+                }
+            });
+        });
+
+        $(document).on('click', '.quantity-update', function (e) {
+            e.preventDefault();
+            $this = $(this);
+            var url = $(this).attr("href");
+            var pk = $(this).attr("data-pk");
+            var action = $(this).attr("action");
+            var stock = $(this).attr("data-stock");
+            var category = $(this).attr("category");
+            var isReload = $this.hasClass("reload");
+            parent = $(this).parents('.cart-product')
+            python = "{% if user.is_authenticated %}";
+
+            var button_checked = "false";
+            if ($('div.cashback span.cashbackApply .cashback-button').is(':checked')) {
+                button_checked = "true";
+            }
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+                data: {
+                    pk: pk,
+                    button_checked: button_checked
+                },
+
+                success: function (data) {
+                    var status = data['status'];
+                    var remove_status = data['remove_status'];
+                    var message = data['message'];
+                    if (status == "true") {
+                        var qty = data['qty'];
+                        var subtotal = data['subtotal'];
+                        var total = data['total'];
+                        var amount_payable = data['amount_payable']
+                        var quantity_available = data['quantity_available']
+
+                        parent.find('span.productQuantity').html(parseInt(qty))
+                        $(".price-details .totalPrice").each(function () {
+                            $(this).html(`BD ${total}`)
+                        });
+                        $(".amount-details .totalPrice").html(`BD ${total}`)
+                        $(".amount-details .amount .amountPayable").html(`BD ${amount_payable}`)
+
+                        if (quantity_available == true) {
+                            parent.find("div.category").html(`<span>${category}</span>`)
+                            location.reload()
+                        }
+
+                    }
+                    if (remove_status == "true") {
+                        var cart_item_count = data['cart_item_count'];
+                        $('span.total-items').html(cart_item_count)
+                        $(".amount-details .amount .amountPayable").html(`BD ${amount_payable}`)
+                        parent.remove()
+
+                        if (total == 0) {
+                            location.reload()
+                        }
+                    }
+
+                },
+
+                error: function (data) {
+                    var title = "An error occurred";
+                    var message = "An error occurred. Please try again later.";
+                    swal(title, message, "error");
+                }
+            });
+
+            python = "{% else %}";
+            if (localStorage.getItem("productDict") !== null) {
+                productDict = JSON.parse(localStorage.getItem('productDict'));
+                if (pk in productDict) {
+                    var product_data = productDict[pk]
+                    var quantity = product_data[0]
+                    var varient = product_data[1]
+                    if (action == "Plus") {
+                        if (quantity < stock) {
+                            quantity += 1
+                            productDict[pk] = [quantity, varient];
+                        }
+                    }
+                    else if (action == "Minus") {
+                        quantity -= 1
+                        productDict[pk] = [quantity, varient];
+                    }
+                    localStorage.removeItem("productDict")
+                    localStorage.setItem('productDict', JSON.stringify(productDict));
+                    productDict = JSON.parse(localStorage.getItem('productDict'));
+                    var product_data = productDict[pk]
+                    var quantity = product_data[0]
+                    parent.find(".productQuantity").html(quantity)
+                    if (quantity <= 0) {
+                        localStorage.removeItem("productDict")
+                        delete productDict[pk];
+                        localStorage.setItem('productDict', JSON.stringify(productDict));
+                        parent.remove()
+                        parent.find(".productQuantity").html(1)
+                        length -= 1
+
+                    }
+                    $('.cart-products-count').html(Object.keys(productDict).length)
+                    $('.side-cart-count').html(Object.keys(productDict).length)
+                    if (action == "Minus") {
+                        if (stock == quantity) {
+                            parent.find("div.category").html(`<span>${category}</span>`)
+                            location.reload()
+                        }
+                    }
+                }
+                if ((Object.keys(productDict).length) === 0) {
+                    localStorage.removeItem("productDict")
+                    localStorage.removeItem("campaign")
+                    location.reload()
+                }
+                else {
+                    var products = localStorage.getItem('productDict');
+                    var url = python = "{% url 'web:take_cart_details' %}";
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        dataType: 'json',
+                        data: {
+                            products: products
+                        },
+
+                        success: function (data) {
+                            var status = data['status'];
+                            var message = data['message'];
+                            var cart_items_count = data['cart_items_count'];
+                            var total = data['total'];
+                            if (status == "true") {
+                                $(".price-details .totalPrice").each(function () {
+                                    $(this).html(`BD ${total}`)
+                                });
+                            }
+                        },
+                        error: function (data) {
+                            var title = "An error occurred";
+                            var message = "An error occurred. Please try again later.";
+                            swal(title, message, "error");
+                        }
+                    });
+                }
+            }
+            python = "{% endif %}";
+        });
+
+        $(document).on('click', '.item-remove', function (e) {
+            e.preventDefault();
+            $this = $(this);
+            var url = $(this).attr("href");
+            var pk = $(this).attr("data-pk");
+            var isReload = $this.hasClass("reload");
+            parent = $(this).parents('.cart-product')
+            python = "{% if not user.is_authenticated %}";
+
+            if (localStorage.getItem("productDict") !== null) {
+                productDict = JSON.parse(localStorage.getItem('productDict'));
+                if (pk in productDict) {
+                    var propOwn = Object.getOwnPropertyNames(productDict);
+                    var length = propOwn.length
+                    var product_data = productDict[pk]
+                    var quantity = product_data[0]
+                    var varient = product_data[1]
+                    var cart_total = $(".amount-details .price .cart-total").text()
+                    cart_total = parseInt(cart_total)
+                    price = parent.find(".price .item-price").html()
+                    price = parseInt(price)
+                    localStorage.removeItem("productDict")
+                    delete productDict[pk];
+                    length -= 1
+                    cart_total -= (price * quantity)
+                    localStorage.setItem('productDict', JSON.stringify(productDict));
+                    parent.remove()
+                    parent.find(".productQuantity").html(1)
+                    $('.cart-products-count').html(Object.keys(productDict).length)
+                    $('.side-cart-count').html(Object.keys(productDict).length)
+                    $(".price-details .totalPrice").each(function () {
+                        $(this).html(`BD ${cart_total}`)
+                    });
+                    $(".amount-details .totalPrice").html(`BD ${cart_total}`)
+
+                }
+                if ((Object.keys(productDict).length) === 0) {
+                    localStorage.removeItem("productDict")
+                    localStorage.removeItem("campaign")
+                    location.reload()
+                }
+                else {
+                    var products = localStorage.getItem('productDict');
+                    var url = python = "{% url 'web:take_cart_details' %}";
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        dataType: 'json',
+                        data: {
+                            products: products
+                        },
+
+                        success: function (data) {
+                            var status = data['status'];
+                            var message = data['message'];
+                            var cart_items_count = data['cart_items_count'];
+                            var total = data['total'];
+                            if (status == "true") {
+                                $(".price-details .totalPrice").each(function () {
+                                    $(this).html(`BD ${total}`)
+                                });
+                            }
+                        },
+                        error: function (data) {
+                            var title = "An error occurred";
+                            var message = "An error occurred. Please try again later.";
+                            swal(title, message, "error");
+                        }
+                    });
+                }
+            }
+
+            python = "{% else %}";
+            var button_checked = "false";
+            if ($('div.cashback span.cashbackApply .cashback-button').is(':checked')) {
+                button_checked = "true";
+            }
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+                data: {
+                    pk: pk,
+                    button_checked: button_checked
+                },
+
+                success: function (data) {
+                    var status = data['status'];
+                    var message = data['message'];
+                    if (status == "true") {
+
+                        var total = data['total'];
+                        var cart_count = data['cart_count'];
+                        var amount_payable = data['amount_payable'];
+
+                        parent.remove()
+                        $('.cart-products-count').html(cart_count)
+                        $('.side-cart-count').html(cart_count)
+                        $(".price-details .totalPrice").each(function () {
+                            $(this).html(`BD ${total}`)
+                        });
+                        $(".amount-details .totalPrice").html(`BD ${total}`)
+                        $(".amount-details .amount .amountPayable").html(`BD ${amount_payable}`)
+
+                        if (total == 0) {
+                            location.reload()
+                        }
+                    }
+                },
+
+                error: function (data) {
+                    var title = "An error occurred";
+                    var message = "An error occurred. Please try again later.";
+                    swal(title, message, "error");
+                }
+            });
+            python = "{% endif %}";
+        });
+
+        $(document).on('click', '.address-remove', function (e) {
+            e.preventDefault();
+            $this = $(this);
+            var url = $(this).attr("href");
+            var pk = $(this).attr("data-pk");
+            var isReload = $this.hasClass("reload");
+            parent = $(this).parents('.cart .bottom ul li.userAddress')
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+                data: {
+                    pk: pk
+                },
+
+                success: function (data) {
+                    var status = data['status'];
+                    if (status == "true") {
+                        parent.remove()
+                        location.reload()
+                        $("#view-products div.delivery-details").hide();
+                        $("#view-products div.cart").show();
+
+                    }
+
+                },
+
+                error: function (data) {
+                    var title = "An error occurred";
+                    var message = "An error occurred. Please try again later.";
+                    swal(title, message, "error");
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Anonymous User Cart -->
+<script>
+    $(document).ready(function () {
+
+        python = "{% if not user.is_authenicated %}";
+        if (localStorage.getItem("productDict") !== null) {
+            var products = localStorage.getItem('productDict');
+            var length = products.length
+            if (products != {}) {
+                var url = python = "{% url 'web:anonymous_user_cart' %}";
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: 'json',
+                    data: {
+                        products: products
+                    },
+
+                    success: function (data) {
+                        var status = data['status'];
+                        var message = data['message'];
+                        var cart_items = data['cart_items'];
+                        var total = data['total'];
+                        if (status == "true") {
+                            var content = '';
+                            var count = 0
+                            for (i = 0; i < cart_items.length; i++) {
+                                count += 1
+                                var pk = cart_items[i].pk;
+                                var name = cart_items[i].name;
+                                var image = cart_items[i].image;
+                                var price = cart_items[i].price;
+                                var quantity = cart_items[i].quantity;
+                                var category = cart_items[i].category;
+                                var stock = cart_items[i].stock
+                                var varient = cart_items[i].varient
+                                var stock_available = cart_items[i].stock_available;
+                                var is_qty_available = cart_items[i].is_qty_available;
+                                if (image == '') {
+                                    image = `{% static 'web/shop/images/product-not-found.jpeg' %}`
+                                }
+                                var description = `<span>${category}</span>`
+                                var increment = `<a class="quantity-update" href="{% url 'orders:increment_cart_item' %}" data-pk="${pk}" data-stock="${stock}" action="Plus"><span class="icon icon-plus"></span></a>`
+                                if (stock_available == false) {
+                                    description = `<span style="color:red;">No stock</span>`
+                                    increment = `<a class="" href="javascript:void(0)" data-pk="${pk}" action="Plus"><span class="icon icon-plus"></span></a>`
+                                }
+                                else if (is_qty_available == false) {
+                                    description = `<span style="color:red;">Only ${stock} Available</span>`
+                                    increment = `<a class="" href="javascript:void(0)" data-pk="${pk}" action="Plus"><span class="icon icon-plus"></span></a>`
+                                }
+                                if (varient != null) {
+                                    var h5 = `<h5>${name}(<span>${varient}</span>)</h5>`
+                                }
+                                else {
+                                    var h5 = `<h5>${name}</h5>`
+                                }
+                                content += `<li class="cart-product">
+                                        <div class="left">
+                                            <img src="${image}" alt="Vel Metus">
+                                        </div>
+                                        <div class="right">
+                                            <div class="title">
+                                                ${h5}
+                                                <div class="price">
+                                                    <span class="item-price">BD ${price}</span>
+                                                </div>
+                                            </div>
+                                            <div class="quantity">
+                                                <a class="quantity-update" href="{% url 'orders:decrement_cart_item' %}" category="${category}" data-pk="${pk}" data-stock="${stock}" action="Minus"><span class="icon icon-minus"></span></a>
+                                                <a href="#"><span class="number productQuantity">${quantity}</span></a>
+                                                ${increment}
+                                            </div>
+                                            <div class="category">
+                                                ${description}
+                                            </div>
+                                            <div class="close-icon">
+                                                <a href="{% url 'orders:delete_cart_item' %}"
+                                                    class="item-remove remove btn btn-default btn-icon waves-effect waves-circle waves-float"
+                                                    data-pk="${pk}">
+                                                    <span class="icon icon-cancel"></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>`
+
+                            }
+                            var price_content = `<span class="totalItem">Subtotal</span>
+                                <span>BD <span class="totalPrice cart-total">${total}</span></span>`
+                            $("#view-products .wrapper .products-list ul").html(content);
+                            $("#view-products .wrapper .products-list .price-details").each(function () {
+                                $(this).html(price_content)
+                            });
+                            $("#view-products .wrapper .products-list .price-details").html(price_content);
+                            $("#view-products .wrapper .products-list .amount-details .price").html(price_content);
+                            $(".price-details .totalItem").html(`subtotal`)
+                            $(".price-details .totalPrice").each(function () {
+                                $(this).html(`BD ${total}`)
+                            });
+                        }
+
+                    },
+
+                    error: function (data) {
+                        var title = "An error occurred";
+                        var message = "An error occurred. Please try again later.";
+                        swal(title, message, "error");
+                    }
+                });
+            }
+        }
+        python = "{% endif %}";
+
+    });
+</script>
+
+<!-- Login from Cart -->
+<script>
+    $(document).on('click', '.login-from-cart', function (e) {
+        e.preventDefault();
+        $this = $(this);
+        var phone_number = $('.phone-number-in-cart').val()
+        $(".mobileNumber").html("+973 " + phone_number)
+        $.ajax({
+            type: "GET",
+            url: '{% url "advertisers:sign_up" %}',
+            dataType: 'json',
+            data: {
+                phone_number: phone_number
+            },
+
+            success: function (data) {
+                var status = data['status'];
+                var message = data['message'];
+                var app_user_pk = data['app_user_pk']
+                resend_otp_link = data['resend_otp_link']
+                if (status == "true") {
+
+                    $('.appUserPk').val(app_user_pk)
+                    $('.resendOtp').attr('href', resend_otp_link)
+                    $("#view-products div.login-shopping").hide();
+                    $("#view-products div.otp-details").show();
+
+                }
+
+                $("#snackbar").html(message);
+                ShowSnackBar();
+
+            },
+
+            error: function (data) {
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later.";
+                swal(title, message, "error");
+            }
+        });
+    });
+    $(document).on('click', '.verify-otp-in-cart', function (e) {
+        e.preventDefault();
+        $this = $(this);
+        var otp1 = $('#otp_no1').val()
+        var otp2 = $('#otp_no2').val()
+        var otp3 = $('#otp_no3').val()
+        var otp4 = $('#otp_no4').val()
+        var otp = otp1 + otp2 + otp3 + otp4
+        var app_user_pk = $('.appUserPk').val()
+        var productData = ''
+        if (localStorage.getItem("productDict") !== null) {
+            productData = localStorage.getItem('productDict');
+        }
+        $.ajax({
+            type: "GET",
+            url: '{% url "advertisers:verify_otp" %}',
+            dataType: 'json',
+            data: {
+                otp_number: otp,
+                app_user_pk: app_user_pk,
+                cart: productData,
+            },
+
+            success: function (data) {
+                var status = data['status'];
+                var message = data['message'];
+                if (status == "true") {
+                    localStorage.clear();
+                    location.reload(true)
+                }
+                else {
+                    $("#snackbar").html(message);
+                    ShowSnackBar();
+                }
+
+            },
+
+            error: function (data) {
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later.";
+                swal(title, message, "error");
+            }
+        });
+    });
+    $(document).on('click', '.resendOtp', function (e) {
+        e.preventDefault();
+        $this = $(this);
+        var resend_otp_link = $('.resendOtp').attr('href')
+        $.ajax({
+            type: "GET",
+            url: resend_otp_link,
+            dataType: 'json',
+
+            success: function (data) {
+                var status = data['status'];
+                var message = data['message'];
+
+                $("#snackbar").html(message);
+                ShowSnackBar();
+
+            },
+
+            error: function (data) {
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later.";
+                swal(title, message, "error");
+            }
+        });
+    });
+</script>
+<!-- end login -->
+
+<!-- Address Edit -->
+<script>
+    $(document).on('click', '.address-edit', function (e) {
+        e.preventDefault();
+        $this = $(this);
+        var url = $(this).attr('href')
+        parent = $(this).parents('.cart .bottom ul li.userAddress')
+
+        var road_number = parent.find(".road").html()
+        var block_number = parent.find(".block").html()
+        var building_number = parent.find(".building").html()
+        var additional_directions = parent.find(".directions").html()
+        var villa_no = parent.find(".villa").html()
+
+        $(".edit-address form").attr("action", url)
+        $(".edit-address form .road_number").val(road_number)
+        $(".edit-address form .block_number").val(block_number)
+        $(".edit-address form .villa_no").val(villa_no)
+        $(".edit-address form .building_number").val(building_number)
+        $(".edit-address form .additional_directions").val(additional_directions)
+
+        $("#view-products div.cart").hide()
+        $("#view-products div.edit-address").show()
+
+    });
+
+    $(document).on("submit", "form.address-form", function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var url = $(this).attr("action");
+
+        var road_number = $(".edit-address form .road_number").val()
+        var block_number = $(".edit-address form .block_number").val()
+        var building_number = $(".edit-address form .building_number").val()
+        var villa_number = $(".edit-address form .villa_number").val()
+        var additional_directions = $(".edit-address form .additional_directions").val()
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType: 'json',
+            data: {
+                road_number: road_number,
+                block_number: block_number,
+                building_number: building_number,
+                additional_directions: additional_directions,
+                villa_number : villa_number
+            },
+
+            success: function (data) {
+                var status = data['status'];
+                var message = data['message'];
+                if (status == "true") {
+                    parent = $(`a[href="${url}"]`).parents('.cart .bottom .userAddress')
+                    parent.find(".road").html(road_number)
+                    parent.find(".block").html(block_number)
+                    parent.find(".building").html(building_number)
+                    parent.find(".villa").html(villa_number)
+                    parent.find(".directions").html(additional_directions)
+
+                    $("#view-products div.cart").show()
+                    $("#view-products div.edit-address").hide()
+                }
+            },
+
+            error: function (data) {
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later.";
+                swal(title, message, "error");
+            }
+        });
+
+
+    });
+</script>
+
+<!-- Cashback Logic -->
+<script>
+    $(document).on('click', '.cashback-button', function (e) {
+
+        if ($(this).is(':checked')) {
+            var url = "{% url 'web:add_cashback_amount' %}";
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+
+                success: function (data) {
+                    var status = data['status'];
+                    var amount_payable = data['amount_payable'];
+                    if (status == "true") {
+                        $(".amount-details .amount .amountPayable").html(`BD ${amount_payable}`)
+                    }
+                },
+
+                error: function (data) {
+                    var title = "An error occurred";
+                    var message = "An error occurred. Please try again later.";
+                    swal(title, message, "error");
+                }
+            });
+        }
+        else {
+            location.reload()
+        }
+
+    });
+</script>
+
+
+{% endblock content %}

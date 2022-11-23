@@ -1,0 +1,16 @@
+<li class="card">
+    <a href="{% url 'web:campaign_view' pk=instance.pk %}">                 
+        <div class="top">
+            <span class="overlay"></span>
+            <div class="top-header">
+                <p>{{instance.description|truncatechars:140}}</p>
+            </div>
+        </div>
+        <div class="middle">
+            <h3>{{instance.title}}</h3>
+        </div>
+        <div class="bottom">
+            <h3>View</h3>
+        </div>
+    </a>
+</li>

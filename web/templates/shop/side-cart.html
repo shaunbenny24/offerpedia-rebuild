@@ -1,0 +1,30 @@
+{% load static %}
+<section id="side-cart">
+    <div class="round">
+        <div class="cart">
+            <a href="{% url 'orders:cart' %}?next={{ next_login }}" class="side-cart-count">{{ cart_item_count|default:"0"}}</a>
+        </div>
+    </div>
+    <div id="CartSideBar">
+        <div class="banner">
+            <div class="content">
+                Item Added to cart
+            </div>
+            <div class="arrow-right"></div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function ShowCartSideBar() {
+        var x = $("#CartSideBar");
+        var window_width = $(window).width();
+        if (window_width >= 551){
+            x.show();
+            setTimeout(function () {
+                x.hide();
+            }, 3000);
+        };
+    }
+</script>
+

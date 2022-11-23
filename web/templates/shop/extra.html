@@ -1,0 +1,93 @@
+<div class="address-form">
+    <div class="top">
+        <a href="#" class="one">1</a>
+        <a href="#" class="two">2</a>
+    </div>
+    <div class="bottom">
+        <h2>Add New Address</h2>
+        <form action="{% url 'advertisers:address' %}" class="ajax reload reset" method="POST">
+            {% csrf_token %}
+            <div class="form-input">
+                {{ form.road_number }}
+                {% if form.road_number.errors %}
+                    <label class="error">{{ form.road_number.errors.as_text }}</label>
+                {% endif %}
+            </div>
+            <div class="form-input">
+                {{ form.block_number }}
+                {% if form.block_number.errors %}
+                    <label class="error">{{ form.block_number.errors.as_text }}</label>
+                {% endif %}
+            </div>
+            <div class="form-input">
+                {{ form.building_number }}
+                {% if form.building_number.errors %}
+                    <label class="error">{{ form.building_number.errors.as_text }}</label>
+                {% endif %}
+            </div>
+            <div class="form-input">
+                {{ form.zip_code }}
+                {% if form.zip_code.errors %}
+                    <label class="error">{{ form.zip_code.errors.as_text }}</label>
+                {% endif %}
+            </div>
+            <div class="form-input">
+                {{ form.additional_directions }}
+                {% if form.additional_directions.errors %}
+                    <label class="error">{{ form.additional_directions.errors.as_text }}</label>
+                {% endif %}
+            </div>
+            <div class="form-button">
+                <input type="submit" value="Save">
+                <button class="cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div> <!-- (#products > section.wrapper > div.address-form) -->
+<div class="cart">
+    <div class="top">
+        <a href="#" class="one">1</a>
+        <a href="#" class="two">2</a>
+    </div>
+    <div class="bottom">
+        <h2>Deliver Address</h2>
+        <form action="">
+            <ul>
+                {% if addresses %}
+                    {% for address in addresses %}
+                        <li>
+                            <div class="first">
+                                <label class="container"> 
+                                    {% if address.is_active %} 
+                                        <input type="radio" name="radio" checked value="{{ address.pk }}" class="selected-address"> 
+                                    {% else %}
+                                        <input type="radio" name="radio" value="{{ address.pk }}" class="selected-address">
+                                    {% endif %}  
+                                    <span class="check"></span>  
+                                    </label>  
+                                <div class="address">
+                                    <p>{{address.road_number}}</p>
+                                    <p>{{address.block_number}}</p>
+                                    <p>{{address.building_number}}</p>
+                                    <p>{{address.zip_code}}</p>
+                                    <p>{{ address.additional_directions }}</p>
+                                </div>
+                                <div class="close-icon">
+                                    <a href="#" class="cancel"><span class="icon icon-cancel"></span></a>
+                                    <!-- <a href="#" class="edit"><span class="icon icon-edit"></span></a> -->
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+            <div class="form-button">
+                <button class="cancel cart-add-address">Add Address</button>
+                <input type="submit" value="Continue" />
+                <!-- <a href="{% url 'orders:checkout' %}" class="action-button redirect">Checkout</a> -->
+            </div>
+        </form>
+    </div>
+</div> 
+</section> 
+</section>

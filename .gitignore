@@ -1,0 +1,7 @@
+# ignore ALL .log files
+*.pyc
+.venv/
+.env
+venv/
+db.sqlite3
+media/

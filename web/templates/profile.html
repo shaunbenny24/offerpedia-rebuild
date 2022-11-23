@@ -1,0 +1,200 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block content %}
+    <section id="container" class="profile-page">
+        <section id="main">
+            <section class="head">
+                <h2><a class="icon icon-left left" href="{% url 'web:dashboard' %}">&nbsp;</a>{{app_user.name}}</h2>
+            </section>
+            <section class="top">
+                <div class="img">
+                    <img src="{% static 'web/images/user-alt2.jpg' %}" alt="User"> 
+                </div>
+            </section>
+            <section class="rate">
+                <ul class="rate">
+                    <li>
+                        <h4 class="user_earned">₹ <span>{{app_user.earned|default:0.00}}</span></h4>
+                        <h6>I Earned</h6>
+                    </li>
+                    <li>
+                        <h4 class="user_paid">₹ <span>{{app_user.paid|default:0.00}}</span></h4>
+                        <h6>I Received</h6>
+                    </li>
+                    <li>
+                        <h4 class="user_balance">₹ <span>{{app_user.balance|default:0.00}}</span></h4>
+                        <h6>Balance</h6>
+                    </li>
+                </ul>
+                <br class="clear">
+                {% if settings %}
+                    {% if settings.minimum_amount <= app_user.balance|default:0 %}
+                        <div class="button-container">
+                            <a href="javascript:void(0);" class="active-button">Withdraw Amount</a>
+                        </div>
+                    {% else %}
+                        <div class="button-container">
+                            <a href="javascript:void(0);" onclick="errorPopup();" class="disabled-button">Withdraw Amount</a>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <div class="content-box">
+                    <h3 class="heading">Active Campaigns</h3>
+                    {% if active_campaigns %}
+                    <ul>
+                        {% for campaign in active_campaigns %}
+                            <li class="card {{campaign.campaign.theme}}">
+                                <a href="{% url 'web:withdraw_campaign' pk=campaign.pk %}" class="action-button reload remove" data-text="Are you withdrawing from this campaign?" data-id="{{instance.pk}}" data-title="Are you sure?">X</a>
+                                <div class="left">
+                                   <h4><a href="{% url 'web:campaign' pk=campaign.campaign.pk %}">{{campaign.campaign.title}}</a></h4>
+                                   <h6>From <b>{{campaign.campaign.from_date|date:"d/m/Y"}}</b></h6>
+                                   <h6>To <b>{{campaign.campaign.to_date|date:"d/m/Y"}}</b></h6>
+                                   <h5 class="active">Join date <b>{{campaign.time.date|date:"d/m/Y"}}</b></h5>
+                                </div>
+                                <div class="right">
+                                   <ul class="rate">
+                                        <li>
+                                            <h4>{{campaign.active_clicks|default:0}}</h4>
+                                            <h6>Active Clicks</h6>
+                                        </li>
+                                        <li>
+                                            <h4>{{campaign.dead_clicks|default:0}}</h4>
+                                            <h6>Dead Clicks</h6>
+                                        </li>
+                                        <li>
+                                            <h4>{{campaign.earned|default:0.00}}</h4>
+                                            <h6>I Earned</h6>
+                                        </li>
+                                         <li>
+                                            <h4>{{campaign.balance|default:0.00}}</h4>
+                                            <h6>My Balance</h6>
+                                        </li>
+                                    </ul>
+                                </div>
+                               <br class="clear">
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                        {% include 'web/includes/nothing_found_lite.html' %}
+                    {% endif %}
+                </div>
+
+                <div class="content-box">
+                    <h3 class="heading">Old Campaigns</h3>
+                    {% if old_campaigns %}
+
+                        <ul>
+                            {% for campaign in old_campaigns %}
+                                <li class="card {{campaign.campaign.theme}}">
+                                    <div class="left">
+                                       <h4><a href="{% url 'web:campaign' pk=campaign.campaign.pk %}">{{campaign.campaign.title}}</a></h4>
+                                       <h6>From <b>{{campaign.campaign.from_date|date:"d/m/Y"}}</b></h6>
+                                       <h6>To <b>{{campaign.campaign.to_date|date:"d/m/Y"}}</b></h6>
+                                       <h5 class="active">Join date <b>{{campaign.time.date|date:"d/m/Y"}}</b></h5>
+                                    </div>
+                                    <div class="right">
+                                        <ul class="rate">
+                                            <li>
+                                            <h4>{{campaign.active_clicks|default:0}}</h4>
+                                            <h6>Active Clicks</h6>
+                                        </li>
+                                        <li>
+                                            <h4>{{campaign.dead_clicks|default:0}}</h4>
+                                            <h6>Dead Clicks</h6>
+                                        </li>
+                                        <li>
+                                            <h4>{{campaign.earned|default:0.00}}</h4>
+                                            <h6>I Earned</h6>
+                                        </li>
+                                         <li>
+                                            <h4>{{campaign.balance|default:0.00}}</h4>
+                                            <h6>My Balance</h6>
+                                        </li>
+                                        </ul>
+                                    </div>
+                                    <br class="clear">
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        {% include 'web/includes/nothing_found_lite.html' %}
+                    {% endif %}
+                </div>
+            </section> 
+        </section>
+    </section>
+
+    <section class="popup hidden errorPopup">
+        <div class="top">
+            <h4>Sorry!!!</h4>
+        </div>
+        <div class="bottom">
+            <p>You need minimum RS {{settings.minimum_amount}} to withdraw amount</p>
+            <span class="cancel">Cancel</span>
+        </div>
+    </section>
+    <span class="popupbg hidden"></span>
+{% endblock %}
+
+
+{% block static %}
+{% load static %}
+<style>
+    .content-box .card {
+        position: relative;
+    }
+    .content-box .card .remove {
+        padding: 2px 7px;
+        position: absolute;
+        right: 10px;
+        top: 0;
+        border-radius: 50%;
+        border: 1px solid #f00;
+        color: #f00;
+        font-size: 13px;
+    }
+</style>
+<script>
+    function amountWithdrawal(){
+        var url = "{% url 'payments:amount_withdrawal_request' %}";
+        show_loader();
+        $.ajax({
+            type : "GET",
+            url : url,
+            dataType : 'json',
+            data : {},
+            success : function(data) {
+                remove_popup();
+                var status = data['status'];
+                var message = data['message'];
+                var title = data['title'];
+                if(status == "true"){
+                    var app_user_earned = data['app_user_earned'];
+                    var app_user_paid = data['app_user_paid'];
+                    var app_user_balance = data['app_user_balance'];
+                    $('.user_earned').find('span').html(app_user_earned);
+                    $('.user_paid').find('span').html(app_user_paid);
+                    $('.user_balance').find('span').html(app_user_balance);
+                    $('.button-container').html('<a href="javascript:void(0);" onclick="errorPopup();" class="disabled-button">Withdraw Amount</a>')
+                    swal(title, message, "success");
+
+                } else {
+                    swal(title, message, "error");
+                }
+            },
+            error : function(data){
+                remove_popup();
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later."; 
+                swal(title, message, "error");
+            }
+        });
+    }
+    $('.active-button').click(function(){
+        amountWithdrawal();
+    })
+
+</script>
+{% endblock %}

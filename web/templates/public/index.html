@@ -1,0 +1,965 @@
+{% extends 'public/extra_base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    #active-campaigns .campaigns {
+        padding-top: 5px;
+    }
+    footer {
+        background: #000000cf;
+    }
+    @media (max-width: 480px) {
+        #active-campaigns .campaigns {
+            padding-top: 45px;
+        }
+
+        #home {
+            padding-top: 5px;
+        }
+    }
+    @media (max-width: 360px){
+        #home {
+            padding-top: 15px;
+        }
+    }
+    @media (max-width: 980px) {
+        #home .search-container {
+            display: none;
+        }
+    }
+</style>
+<section id="home" class="Navbar-Offerpedia">
+    <section class="wrapper">
+        <header>
+            <div class="logo-container">
+                <h1 class="left">
+                    <a href="{% if next_login %}{{ next_login }}{% else %}{% url 'public_index' %}{% endif %}"><img src="{% static 'web/shop/images/logo.png' %}" alt="Logo" /></a>
+                </h1>
+                <div class="search-container">
+                    <form action="">
+                        <input type="text" placeholder="search ..." name="search" />
+                        <input type="hidden" name="campaign_type" value="{{ campaign_type_pk }}" />
+                        <button type="submit">
+                            <i class="zmdi zmdi-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <ul class="right">
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="#" class="profile">
+                        <span class="icon icon-user"></span>
+                        <span class="profile">Profile</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="app-user-login">
+                    <a href="#" onclick="(function(e){e.preventDefault();})(event)" class="login-profile">
+                        <span class="icon icon-user"></span>
+                        <span class="profile">Profile</span>
+                    </a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="" class="cart-icon">
+                        <span class="icon icon-shopping-bag"></span>
+                        <span class="cart-round cart-products-count">{{ cart_item_count|default:"0"}}</span>
+                        <span class="bag">Bag</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="loginpop">
+                <div class="orders-placed">
+                    <ul>
+                        {% if not user.is_authenticated %}
+                        <li class="app-user-login remove-loginpop">
+                            <a href="">
+                                <span class="profile"><i class="zmdi zmdi-account-circle"></i></span>
+                                <h1>Account</h1>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'my_profile' %}?next={{next_login}}" class="remove-loginpop">
+                                <span class="profile"><i class="zmdi zmdi-account-circle"></i></span>
+                                <h1>Account</h1>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if not user.is_authenticated %}
+                        <li class="app-user-login remove-loginpop">
+                            <a href="">
+                                <span class="myorders"><i class="zmdi zmdi-mall"></i></span>
+                                <h1>My Orders</h1>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'my_profile' %}?next={{next_login}}" class="remove-loginpop">
+                                <span class="myorders"><i class="zmdi zmdi-mall"></i></span>
+                                <h1>My Orders</h1>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if not user.is_authenticated %}
+                        <li class="app-user-login remove-loginpop">
+                            <a href="">
+                                <span class="login"><i class="zmdi zmdi-square-right"></i></span>
+                                <h1>Login</h1>
+                            </a>
+                        </li>
+                        {% else %}
+                        {% if is_not_redirect %}
+                        <li>
+                            <a href="{% url 'advertisers:logout' %}"
+                                class="sbtn btn-default btn-icon waves-effect waves-circle waves-float remove-loginpop">
+                                <span class="logout"><i class="zmdi zmdi-square-right"></i></span>
+                                <h1>Logout</h1>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'advertisers:logout' %}?next={{next_login}}"
+                                class="sbtn btn-default btn-icon waves-effect waves-circle waves-float remove-loginpop">
+                                <span class="logout"><i class="zmdi zmdi-square-right"></i></span>
+                                <h1>Logout</h1>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                    </ul>
+
+                    <div class="tri"></div>
+                </div>
+            </div>
+        </header>
+    </section>
+</section>
+<section id="old-offerpedia">
+<section id="home">
+    <section id="active-campaigns">
+        <section class="wrapper">
+            <div class="campaigns">
+                {% if campaigns %}
+                    <!--paggy-->
+                    <div class="index-page">
+                        <div class="campaign-types">
+                            <div class="scrollmenu">
+                                {% if campaign_type_pk == "all" %}
+                                    <a href='{% url "public_index" %}?campaign_type=all' class="all active">All</a>
+                                {% else %}
+                                    <a href="{% url 'public_index' %}?campaign_type=all" class="all">All</a>
+                                    {% for campaign_type in campaign_types %}
+                                        {% if campaign_type_pk == campaign_type.pk %}
+                                            <a href="{% url 'public_index' %}?campaign_type={{campaign_type.pk}}" class="active">{{ campaign_type.name }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                {% for campaign_type in campaign_types %}
+                                    {% if not campaign_type_pk == campaign_type.pk %}
+                                        <a href="{% url 'public_index' %}?campaign_type={{campaign_type.pk}}">{{ campaign_type.name }}</a> <input type="hidden" name="campaign_type" value="{{ campaign_type_pk }}" />
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="search-mobile">
+                            <ul>
+                                <li class="search-li">
+                                    <form>
+                                        <div class="parent search">
+                                            <!-- <i class="zmdi zmdi-search search-icon"></i> -->
+                                            <span class="search-content">
+                                                <input type="text" name="search" placeholder="Search ...">
+                                                <input type="hidden" name="campaign_type" value="{{ campaign_type_pk }}" />
+                                                <button type=submit class="submit-button"><i
+                                                        class="zmdi zmdi-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="offer-content">
+                            <h1>Share our campaigns to your friends and family. Get cashback every time you or they
+                                purchase.</h1>
+                        </div>
+                        <div>
+                            Offer Campaigns
+                        </div>
+                    </div>
+                    <div class="campaign" id="CampaignActive">
+                        {% for campaign in campaigns %}
+                        <div class="card equal-card">
+                            {% if campaign.youtube_video_id %}
+                                <div class="image">
+                                    <iframe width="100%" height="125px" style="border-radius: 10px;" class="embed-responsive-item image1"
+                                        src="https://www.youtube.com/embed/{{campaign.youtube_video_id}}/?autoplay=1"></iframe>
+                                </div>
+                            {% else %}
+                                <div class="image">
+                                    <a href="{% url 'campaign_view' pk=campaign.pk %}?friend=unfriend">
+                                        <img src="{{ campaign.get_image }}" alt="">
+                                    </a>
+                                </div>
+                            {% endif %}
+                            
+                            <div>
+                                <div class="title" style="display: block; height: 36px;">
+                                    <h5>{{ campaign.title }}</h5>
+                                </div>
+                                <div class="cashback" style="display: block; height: 32px;">
+                                    {% if campaign.user_benifit %}
+                                    <div class="you">
+                                        <span>You Get</span>
+                                        <span>{{ campaign.user_benifit }}</span>
+                                    </div>
+                                    {% endif %}
+                                    {% if campaign.referrer_benifit %}
+                                    <div class="you">
+                                        <span>Friend Gets</span>
+                                        <span>{{ campaign.referrer_benifit }}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="button">
+                                <a href="{% url 'campaign_view' pk=campaign.pk %}?friend=unfriend">Shop Now</a>
+                                <div class="share">
+                                    {% if app_user %}
+                                    <i class="share-button" data-pk="{{ campaign.pk }}">Share</i>
+                                    {% else %}
+                                    <i class="app-user-login">Share</i>
+                                    {% endif %}
+                                </div>
+                                <div class="share-buttons">
+                                    <div class="facebook">
+                                        <a class="resp-sharing-button__link"
+                                            href="https://facebook.com/sharer/sharer.php?u={{scheme}}://{{domain}}/campaign/{{campaign.pk}}/?ref_id={{ app_user.pk }}"
+                                            target="_blank" rel="noopener" aria-label="Share on Facebook">
+                                            <i class="zmdi zmdi-facebook"></i>
+                                        </a>
+                                    </div>
+                                    <div class="instagram">
+                                        <a href="{{scheme}}://{{domain}}/campaign/{{campaign.pk}}/?ref_id={{ app_user.pk }}"
+                                            class="shareAnyway" aria-label="{{ campaign.sharable_content}}">
+                                            <img src="{% static 'web/shop/images/3dots.png' %}" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="whatsapp">
+                                        <a target="_blank"
+                                            href="https://wa.me/?text={{ campaign.sharable_content }},%0alink :{{scheme}}://{{domain}}/campaign/{{campaign.pk}}/?ref_id={{ app_user.pk }}"
+                                            rel="noopener noreferrer" class="button btn-submit submit-newsletter" aria-label="{{ campaign.sharable_content }}">
+                                            <img src="{% static 'web/shop/images/whatsapp.png' %}" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="page" id="pagination">
+                        <!--n-264-->
+                        <ul class="pagination">
+                            <li></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="offer-content">
+                        <h1 style="text-align: center; font-size: 32px; padding-top: 20px;">Nothing Found.</h1>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </section>
+    <section id="campaign-share-link">
+        <section class="wrapper">
+            <div class="share">
+                <div class="link">
+                    <input type="text" value="http://121.0.0.1.8000/campaign/" id="shareLink">
+                    <span class="copy">Copy</span>
+                    <span class="close"><a href="#" id="close" class="zmdi zmdi-close-circle-o"></a></span>
+                </div>
+            </div>
+        </section>
+    </section>
+    <section id="spotlight">
+        <section class="wrapper">
+            <div class="left">
+                <h1>offerpedia</h1>
+                <p>Let's grow together.</br>you and your friend make money!</p>
+                <a href="{% url 'public_index' %}#about" class="button">learn more</a>
+                <div class="links">
+                    <div class="left">
+                        <div class="img">
+                            <a href="https://play.google.com/store/apps/details?id=com.offerpedia.offerpedia"
+                                target="_blank" class="link">
+                                <img src="{% static 'web/public/website/images/playstore.png' %}" alt="image" />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="right ">
+                        <div class="img">
+                            <a href="https://itunes.apple.com/us/app/offerpedia-the-referral-bank/id1461088653"
+                                target="_blank" class="link">
+                                <img src="{% static 'web/public/website/images/appstore.png' %}" alt="image" />
+                            </a>
+                        </div>
+                    </div>
+                    <br class="clear" />
+                </div>
+            </div>
+            <div class="right">
+                <div class="image">
+                    <img src="{% static 'web/public/website/images/spotlight.png' %}" alt="image" />
+                </div>
+            </div>
+            <br class="clear" />
+        </section>
+    </section>
+</section><!-- section#home -->
+</section>
+<section id="about">
+    <section class="wrapper">
+        <div class="top">
+            <h3>Introducing Offerpedia</h3>
+            <p>It is a very simple idea!</p>
+        </div>
+        <div class="bottom">
+            <div class="left">
+                <div class="img">
+                    <img src="{% static 'web/public/website/images/about.png' %}" alt="image">
+                </div>
+            </div>
+            <div class="right">
+                <ul>
+                    <li>
+                        <h3>Join</h3>
+                        <p>Download and Join by simply providing your contact number.</p>
+                    </li>
+                    <li>
+                        <h3>Share</h3>
+                        <p>Select your favourite campaigns and share it to your friends and family through any social media.</p>
+                    </li>
+                    <li>
+                        <h3>Earn</h3>
+                        <p>You get a cashback each time you purchase. Not just that, you and your friend get cashback each time your friend purchase through your referrals. Yes !!! You heard it right..!</p>
+                    </li>
+                </ul>
+                <br class="clear" />
+            </div>
+            <br class="clear" />
+        </div>
+    </section>
+</section><!-- section#about -->
+{% if testimonials %}
+<section id="testimonials">
+    <section class="wrapper">
+        <h3>tesimonials</h3>
+        <div class="content owl-carousel">
+
+            {% for testimonial in testimonials %}
+            <div>
+                <p>{{testimonial.description}}</p>
+                <div class="img">
+                    <img src="{{testimonial.image.crop.100x100}}" alt="{{testimonial.name}}">
+                </div>
+                <h3>{{testimonial.name}}</h3>
+                <b>{{testimonial.designation}}</b>
+            </div>
+            {% endfor %}
+
+        </div>
+    </section>
+</section><!-- section#testimonials -->
+{% endif %}
+<section id="advertiser">
+    <section class="wrapper">
+        <div class="top">
+            <h3>Coming soon</h3>
+        </div>
+        <div class="bottom">
+            <div class="left photo">
+                <div class="img">
+                    <img src="{% static 'web/public/website/images/advertiser.png' %}" alt="images">
+                </div>
+            </div>
+            <div class="right">
+                <ul>
+                    <li>
+                        <div class="left">
+                            <div class="img">
+                                <img src="{% static '/web/public/website/images/transfer.png' %}" alt="image">
+                            </div>
+                        </div>
+                        <div class="right">
+                            <h4>Transfer</h4>
+                            <p>Transfer the cash back in your offerpedia account to any Offerpedia User Globally.</p>
+                        </div>
+                        <br class="clear" />
+                    </li>
+                    <li>
+                        <div class="left">
+                            <div class="img">
+                                <img src="{% static 'web/public/website/images/scan.png' %}" alt="image">
+                            </div>
+                        </div>
+                        <div class="right">
+                            <h4>Scan and Pay</h4>
+                            <p>You can scan the QR Code and pay with Offerpedia cash back at any online and offline
+                                stores.</p>
+                        </div>
+                        <br class="clear" />
+                    </li>
+                    <li>
+                        <div class="left">
+                            <div class="img">
+                                <img src="{% static 'web/public/website/images/withdraw.png' %}" alt="image">
+                            </div>
+                        </div>
+                        <div class="right">
+                            <h4>Withdraw to Account</h4>
+                            <p>You can withdraw your cashback in offerpedia account to your bank account.</p>
+                        </div>
+                        <br class="clear" />
+                    </li>
+
+                </ul>
+                <br class="clear" />
+            </div>
+            <br class="clear" />
+        </div>
+    </section>
+</section><!-- section#advertiser -->
+<section id="opinion">
+    <section class="wrapper">
+        <div class="left">
+            <h3>Why Offerpedia</h3>
+            <p>Offerpedia is a Word of Mouth marketing platform which brings a Double-sided Referral Program.
+                If you love a product /service listed on the Offerpedia platform, share it with your friends and family.
+                If anybody whom you shared makes a purchase, you get a cashback.
+                Now, a zillion platforms work the same… So what’s new?
+                Offerpedia does not just give a cashback to the person shared, but a cashback is given to the person who makes the purchase too! Great! Isn’t it?</p>
+        </div>
+        <div class="right">
+            <div class="img">
+                <img src="{% static 'web/public/website/images/spotlight.png' %}" alt="images">
+            </div>
+        </div>
+        <br class="clear" />
+    </section>
+</section><!-- section#opinion -->
+<footer>
+    <section class="wrapper">
+        <div class="top">
+            <div class="first">
+                <h1><a href="{{ next_login }}"><img src="{% static 'web/shop/images/white-logo.png' %}" alt="Logo"></a>
+                </h1>
+                <p style="text-align: left;">Be a part of Offerpedia and let's  support our local businesses. Share our campaigns to your friends and family. Get cashback everytime you or they purchase. </p><p style="text-align: left; margin-top: 10px;">#Let'sgrowtogether</p>
+            </div>
+            <div class="middle">
+                <h5>Quick Links</h5>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    
+                </ul>
+            </div>
+            <div class="last">
+                <div class="contact">
+                    <h5>Contact</h5>
+                    <p>If you have any questions or need help, feel free to contact with our team</p>
+                </div>
+                <div class="icons com-links">
+                    <ul>
+                        <li><a href="https://instagram.com/offerpedia"><span class="icon icon-instagram"></span></a>
+                        </li>
+                        <li><a
+                                href="https://facebook.com/pages/category/Advertising-Marketing/Offerpedia-388019758362297/"><span
+                                    class="icon icon-facebook"></span></a></li>
+                        <!-- <li><a href=""><span class="icon icon-whatsapp"></span></a></li> -->
+                    </ul>
+                </div>
+                <div class="phone call">
+                    <a href="tel:+973 39217883">
+                        <span class="phone-icon icon-phone"></span>
+                        <span class="number"> +973 39217883</span>
+                    </a>
+                    <a href="mailto:hello@offerpedia.org" class="email-link">
+                        <span class="zmdi zmdi-email"></span>
+                        <span class="email">hello@offerpedia.org</span>
+                    </a>
+                </div>
+            </div>
+            <div class="links last">
+                <div class="icons com-icons">
+                    <ul>
+                        <li><a href="https://instagram.com/offerpedia"><span class="icon icon-instagram"></span></a>
+                        </li>
+                        <li><a
+                                href="https://facebook.com/pages/category/Advertising-Marketing/Offerpedia-388019758362297/"><span
+                                    class="icon icon-facebook"></span></a></li>
+                    </ul>
+                </div>
+                <div class="phone call-links">
+                    <a href="tel:+973 39217883" class="phone-link">
+                        <span class="phone-icon icon-phone"></span>
+                        <span class="number">+973 39217883</span>
+                    </a>
+                    <a href="mailto:hello@offerpedia.org" class="email-link">
+                        <span class="zmdi zmdi-email"></span>
+                        <span class="email">hello@offerpedia.org</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <p> &copy; 2020 OFFERPEDIA. All rights reserved. Created and maintained by <span>Talrop WorkTech</span></p>
+        </div>
+    </section>
+</footer><!-- footer -->
+<div id="snackbar"></div>
+
+<!-- Login Section -->
+<section id="overlay-login">
+    <section class="login">
+
+        <div class="left">
+            <h1 class="Logo"><img src="{% static 'web/shop/images/white-logo.png' %}" alt="Logo" /></h1>
+        </div>
+
+        <div class="right">
+            <form action="#">
+                <div class="Text">
+                    <h1>Welcome</h1>
+                    <!-- <p>Login to your existing account</p> -->
+                </div>
+                <div class="Phone">
+                    <span class="zmdi zmdi-phone"></span>
+                    <h5>+973</h5>
+                    <input type="number" placeholder="Enter Phone Number" name="phone-number" required
+                        class="phone-number">
+                </div>
+                <input type="submit" value="Next" class="button login-user" />
+                <a href="#" id="close" class="zmdi zmdi-close-circle-o"></a>
+            </form>
+        </div>
+    </section>
+</section>
+
+<section id="overlay-otp">
+    <section class="otp">
+        <div class="left">
+            <h1 class="Logo"><img src="{% static 'web/shop/images/white-logo.png' %}" alt="Logo" /></h1>
+        </div>
+        <div class="right">
+            <div class="Text">
+                <h1>Enter Verification Code</h1>
+                <p>We have send a 4 digit code to +973 <span class="mobile-number"> 9876543210</span></p>
+            </div>
+
+            <form action="" class="digits">
+                <div class="form-input">
+                    <input type="number" id="otp1" placeholder="" maxlength="1" required>
+                    <input type="number" id="otp2" placeholder="" maxlength="1" required>
+                    <input type="number" id="otp3" placeholder="" maxlength="1" required>
+                    <input type="number" id="otp4" placeholder="" maxlength="1" required>
+                    <input type="hidden" value="" name="app_user_pk" class="app_user-pk">
+                </div>
+                <div class="form-button">
+                    <input type="submit" value="Verify" class="button verify-otp-number" />
+                </div>
+            </form>
+            <a href="" class="resend-otp">
+                <p>Resend OTP</p>
+            </a>
+            <a href="#" id="close" class="zmdi zmdi-close-circle-o"></a>
+        </div>
+    </section>
+</section>
+<!-- End Login Section -->
+
+<!-- Snack bar -->
+<style>
+    #snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 20px 20px;
+        position: fixed;
+        z-index: 15;
+        top: 85%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+</style>
+<script>
+    function ShowSnackBar() {
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function () {
+            x.className = x.className.replace("show", "");
+        }, 3000);
+    }
+</script>
+<!-- End Snack bar -->
+
+<script>
+    function cartTotalCount() {
+        if (localStorage.getItem("productDict") !== null) {
+            productDict = JSON.parse(localStorage.getItem('productDict'));
+            python = "{% if not user.is_authenticated %}";
+            $('.cart-products-count').html(Object.keys(productDict).length)
+            // $('.side-cart-count').html(Object.keys(productDict).length)
+
+            python = "{% else %}";
+            localStorage.removeItem("productDict")
+            if (localStorage.getItem("campaign") !== null) {
+                localStorage.removeItem("campaign")
+            }
+            python = "{% endif %}";
+        }
+    }
+    $(document).ready(function () {
+        cartTotalCount();
+
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        function equalcard(s) {
+            var h = 0;
+            var line_height = 0;
+            $(s).css('display', 'block').css('height', 'auto');
+            $(s).each(function () {
+                var height = $(this).outerHeight(true);
+                if (height > h) {
+                    h = height;
+                }
+            });
+            $(s).height(h);
+        }
+        equalcard('#active-campaigns .campaigns .campaign .card .equal-card');
+        equalcard('#active-campaigns .campaigns .campaign .card .equal-card2');
+
+        $("#active-campaigns .share-button").click(function () {
+            parent = $(this).parents('#active-campaigns div.campaign div.card')
+            var campaign_pk = $(this).attr("data-pk")
+            var url = `/social-share-link/${campaign_pk}/`;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+
+                success: function (data) {
+                    var status = data['status'];
+                    var message = data['message'];
+                    var link = data['link'];
+                    if (status == "true") {
+                        parent.find('div.facebook a').attr('href', `https://facebook.com/sharer.php?u=${link}`)
+                        parent.find('div.instagram a').attr('href', link)
+                        parent.find('div.whatsapp a').attr('href', `https://wa.me/?text=${link}`)
+                    }
+                }
+            });
+            parent.find("div.share-buttons").toggle();
+        });
+
+        $("div.instagram a.shareAnyway").click(function (e) {
+            e.preventDefault();
+            var link = $(this).attr('href')
+            $("#campaign-share-link").show()
+            $("#campaign-share-link div.share div.link input#shareLink").val(link)
+        });
+
+        $("#campaign-share-link div.share span.close").click(function () {
+            $("#campaign-share-link").hide()
+        });
+
+        $("#campaign-share-link div.share span.copy").click(function () {
+            var copyText = document.getElementById("shareLink");
+
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+            /* Copy the text inside the text field */
+            document.execCommand("copy");
+
+            /* Alert the copied text */
+            alert("Copied the text: " + copyText.value);
+        });
+    });
+
+</script>
+
+<!-- Pagination -->
+<script>
+    $(document).ready(function () {
+        $("ul.pagination li a").each(function () {
+            var href = $(this).attr("href")
+            href = href + '#active-campaigns'
+            $(this).attr("href", href)
+        });
+    });
+</script>
+<!-- End pagination -->
+
+<!-- Login and verify -->
+<script>
+    $(document).ready(function () {
+
+
+        $(".app-user-login").click(function () {
+            $("#overlay-login").toggleClass("modal-enabled");
+        });
+        $("#overlay-login .login .right a#close").click(function () {
+            $("#overlay-login").toggleClass("modal-enabled");
+        });
+
+        $("#overlay-otp .otp .right a#close").click(function () {
+            $("#overlay-otp").toggleClass("modal-enable");
+        });
+
+        $("#home section.wrapper header ul li a.profile").click(function () {
+            $(".loginpop").toggleClass("show");
+        });
+        $("#main-home section.wrapper header ul.right li a.profile ").click(function () {
+            $(".loginpop").toggleClass("show");
+        });
+
+        $(document).on('click', '#home section.wrapper header ul .remove-loginpop', function () {
+            $(".loginpop").removeClass("show");
+        });
+        $(document).on('click', '#main-home section.wrapper header ul .remove-loginpop', function () {
+            $(".loginpop").removeClass("show");
+        });
+
+        $('#overlay-otp .otp .right input').on('keyup', function (event) {
+            var KeyID = event.keyCode;
+            var key = $(this).val();
+            var len = key.length;
+            if (len > 1) {
+                var val = key % 10;
+                $(this).val(val)
+            }
+            if (KeyID == 8) {
+                $(this).prev().focus();
+            }
+            else {
+                $(this).next().focus();
+            }
+        });
+    });
+
+    $(document).on('click', '.login-user', function (e) {
+        e.preventDefault();
+        $this = $(this);
+        var phone_number = $('.phone-number').val()
+        $('.mobile-number').html(phone_number)
+        $.ajax({
+            type: "GET",
+            url: 'url "advertisers:sign_up" %}',
+            dataType: 'json',
+            data: {
+                phone_number: phone_number
+            },
+
+            success: function (data) {
+                var status = data['status'];
+                var message = data['message'];
+                var app_user_pk = data['app_user_pk']
+                var mobile_number = data['phone_number']
+                var resend_otp_link = data['resend_otp_link']
+                if (status == "true") {
+
+                    $('.app_user-pk').val(app_user_pk)
+                    $("#overlay-otp").toggleClass("modal-enable");
+                    $("#overlay-login").toggleClass("modal-enabled");
+                    $('.resend-otp').attr('href', resend_otp_link)
+
+                }
+
+                $("#snackbar").html(message);
+                ShowSnackBar();
+
+            },
+
+            error: function (data) {
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later.";
+                swal(title, message, "error");
+            }
+        });
+    });
+    $(document).on('click', '.verify-otp-number', function (e) {
+        e.preventDefault();
+        $this = $(this);
+        var otp1 = $('#otp1').val()
+        var otp2 = $('#otp2').val()
+        var otp3 = $('#otp3').val()
+        var otp4 = $('#otp4').val()
+        var otp = otp1 + otp2 + otp3 + otp4
+        var app_user_pk = $('.app_user-pk').val()
+        let productDict = ''
+        if (localStorage.getItem("productDict") !== null) {
+            productDict = localStorage.getItem('productDict');
+        }
+        $.ajax({
+            type: "GET",
+            url: '{ url "advertisers:verify_otp" }',
+            dataType: 'json',
+            data: {
+                otp_number: otp,
+                app_user_pk: app_user_pk,
+                cart: productDict,
+            },
+
+            success: function (data) {
+                var status = data['status'];
+                var message = data['message'];
+                if (status == "true") {
+                    localStorage.clear();
+                    location.reload(true)
+                }
+                $("#snackbar").html(message);
+                ShowSnackBar();
+            },
+
+            error: function (data) {
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later.";
+                swal(title, message, "error");
+            }
+        });
+    });
+
+    $(document).on('click', '.resend-otp', function (e) {
+        e.preventDefault();
+        $this = $(this);
+        var resend_otp_link = $('.resend-otp').attr('href')
+        $.ajax({
+            type: "GET",
+            url: resend_otp_link,
+            dataType: 'json',
+
+            success: function (data) {
+                var status = data['status'];
+                var message = data['message'];
+                $("#snackbar").html(message);
+                ShowSnackBar();
+
+            },
+
+            error: function (data) {
+                var title = "An error occurred";
+                var message = "An error occurred. Please try again later.";
+                swal(title, message, "error");
+            }
+        });
+    });
+
+</script>
+<!-- End Login Otp Verify Section  -->
+
+<!-- Search functionality -->
+<script>
+    $(".search-icon").click(function () {
+        $(this).hide()
+        var parent = $(this).parents("div.right nav")
+        parent.find("ul li").not(".search-li").hide()
+        parent.find("form div span.search-content").show()
+        parent.find("form div.parent").addClass("search")
+    });
+    $(".close-icon").click(function () {
+        $(".search-icon").show()
+        var parent = $(this).parents("div.right nav")
+        parent.find("ul li").show()
+        parent.find("form div span.search-content").hide()
+        parent.find("form div.parent").removeClass("search")
+    });
+</script>
+<!-- End Search -->
+{% endblock %}
+
+<!-- <header>
+
+    <div class="bottom">
+        <section class="wrapper">
+            <div class="left new-left">
+                <h1>
+                    <a href="{% url 'web:public_index' %}" title="Offerpedia">
+                        <img src="{% static 'web/public/website/images/logo.png' %}" alt="image">
+                    </a>
+                </h1>
+                <div class="search-mobile-view">
+                    <ul>
+                        <li class="search-li">
+                            <form>
+                                <div class="parent search"> -->
+<!-- <i class="zmdi zmdi-search search-icon"></i> -->
+<!-- <span class="search-content">
+                                        <input type="text" name="search" placeholder="Search Campaigns">
+                                        <button type=submit class="submit-button"><i class="zmdi zmdi-search"></i></button>
+                                    </span>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <span class="mobile-menu-icon icon-align-right "></span>
+            <span class="mobile-menu-close-icon icon-cancel"></span>
+            <div class="right">
+                <nav>
+                    <ul>
+                        <li class="active"><a href="{% url 'web:public_index' %}">Home</a></li>
+                        <li><a href="{% url 'web:public_business' %}" target="_blank">Offerpedia for business</a></li>
+                        <li><a href="javascript:void(0);" onclick="clientLogin();">Merchant Login</a></li> -->
+<!-- <li><a href="{% url 'web:ecommerce_active_campaigns' %}"><span class="icon icon-bell-alt">&nbsp;</span>Campaigns</a></li> -->
+<!--
+                        <li><a href="{% url 'web:public_index' %}#spotlight">Download App</a></li>
+                        <li><a href="#">Shop Now</a></li>
+                        <li class="search-li">
+                             <form>
+                                 <div class="parent">
+                                     <i class="zmdi zmdi-search search-icon"></i>
+                                     <span class="search-content">
+                                        <button type=submit class="submit-button"><i class="zmdi zmdi-search"></i></button>
+                                        <input type="text" name="search" placeholder="Search Campaigns">
+                                        <i class="zmdi zmdi-close close-icon"></i>
+                                     </span>
+                                 </div>
+                             </form>
+                         </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="mobile-menu">
+                <ul>
+                    <li><a href="{% url 'web:public_index' %}">Home</a></li>
+                    <li><a href="{% url 'web:public_business' %}" target="_blank">Offerpedia for business</a></li>
+                    <li><a href="javascript:void(0);" onclick="clientLogin();">Merchant Login</a></li> -->
+<!-- <li><a href="{% url 'web:ecommerce_active_campaigns' %}"><span class="icon icon-bell-alt">&nbsp;</span>Campaigns</a></li> -->
+<!--
+                    <li><a href="{% url 'web:public_index' %}#spotlight">Download App</a></li>
+                    <li><a href="#">Shop Now</a></li>
+                </ul>
+            </div>
+            <div class="mobile-menu-overlay"></div>
+            <br class="clear" />
+        </section>
+    </div>
+</header> -->

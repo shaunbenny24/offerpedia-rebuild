@@ -1,0 +1,48 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block content %}
+    {% include 'web/includes/menu.html' %}  
+    <section id="container" class="offer">
+        <section class="head main-list">
+            <h2>
+                <a class="icon icon-menu left menu button-collapse" href="#" data-activates="slide-out">&nbsp;</a>
+                <img src="{% static 'web/public/images/logo.png' %}" height="22" alt="Offerpedia">
+                <a class="icon icon-user right" href="{% url 'web:profile' %}">&nbsp;</a>
+            </h2>
+        </section>
+        <section class="main">
+            {% if instances %}
+                {% for instance in instances %}
+                <a href="{% url 'web:campaigns' pk=instance.pk %}">
+                    <div class="full-card card {{instance.theme}}"  style="background-image: url({% static 'web/images/bg-2.jpg' %});">
+                        <span class="bg">&nbsp;</span>
+                        <div class="left">
+                            <img src="{{instance.icon.url}}" alt="{{instance.name}}">
+                        </div>
+                        <div class="right">
+                            <h4>{{instance.name}}</h4>
+                            <p>{{instance.description}}</p>
+                        </div>
+                        <br class="clear">
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                {% include 'web/includes/nothing_found.html' %}
+            {% endif %}
+        </section>
+    </section>
+{% endblock %}
+
+{% block static %}
+    <script>
+        $('.button-collapse').sideNav({
+          menuWidth: 300,
+          edge: 'left',
+          closeOnClick: true,
+          draggable: true,
+          onOpen: function(el) {},
+          onClose: function(el) {},
+        });
+    </script>
+{% endblock %}

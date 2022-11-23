@@ -1,0 +1,269 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% load social_share %}
+{% block content %}
+
+    <section id="container" class="single {{instance.theme}}" style="background: url({% static 'web/images/bg-2.jpg' %}) no-repeat; background-size: cover;" >
+        <section class="single">
+            <span class="bg">&nbsp;</span>
+            <span class="bg1 white">&nbsp;</span>
+            <section id="main">
+                <section class="head">
+                    <h2><a class="icon icon-left left" href="{% url 'web:campaigns' instance.campaign_type.pk %}">&nbsp;</a><span class="right social-button">{{instance.get_status_display}}</span></h2>   
+                    <br class="clear">
+                </section>
+
+                <section class="main">
+                   <div class="card main-card {{instance.theme}}">
+                       <div class="left">
+                           <h3>{{instance.title}}</h3>
+                       </div>
+                       <div class="right">
+                           <a href="javascript:void(0);" class="button-rate">₹{{instance.campaign_type.amount_to_user}} per click</a>
+                       </div>
+                       <br class="clear" />
+                       <div class="left holo-div">
+                           <a href="javascript:void(0);" class="button-holo">Total {{instance.pricing.no_of_clicks|floatformat}} clicks</a>
+                       </div>
+                       <div class="right holo-div">
+                           <a href="javascript:void(0);" class="button-holo">{{instance.clicks_left|floatformat}} clicks left</a>
+                       </div>
+                       <br class="clear" />
+                       <div class="date">
+                           <h6>From <b>{{instance.from_date|date:"d/m/Y"}}</b></h6>
+                           <h6>To <b>{{instance.to_date|date:"d/m/Y"}}</b></h6>
+                       </div>
+                       <p>{{instance.description}}</p>
+                            {% if is_my_campaign %}
+                            {% if my_campaign.active_clicks >= instance.user_click_limit %}
+                                <span class="button-warning-msg">Campaign Limit Exceeded</span>
+                            {% else %}
+                                <ul class="alternative_links">
+                                    <li>{% post_to_facebook public_campaign_link %}</li>
+                                    <li><a target="_blank" href="https://twitter.com/intent/tweet?url={{public_campaign_link}}&text={{instance.title}}" class="ig-b- ig-b-32"><span class="icon icon-twitter">&nbsp;</span></a></li>
+                                    <li>{% post_to_gplus public_campaign_link %}</li>
+                                    <li>{% send_email instance.title "{{instance.title}}" public_campaign_link %}</li>
+                                    <li><a href="whatsapp://send?text={{public_campaign_link}}" data-action="share/whatsapp/share"><span class="icon icon-whatsapp">&nbsp;</span></a></li>
+                                    <li><span class="icon icon-attach copy_link_menu">&nbsp;</span></li>
+                                </ul>
+                                <input type="text" class="hidden copy-link" value="{{public_campaign_link}}">
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'web:add_to_my_campaign' pk=instance.pk %}" class="add-button action-button reload" data-text="Add this to your list" data-id="{{instance.pk}}" data-title="Are you sure?"><span class="icon icon-attach"></span>Add to My list</a>
+                       {% endif %}
+                   </div>
+                </section>
+
+                {% if request.user.is_superuser %}
+                    <section class="details card">
+                        <div class="left">
+                            <span class="icon icon-user-o"></span>
+                        </div>
+                        <div class="right">
+                            <h5>{{instance.client.name}}</h5>
+                            <div class="location">
+                                <span class="icon icon-location">&nbsp;</span>
+                                <p>{{instance.client.address}}</p>
+                                <br class="clear">
+                            </div>
+                            <div class="phone">
+                                <span class="icon icon-phone">&nbsp;</span>
+                                 <p><a href="" title="">{{instance.client.phone}}</a></p>
+                                 <br class="clear">
+                            </div>
+                           
+                            <div class="mail">
+                                 <span class="icon icon-mail-alt">&nbsp;</span>
+                                <p><a href="" title="">{{instance.client.email}}</a></p>
+                                <br class="clear">
+                            </div>
+                        </div>
+                        <br class="clear">
+                    </section>
+                {% endif %}
+
+                {% if my_campaign %}
+                <section class="activities">
+                    <div class="heading">
+                        <h4>My Activities</h4>
+                    </div>
+                    <ul>
+                        <li class="card active">
+                            <div class="left">
+                                <span class="round">&nbsp;</span>
+                            </div>
+                            <div class="right">
+                                <h6>Active Clicks</h6>
+                                <p>{{my_campaign.active_clicks}}</p>
+                             </div>
+                        </li>
+                        <li class="card active">
+                            <div class="left">
+                                <span class="round">&nbsp;</span>
+                            </div>
+                            <div class="right">
+                                <h6>Dead Clicks</h6>
+                                <p>{{my_campaign.dead_clicks}}</p>
+                             </div>
+                        </li>
+                        <li class="card active">
+                            <div class="left">
+                                <span class="round">&nbsp;</span>
+                            </div>
+                            <div class="right">
+                                <h6>I Earned</h6>
+                                <p>{{my_campaign.earned}}</p>
+                             </div>
+                        </li>
+                        <li class="card active">
+                            <div class="left">
+                                <span class="round">&nbsp;</span>
+                            </div>
+                            <div class="right">
+                                <h6>My Balance</h6>
+                                <p>{{my_campaign.balance}}</p>
+                             </div>
+                        </li>
+                    </ul>
+                    <br class="clear">
+                </section>
+                {% endif %}
+
+                {% if campaign_regions %}
+                    <section class="places">
+                        <div class="heading">
+                            <h4>Campagin Allowed Places</h4>
+                        </div>
+                        <table>
+                            <tr>
+                                <th>Country</th>
+                                <th>State</th>
+                                <th>City</th>
+                            </tr>
+                        {% for region in campaign_regions %}
+                            <tr>
+                                <td>{{region.country|default:"All"}}</td>
+                                <td>{{region.state|default:"All"}}</td>
+                                <td>{{region.city|default:"All"}}</td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    </section>
+                {% endif %}
+            </section>
+        </section>
+    </section>
+    <div id="copymessage"></div>
+ {% endblock %}
+
+ {% block static %}
+ <style>
+     .alternative_links {
+        display: none;
+     }
+     .copy_link_menu {
+        cursor: pointer;
+     }
+     .copy-link {
+        width: 100%;
+        padding: 3px 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        margin-top: 20px;
+        border: none;
+        display: block;
+        border-bottom : 1px solid #ccc;
+        outline:none;
+        font-size: 14px;
+     }
+     .copy-link.hidden {
+        display: none;
+     }
+     input:focus {
+        outline: none
+     }
+     #copymessage {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+    }
+    .button-warning-msg {
+        padding:10px 20px;
+        background: #e57373;
+        font-size: 17px;
+        color: #fff;
+        display: block;
+        text-align: center;
+        margin: 20px auto 10px;
+        border-radius: 30px;
+        cursor: pointer;
+        width: 230px;
+    }
+    #copymessage.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+    @-webkit-keyframes fadein {
+        from {bottom: 0; opacity: 0;} 
+        to {bottom: 30px; opacity: 1;}
+    }
+    @keyframes fadein {
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
+    }
+    @-webkit-keyframes fadeout {
+        from {bottom: 30px; opacity: 1;} 
+        to {bottom: 0; opacity: 0;}
+    }
+    @keyframes fadeout {
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
+    }
+</style>
+<script>
+    
+    $('.alternative_links').css('display','block');
+    
+    $(document).ready(function(){
+        $('.copy_link_menu').click(function(){
+            $('.copy-link').toggleClass('hidden').focus().select();
+            
+            var link_a = $('.copy-link');
+            if (link_a.hasClass('hidden')){
+
+            } else {
+                try {
+                    var ok = document.execCommand('copy');
+
+                    if (ok) {
+                        $("#copymessage").html('Copied');
+                    } else {
+                        $("#copymessage").html('Unable to copy!');
+                    }
+                } catch (err) {
+                   $("#copymessage").html('This action Unsupported');
+                }
+                showAlertMessage();
+            }
+              
+        });
+
+        function showAlertMessage() {
+            var copymessage = $("#copymessage");
+            copymessage.addClass("show");
+            setTimeout(function(){ copymessage.removeClass("show"); }, 3000);
+        }
+    });
+    </script>
+ {% endblock %}

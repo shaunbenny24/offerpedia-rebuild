@@ -1,0 +1,334 @@
+{% extends 'public/extra_base.html' %}
+{% load static %}
+{% block content %}
+    <section id="home">
+        <header>
+            <div class="top">               
+            </div>
+            <div class="bottom">
+                <section class="wrapper">
+                    <div class="left">
+                        <h1>
+                            <a href="{% url 'public_index' %}" title="Offerpedia">
+                                <img src="{% static 'web/public/website/images/logo.png' %}" alt="image">
+                            </a>
+                        </h1>                       
+                    </div>
+                    <span class="mobile-menu-icon icon-align-right "></span>
+                    <span class="mobile-menu-close-icon icon-cancel"></span>
+                   <div class="right">
+                        <nav>
+                            <ul>
+                                <li><a href="{% url 'public_index' %}">Home</a></li>
+                                <li class="active"><a href="{% url 'public_business' %}" target="_blank">Offerpedia for business</a></li>
+                                <li><a href="javascript:void(0);" onclick="clientLogin();">Merchant Login</a></li>
+
+                                <li><a href="{% url 'public_index' %}#spotlight">Download App</a></li>
+                            </ul>
+                            <br class="clear" />
+                        </nav>                     
+                    </div>
+                    <div class="mobile-menu">
+                        <ul>
+                            <li><a href="{% url 'public_business' %}">Home</a></li>
+                            <li><a href="{% url 'public_index' %}">Offerpedia for client</a></li>
+                            <li><a href="javascript:void(0);" onclick="clientLogin();">Merchant Login</a></li>
+
+                            <li><a href="{% url 'public_index' %}#spotlight">Download App</a></li>
+                        </ul>
+                    </div> 
+                    <div class="mobile-menu-overlay"></div>
+                    <br class="clear" />                 
+                </section>
+            </div>
+        </header>
+        <section id="spotlight">
+            <section class="wrapper">
+                <div class="left">
+                    <h1>offerpedia</h1>
+                    <p>We help you Build your own sales community through Word-Of-Mouth marketing!</p>
+                    <a href="{% url 'public_business' %}#backup" class="button">connect with us</a>
+                </div>
+                <div class="right">
+                    <div class="image">
+                        <img src="{% static 'web/public/website/images/bussines-spotlight.png' %}" alt="image" />
+                    </div>
+                </div>
+                <br class="clear"/>
+            </section>
+        </section>
+    </section><!-- section#home -->
+    <section id="slider" class="business owl-carousel">
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 11.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 12.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 13.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 14.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 15.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 16.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 17.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 18.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 19.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 20.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 21.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 26.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 23.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 24.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 25.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 27.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 28.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 29.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 30.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 31.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 32.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 33.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 34.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 35.png' %}" alt="image">
+        </div>
+        <div class="img">
+            <img src="{% static 'web/public/website/images/footer/Artboard 37.png' %}" alt="image">
+        </div>
+    </section><!-- section#slider -->
+
+    <section id="marketing">
+        <section class="wrapper">
+            <div class="top">
+                <p>Your customers love your products/services. Conventional technique is that they will recommend you to their friends and family. But it happens only with a few passionate customers. Majority of your customers would not spread it due to lack of encouragement. That’s why we are here. </p>
+            </div>
+            <div class="bottom">
+                <div class="img">
+                    <img src="{% static 'web/public/website/images/sale.png' %}" alt="image">
+                </div>                
+            </div>
+        </section>
+    </section><!-- section#marketing -->
+    
+    <section id="count">
+        <section class="wrapper">
+            <div class="count">
+                <div class="user number">
+                    <span><b>500</b>+</span>
+                    <h3>Users</h3>
+                </div>
+                <div class="elements number">
+                    <span><b>20</b>+</span>
+                    <h3>Clients</h3>
+                </div>
+                <div class="element number">
+                    <span>$<b>350</b>+</span>
+                    <h3>Closed Business</h3>
+                </div>
+            </div>    
+        </section>
+    </section><!-- section#count -->
+
+    <section id="sales">
+        <section class="wrapper">
+            <div class="top">
+                <h3>Increase your Sales through Word-Of-mouth Marketing</h3>
+                <p>Offerpedia gets you more customers by incentivizing referrals! This easy way of customer acquisition would cost you a lot less than you would pay to get the same results through advertisements.</p>
+            </div>
+            <div class="bottom">
+                <div class="left item">
+                    <ul>
+                        <li>
+                            <span class="round"></span>
+                            <h4>Attract new customers</h4>
+                            <p>Penetrate your business into customer segments that haven’t purchased at your store before</p>
+                        </li>
+                        <li>
+                            <span class="round"></span>
+                            <h4>Own sales community</h4>
+                            <p>People who love your product/service are motivated to refer it to their network</p>
+                        </li>
+                        <li>
+                            <span class="round"></span>
+                            <h4>Easy to begin campaign</h4>
+                            <p>No tedious campaign integration. Simple process than never before.</p>
+                        </li>
+                    </ul>
+                    <br class="clear /">
+                </div>
+                <div class="middle item">
+                    <div class="img">
+                        <img src="{% static 'web/public/website/images/slaeside.png' %}" alt="image">
+                    </div>
+                </div>
+                <div class="right item">
+                    <ul>
+                        <li>
+                            <span class="round"></span>
+                            <h4>Increased ROI</h4>
+                            <p>More people shop through us at your store, return more frequently, and thus become your loyal customers.</p>
+                        </li>
+                        <li>
+                            <span class="round"></span>
+                            <h4>Transparency</h4>
+                            <p>Monitor all your datas and get insights on all a simple dashboard.</p>
+                        </li>
+                        <li>
+                            <span class="round"></span>
+                            <h4>No platform charges</h4>
+                            <p>No hidden costs or platform charges and you pay only for successful businesses made through us.</p>
+                        </li>
+                    </ul>
+                    <br class="clear /">
+                </div>
+                <br class="clear" />
+            </div>
+        </section>
+    </section><!-- section#sales -->
+
+    <footer>
+      <section id="backup">
+            <section class="wrapper">
+                <div class="box">
+                    <h3>Backed by</h3>
+                    <div class="box-bottom">
+                        <div class="left img">
+                            <a href="https://startupbahrain.com/" target="_blank"><img src="{% static 'web/public/website/images/bahrain.png' %}" alt="image"></a>
+                        </div>
+                        <div class="right img">
+                            <a href="https://www.c5capital.com/" target="_blank"><img src="{% static 'web/public/website/images/cd.png' %}" alt="image"></a>
+                        </div>
+                        <br class="clear"/>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section class="middle">
+            <p>Follow us on</p>
+            <div class="icon">
+                <a href="https://facebook.com/pages/category/Advertising-Marketing/Offerpedia-388019758362297/" target="_blank">
+                    <span class="icon-facebook" title="https://facebook.com/pages/category/Advertising-Marketing/Offerpedia-388019758362297/">
+                        <small></small>
+                    </span>
+                </a>
+                <a href="https://instagram.com/offerpedia" target="_blank">
+                    <span class="icon-instagram" title="https://instagram.com/offerpedia">
+                        <small></small>
+                    </span>
+                </a>
+            </div>
+            <div class="connect web">
+                <p>Connect With Us</p>
+                <div class="icon">
+                    <p><span class="icon-mail"></span><a href="mailto:hello@offerpedia.org">hello@offerpedia.org</a></p>
+                    
+                    <p class="phone"><span class="icon-phone"></span><a href="tel:+973 39217883">+973 39217883</a></p>
+                </div>
+
+            </div>
+            <div class="connect mobile hidden">
+                <p>Connect With Us</p>
+                <div class="icon">
+                    <p><span class="icon-mail"></span><a href="mailto:hello@offerpedia.org">hello@offerpedia.org</a></p>
+                    
+                    <p><span class="icon-phone"></span><a href="tel:+973 39217883">+973 39217883</a></p>
+                </div>
+
+            </div>
+            <div class="privacy">
+                <ul>
+                    <li><a href="{% url 'public_index' %}#spotlight">Download App</a></li>
+                    <li><a href="{% url 'public_privacy' %}">Privacy</a></li>
+                    <li><a href="{% url 'public_support' %}">Support</a></li>
+                </ul>
+            </div>
+
+            
+        </section>
+        <section class="bottom">
+            <p>&copy; {% now 'Y' %} Offerpedia. All rights reserved | Created and maintained under <a href="https://talrop.com/worktech" target="_blank" title="Talrop Techpe"> Talrop WorkTech</a></p>
+        </section>
+    </footer><!-- footer -->
+    <script>
+        $(".owl-carousel").owlCarousel({
+        "loop" : true,
+        "auto" : true,
+        "pager" : true,
+        "autoplay" : true,
+        // "center" : true,
+        "autoplaySpeed" : 1000,
+        "responsiveClass":true,
+          "responsive":{
+              0:{
+                  items:1,
+                  nav:true
+              },
+              360:{
+                items:3,
+                nav:false
+              },
+              600:{
+                  items:4,
+                  nav:false
+              },
+              860:{
+                  items:5,
+                  nav:false
+              },
+              980:{
+                  items:6,
+                  nav:false
+              },
+              1000:{
+                  items:8,
+                  nav:true,
+                  loop:false
+              },
+              1280:{
+                  items:10,
+                  nav:true,
+                  loop:false
+              }
+          }
+      });
+    </script>
+{% endblock %}

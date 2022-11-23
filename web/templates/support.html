@@ -1,0 +1,112 @@
+{% extends 'web/public/base.html' %}
+{% load static %}
+{% block meta %}
+
+{% endblock %}
+
+{% block content %}
+<section id="support">
+	<section class="wrapper">
+		<section class="container">
+			<section class="top"><h3>{{title}}</h3></section>
+			<section class="content">
+				<h4>FAQ</h4>
+				<h5>1. How do I get started with Offerpedia App?</p>
+				<p>Download Offerpedia mobile application and click ‘Join’ to start referring your friends and family. </p>
+				<h5>2. How do I join in Offerpedia App?</p>
+				<p>Once you click ‘Join’ in the application, you will be asked to select the country and enter your mobile number.  You will receive a 4-digit One-Time-Password (OTP) with which you can access the application.</p>
+				<h5>3. How do I start sharing the campaign?</p>
+				<p>Once you have joined successfully into the Application, you will see various campaigns listed. Click on the campaign of your choice and click the ‘+’ button to add that particular campaign to your ‘My Campaign’. Hence you can share clicking on the share button and start referring!</p>
+				<h5>4. How do I get money from referring?</p>
+				<p>Share the campaign of your choice to your friends and family. When they make a purchase, they would ask for a cash back code in the retail outlet.  Once they enter the cash back code, cash back will be given to you and your friend’s account within 5 hours.</p>
+				<h5>5. How many campaigns can I add to my list at a time?</p>
+				<p>You can add 5 campaigns to your list at a time. If you want to choose a different campaign after the 5th campaign, you have to click on the ‘Remove from list’ button and remove an existing campaign.</p>
+				<h5>6. What is Active Click and a Dead Click?</p>
+				<p>The campaign listed has to be shared to people in the country mentioned in the Campaign Allowed Places. When a person in the same country as mentioned is seen, it is an Active Click and if not, then it becomes a dead Click.</p>
+				<h5>7. Where does my friend enter the cash back code if I refer him?</p>
+				<p>Your friend receives a link of Offerpedia with the campaign details. Your friend has to make a purchase from that retail outlet and upon the payment of the bill, your friend has to ask for the cash back code. Your friend takes the link that you have shared with him, clicks the ‘cash back’ button, and fills up the form to Submit.  Within 5 hours, you and your friend receive the cash back!</p>
+				<h5>8. How can I see my cash back received?</p>
+				<p>You can see the details of your cash back by simply clicking on ‘My Account’.</p>
+				<h5>9.  How can I use the cash back received?</p>
+				<p>You can scan and pay the cash back in your wallet at any Offerpedia tied-up retail shop during your purchase. You can withdraw the cash back to your bank account in Bahrain by clicking the ‘Transfer to Bank’ account or you can even transfer it to any Offerpedia App user.</p>
+				<h5>10. How can I transfer amount to my bank account?</p>
+				<p>Once you click on the ‘Transfer button’ in ‘My Account’, you will see a ‘Transfer to Bank’ button at the bottom of the page. On clicking, fill in the form with correct details and choose to ‘Proceed’. The amount will be credited in your account after the verification process.</p>
+				<h5>11. How do I change my current mobile number in Offerpedia?</p>
+				<p>You can go to ‘Settings’ and update the details in your profile at any time.</p>
+				<h4>Merchant login FAQ</h4>
+				<h5>1. How do I register with Offerpedia for my business?</p>
+				<p>Contact Offerpedia Team at hello@offerpedia.org, they would provide you with the details of registering your business with Offerpedia.</p>
+				<h5>2. How can I access offerpedia merchant login?</p>
+				<p>Enter the username and password provided to you by our Team in the Merchant Login.</p>
+				<h5>3. How do I generate a cash back code?</p>
+				<p>Once the customer asks you for the cash back code, enter their bill amount in the space provided and click on the ‘Get Cash back Code’ button. The code generated will be visible on the screen.</p>
+				<h5>4. What do I do when a customer wants to pay with Offerpedia?</p>
+				<p>You can show the QR Code visible on your Offerpedia App to the customer and ask them to scan it and pay the amount. </p>
+				<h5>5. How can I assure whether a customer has paid the bill through Offerpedia App?</p>
+				<p>You can see the details of the payment instantly in the app by clicking the ‘Accounts’ button and selecting ‘Payments’.</p>
+				<h5>6. How will I receive the money paid by a customer through Offerpedia App?</p>
+				<p>You will receive the settlement from Offerpedia Team on every Wednesdays for the week. You can also see the settlement history by clicking ‘Accounts’ button and selecting the ‘Settlements’.</p>
+			</section>
+		</section>
+	</section>
+</section>
+{% endblock %}
+
+{% block static %}
+
+{% load static %}
+<style>
+	#support .top {
+		padding:40px 0;
+	}
+	#support .top h3 {
+		font-weight: bold;
+		font-size: 34px;
+		text-align: center;
+		font-weight: bold;
+		font-family: 'open_sansbold';
+	}
+	#support .content {
+		padding-bottom: 40px;
+		width:80%;
+		margin: 0 auto;
+	}
+	#support .content h5 {
+		font-size: 18px;
+		line-height: 1.6em;
+		margin:10px 0;
+		font-weight: bold;
+	}
+	#support .content p {
+		font-size: 16px;
+		line-height: 1.6em;
+		margin:10px 0;
+		margin-left: 20px;
+	}
+	#support .content h4 {
+		font-size: 20px;
+		font-weight: bold;
+		font-family: 'open_sansbold';
+		font-weight: 700;
+		margin:20px 0 20px;
+	}
+	#support .content p b {
+		font-weight: 700;
+		font-family: 'open_sansbold';
+	}
+	#support .content p i {
+		font-style: italic;
+	}
+	#support .content ul li {
+		margin:15px 0;
+		font-size: 16px;
+		line-height: 1.6em;
+		margin-left: 5%;
+	}
+	@media all and (max-width: 768px){
+		#support .content {
+			width: 100%;
+		}
+	}
+</style>
+{% endblock %}

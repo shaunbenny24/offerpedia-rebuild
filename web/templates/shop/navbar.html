@@ -1,0 +1,108 @@
+{% load static %}
+<section id="home" class="Navbar-Offerpedia">
+    <section class="wrapper">
+        <header>
+            <div class="logo-container">
+                <h1 class="left">
+                    <a href="{% if next_login %}{{ next_login }}{% else %}{% url 'web:public_index' %}{% endif %}"><img
+                            src="{% static 'web/shop/images/logo.png' %}" alt="Logo" /></a>
+                </h1>
+                <!-- <div class="address-container">
+                    <a href="#" class="address-text">
+                        <span class="text">Anna Nagar 12/384, I BLOCK 3rd St, Bharat, India</span>
+                        <span class="zmdi zmdi-chevron-down"></span>
+                    </a>
+                </div> -->
+            </div>
+            <ul class="right">
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="#" class="profile">
+                        <span class="icon icon-user"></span>
+                        <span class="profile">Profile</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="app-user-login">
+                    <a href="#" onclick="(function(e){e.preventDefault();})(event)" class="login-profile">
+                        <span class="icon icon-user"></span>
+                        <span class="profile">Profile</span>
+                    </a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{% url 'orders:cart' %}?next={{ next_login }}" class="cart-icon">
+                        <span class="icon icon-shopping-bag"></span>
+                        <span class="cart-round cart-products-count">{{ cart_item_count|default:"0"}}</span>
+                        <span class="bag">Bag</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="loginpop">
+                <div class="orders-placed">
+                    <ul>
+                        {% if not user.is_authenticated %}
+                        <li class="app-user-login remove-loginpop">
+                            <a href="">
+                                <span class="profile"><i class="zmdi zmdi-account-circle"></i></span>
+                                <h1>Account</h1>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'web:my_profile' %}?next={{next_login}}" class="remove-loginpop">
+                                <span class="profile"><i class="zmdi zmdi-account-circle"></i></span>
+                                <h1>Account</h1>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% if not user.is_authenticated %}
+                        <li class="app-user-login remove-loginpop">
+                            <a href="">
+                                <span class="myorders"><i class="zmdi zmdi-mall"></i></span>
+                                <h1>My Orders</h1>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'web:my_profile' %}?next={{next_login}}" class="remove-loginpop">
+                                <span class="myorders"><i class="zmdi zmdi-mall"></i></span>
+                                <h1>My Orders</h1>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% if not user.is_authenticated %}
+                        <li class="app-user-login remove-loginpop">
+                            <a href="">
+                                <span class="login"><i class="zmdi zmdi-square-right"></i></span>
+                                <h1>Login</h1>
+                            </a>
+                        </li>
+                        {% else %}
+                        {% if is_not_redirect %}
+                        <li>
+                            <a href="{% url 'advertisers:logout' %}"
+                                class="sbtn btn-default btn-icon waves-effect waves-circle waves-float remove-loginpop">
+                                <span class="logout"><i class="zmdi zmdi-square-right"></i></span>
+                                <h1>Logout</h1>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'advertisers:logout' %}?next={{next_login}}"
+                                class="sbtn btn-default btn-icon waves-effect waves-circle waves-float remove-loginpop">
+                                <span class="logout"><i class="zmdi zmdi-square-right"></i></span>
+                                <h1>Logout</h1>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% endif %}
+                    </ul>
+
+                    <div class="tri"></div>
+                </div>
+            </div>
+        </header>
+    </section>
+</section>

@@ -1,0 +1,161 @@
+.theme-violet .bg{
+	background: #ff00cc;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #333399, #ff00cc);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #333399, #ff00cc); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+.bg1{
+	background: white; 
+    background: -webkit-linear-gradient( rgba(255,0,0,0.1)5%,rgba(255,255,255,255) 60%); 
+    background: -o-linear-gradient( rgba(255,0,0,0.1)5%,rgba(255,255,255,255) 60%);
+    background: -moz-linear-gradient( rgba(255,0,0,0.1)5%,rgba(255,255,255,255) 60%);
+    background: linear-gradient( rgba(255,0,0,0.1)5%,rgba(255,255,255,255) 60%);
+}
+.theme-violet .button-rate{
+	background: #C9557D;
+}
+.theme-violet .button-holo{
+	border: 1px solid #C9557D;
+}
+.theme-violet .date b{
+	color: #C9557D;
+}
+.theme-violet .add-button{
+	background: #C9557D;
+}
+.theme-violet .main-card ul li .icon{
+	color: #C9557D;
+}
+.theme-violet .active:hover h6,.theme-violet .active:hover p{
+	color: #C9557D;
+}
+.theme-violet ul .active:hover .round{
+	border: 5px solid #C9557D;
+}
+
+li.theme-violet .left .active, li.theme-violet .left .active b{
+	color: #C9557D;
+}
+li.theme-violet div.right h4,li.theme-violet div.right h6{
+	color: #C9557D;
+}
+li.theme-violet{
+	border-right: 15px solid #C9557D;
+}
+
+
+
+
+
+
+.theme-yellow .bg{
+	background: rgba(202, 197, 49, 1);
+    background: -webkit-linear-gradient(to right, rgba(249, 207, 34, 1), rgba(245, 185, 27, 1), rgba(232, 108, 5, 1));
+    background: linear-gradient(to right, rgba(249, 207, 34, 1), rgba(245, 185, 27, 1), rgba(232, 108, 5, 1));
+}
+.theme-yellow .button-rate{
+	background: rgba(242, 153, 74,1);
+}
+.theme-yellow .button-holo{
+	border: 1px solid rgba(242, 153, 74,1);
+}
+.theme-yellow .date b{
+	color: rgba(242, 153, 74,1);
+}
+.theme-yellow .add-button{
+	background: rgba(242, 153, 74,1);
+}
+.theme-yellow .main-card ul li .icon{
+	color: rgba(242, 153, 74,1);
+}
+.theme-yellow .active:hover h6,.theme-yellow .active:hover p{
+	color: rgba(242, 153, 74,1);
+}
+.theme-yellow ul .active:hover .round{
+	border: 5px solid rgba(242, 153, 74,1);
+}
+li.theme-yellow .left .active, li.theme-yellow .left .active b{
+	color: rgba(242, 153, 74,1);
+}
+li.theme-yellow div.right h4,li.theme-yellow div.right h6{
+	color: rgba(242, 153, 74,1);
+}
+li.theme-yellow{
+	border-right: 15px solid rgba(242, 153, 74,1);
+}
+
+
+.theme-green .bg{
+	background: rgba(52, 232, 158, 1);
+    background: -webkit-linear-gradient(to right, rgba(15, 52, 67, 1), rgba(52, 232, 158, 1));
+    background: linear-gradient(to right, rgba(15, 52, 67, 1), rgba(52, 232, 158, 1));
+
+}
+.theme-green .button-rate{
+	background: rgba(35, 148, 116, 1);
+}
+.theme-green .button-holo{
+	border: 1px solid rgba(35, 148, 116, 1);
+}
+.theme-green .date b{
+	color: rgba(35, 148, 116, 1);
+}
+.theme-green .add-button{
+	background: rgba(35, 148, 116, 1);
+}
+.theme-green .main-card ul li .icon{
+	color: rgba(35, 148, 116, 1);
+}
+.theme-green .active:hover h6,.theme-green .active:hover p{
+	color: rgba(35, 148, 116, 1);
+}
+.theme-green ul .active:hover .round{
+	border: 5px solid rgba(35, 148, 116, 1);
+}
+li.theme-green .left .active, li.theme-green .left .active b{
+	color: rgba(35, 148, 116, 1);
+}
+li.theme-green div.right h4,li.theme-green div.right h6{
+	color: rgba(35, 148, 116, 1);
+}
+li.theme-green{
+	border-right: 15px solid rgba(35, 148, 116, 1);
+}
+
+
+.theme-red .bg{
+	background: rgba(0,0,0,1);
+	background: -webkit-linear-gradient(to right, rgba(255, 7, 11, 1), rgba(229, 0, 141, 1), rgba(0,0,0,1));
+	background: linear-gradient(to right, rgba(255, 7, 11, 1), rgba(229, 0, 141, 1), rgba(0,0,0,1));
+
+}
+.theme-red .button-rate{
+	background: rgba(255, 7, 11,1);
+}
+.theme-red .button-holo{
+	border: 1px solid rgba(255, 7, 11,1);
+}
+.theme-red .date b{
+	color: rgba(255, 7, 11,1);
+}
+.theme-red .add-button{
+	background: rgba(255, 7, 11,1);
+}
+.theme-red .main-card ul li .icon{
+	color: rgba(255, 7, 11,1);
+}
+.theme-red .active:hover h6,.theme-red .active:hover p{
+	color: rgba(255, 7, 11,1);
+}
+.theme-red ul .active:hover .round{
+	border: 5px solid rgba(255, 7, 11,1);
+}
+li.theme-red .left .active, li.theme-red .left .active b{
+	color: rgba(255, 7, 11,1);
+}
+li.theme-red div.right h4,li.theme-red div.right h6{
+	color: rgba(255, 7, 11,1);
+}
+li.theme-red{
+	border-right: 15px solid rgba(255, 7, 11,1);
+}

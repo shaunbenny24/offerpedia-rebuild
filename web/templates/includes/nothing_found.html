@@ -1,0 +1,40 @@
+{% load static %}
+<div class="empty">
+	<div class="content">
+		<img src="{% static 'web/images/empty.svg' %}" alt="Nothing Found" width=120>
+		<h3 class="title">No results found.</h3>
+		<p class="content">We are not able to find anything for your query.</p>
+		<a href="{% url 'web:dashboard' %}" class="button">Back to Home</a>
+	</div>
+</div>
+<style>
+	div.empty {
+		width: 100%;
+		text-align: center;
+		padding: 30% 10% 0;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	div.empty img{
+		max-width: 120px;
+	}
+	div.empty h3.title {
+		font-size: 18px;
+		margin:20px 0;
+		color: #009688;
+	}
+	div.empty p {
+		font-size: 15px;
+	}
+	div.empty a.button {
+		font-size: 14px;
+		padding: 10px 30px;
+		border: 1px solid #009688;
+		border-radius: 20px;
+		color: #009688;
+		display: inline-block;
+		margin-top: 20px;
+	}
+
+</style>

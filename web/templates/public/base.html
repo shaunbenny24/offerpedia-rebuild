@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <title>{{title}}</title>
+        <link rel="stylesheet" href="{% static 'web/public/css/style.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'web/css/sweetalert.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'web/public/css/selectordie.css' %}" type="text/css"/>
+        <link rel="stylesheet" href="{% static 'web/public/css/animate.css' %}" type="text/css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="{% static 'web/public/js/wow.min.js' %}"></script>
+        <link rel="apple-touch-icon" sizes="57x57" href="{% static 'img/favicon/apple-icon-57x57.png' %}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{% static 'img/favicon/apple-icon-60x60.png' %}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'img/favicon/apple-icon-72x72.png' %}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{% static 'img/favicon/apple-icon-76x76.png' %}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'img/favicon/apple-icon-114x114.png' %}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{% static 'img/favicon/apple-icon-120x120.png' %}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{% static 'img/favicon/apple-icon-144x144.png' %}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{% static 'img/favicon/apple-icon-152x152.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/favicon/apple-icon-180x180.png' %}">
+        <link rel="icon" type="image/png" sizes="192x192"  href="{% static 'img/favicon/android-icon-192x192.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{% static 'img/favicon/favicon-96x96.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'img/favicon/manifest.json' %}">
+        <meta name="msapplication-TileColor" content="#52B494">
+        <meta name="msapplication-TileImage" content="{% static 'img/favicon/ms-icon-144x144.png' %}">
+        <meta name="theme-color" content="#52B494">
+        {% block meta %}
+
+        {% endblock %}
+    </head>
+
+    <body>
+        <header>
+            <section class="wrapper">
+                <h1>
+                    <a href="{% url 'web:public_index' %}">
+                        <img src="{% static 'web/public/images/logo.png' %}" alt="Logo">
+                    </a>
+                </h1>
+                <nav>
+                    <ul>
+                        <li><a href="{% url 'web:public_index' %}">Home</a></li>
+                        <li><a href="{% url 'web:public_index' %}#about">About Us</a></li>
+                        <li><a href="javascript:void(0);" onclick="dealerLogin();">Dealer Login</a></li>
+                        <li><a href="javascript:void(0);" onclick="clientLogin();">Client Login</a></li>
+                        <li><a href="{% url 'web:public_index' %}#download">Download App</a></li>
+                    </ul>
+                </nav>
+                <br class="clear" />
+                <div id="mySidenav" class="sidenav hidden" onclick="closeNav()">
+                    <a title="Close" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                    <div class="menu" onclick="closeNav()">
+                        <li><a href="{% url 'web:public_index' %}">Home</a></li>
+                        <li><a href="{% url 'web:public_index' %}#about">About Us</a></li>
+                        <li><a href="javascript:void(0);" onclick="dealerLogin();">Dealer Login</a></li>
+                        <li><a href="javascript:void(0);" onclick="clientLogin();">Client Login</a></li>
+                        <li><a href="{% url 'web:public_index' %}#download" onclick="closeNav()">Download App</a></li>
+                        <li><a href="#" onclick="closeNav()">Shop Now</a></li>
+                    </div>
+                </div>
+                <span class="openmenu hidden" onclick="openNav()">&nbsp;</span>
+            </section>
+        </header>
+
+        {% block content %}
+
+        {% endblock %}
+
+        <footer>
+            <section class="top">
+                <div class="social_box">
+                    <h3>Find us on</h3>
+                    <div class="links">
+                        <a href="#" class="facebook"><img src="{% static 'web/public/images/facebook.svg' %}" alt=""></a>
+                        <a href="#" class="twitter"><img src="{% static 'web/public/images/twitter.svg' %}" alt=""></a>
+                    </div>
+                </div>
+                <div class="mail_box">
+                    <h3>Send a mail to</h3>
+                    <h2><a target="_blank" href="mailto:hello@offerpedia.org">hello@offerpedia.org</a></h2>
+                </div>
+                <div class="bottom_nav">
+                    <a href="{% url 'web:public_index' %}#about">About Us</a>
+                    <a href="{% url 'web:public_index' %}#download">Download App</a>
+                    <a href="{% url 'web:privacy' %}">Privacy</a>
+                    <a href="{% url 'web:support' %}">Support</a>
+                </div>
+            </section>
+            <section class="bottom">
+                <p class="center">&copy; {% now 'Y' %} Offerpedia. All rights reserved.</p>
+            </section>
+        </footer>
+        <section class="popup hidden clientRegister">
+            <div class="top">
+                <h4>Register Now</h4>
+                <span class="close">x</span>
+            </div>
+            <div class="bottom">
+                <form class="ajax redirect" action="{% url 'web:create_client_registration' %}" method="post">
+                    {% csrf_token %}
+                    {% for field in client_registration_form %}
+                        <p class="{% if forloop.counter|divisibleby:2 %}second{% endif %}">
+                            <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                            {{field}}
+                        </p>
+                    {% endfor %}
+                    <br class="clear" />
+                    <p class="submit">
+                        <input type="submit" value="Submit" />
+                        <br class="clear">
+                    </p>
+                </form>
+            </div>
+        </section>
+
+        <section class="popup hidden dealerLogin">
+            <div class="top">
+                <h4>Login Now</h4>
+                <span class="close">x</span>
+            </div>
+            <div class="bottom">
+                <form class="ajax redirect reset" action="{% url 'users:dealer_login' %}" method="post">
+                    {% csrf_token %}
+                    {% for field in advertiser_login_form %}
+                        <p class="{% if forloop.counter|divisibleby:2 %}second{% endif %}">
+                            <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                            {{field}}
+                        </p>
+                    {% endfor %}
+                    <br class="clear" />
+                    <p class="submit">
+                        <input type="submit" value="Submit" />
+                        <br class="clear">
+                    </p>
+                    <p class="info">To be a registered dealer at Offerpedia, mail us at <b>career@offerpedia.org</b>.</p>
+                </form>
+            </div>
+        </section>
+
+        <section class="popup hidden clientLogin">
+            <div class="top">
+                <h4>Login Now</h4>
+                <span class="close">x</span>
+            </div>
+            <div class="bottom">
+                <form class="ajax redirect reset" action="{% url 'users:client_login' %}" method="post">
+                    {% csrf_token %}
+                    {% for field in advertiser_login_form %}
+                        <p class="{% if forloop.counter|divisibleby:2 %}second{% endif %}">
+                            <label for="{{ field.id_for_label }}">{{field.label}}</label>
+                            {{field}}
+                        </p>
+                    {% endfor %}
+                    <br class="clear" />
+                    <p class="submit">
+                        <input type="submit" value="Submit" />
+                        <br class="clear">
+                    </p>
+                </form>
+            </div>
+        </section>
+        <span class="popupbg hidden"></span>
+
+        <script src="{% static 'web/js/jquery.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'web/public/js/selectordie.min.js' %}"></script>
+        <script src="{% static 'web/public/js/script.js' %}"></script>
+        <script src="{% static 'web/js/sweetalert.min.js' %}"></script>
+        <script>
+        wow = new WOW(
+          {
+            animateClass: 'animated',
+            callback:     function(box) {
+            }
+          }
+        );
+        wow.init();
+
+        function clientRegister() {
+            var popupbox = $('.clientRegister');
+            popupbox.removeClass('hidden fadeOutUp');
+            $('.popupbg').removeClass('hidden'); 
+            if (!popupbox.hasClass('animated')){
+                popupbox.addClass('animated fadeInUp');
+            } else {
+                popupbox.addClass('fadeInUp');
+            }
+            
+        }
+
+        $(document).on('click','.popupbg,.clientRegister span.close',function(){
+            $('.clientRegister').addClass('hidden fadeOutUp');
+            $('.clientRegister').removeClass('fadeInUp');
+            $('.popupbg').addClass('hidden');
+        });
+
+        function dealerLogin() {
+            var popupbox = $('.dealerLogin');
+            popupbox.removeClass('hidden fadeOutUp');
+            $('.popupbg').removeClass('hidden'); 
+            if (!popupbox.hasClass('animated')){
+                popupbox.addClass('animated fadeInUp');
+            } else {
+                popupbox.addClass('fadeInUp');
+            }
+            
+        }
+
+        $(document).on('click','.popupbg,.dealerLogin span.close',function(){
+            $('.dealerLogin').addClass('hidden fadeOutUp');
+            $('.dealerLogin').removeClass('fadeInUp');
+            $('.popupbg').addClass('hidden');
+        });
+
+        function clientLogin() {
+            var popupbox = $('.clientLogin');
+            popupbox.removeClass('hidden fadeOutUp');
+            $('.popupbg').removeClass('hidden'); 
+            if (!popupbox.hasClass('animated')){
+                popupbox.addClass('animated fadeInUp');
+            } else {
+                popupbox.addClass('fadeInUp');
+            }
+            
+        }
+
+        $(document).on('click','.popupbg,.clientLogin span.close',function(){
+            $('.clientLogin').addClass('hidden fadeOutUp');
+            $('.clientLogin').removeClass('fadeInUp');
+            $('.popupbg').addClass('hidden');
+        });
+
+      </script>
+        {% block static %}
+            {% load static %}
+
+        {% endblock %}
+
+    </body>
+</html>

@@ -1,0 +1,183 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block content %}
+    <section id="container" class="profile-page">
+        <section id="main">
+            <section class="head">
+                <h2><a class="icon icon-left left" href="{% url 'web:dashboard' %}">&nbsp;</a>{{app_user.name}}</h2>
+            </section>
+            <section class="top">
+                <div class="img">
+                    <img src="{% static 'web/images/user-alt2.jpg' %}" alt="User"> 
+                </div>
+            </section>
+            <section class="rate">
+                <div class="content-box">
+                    <h3 class="heading">About Me</h3>
+                    <div class="content update">
+                        <form class="ajax redirect" action="{{url}}" method="post">
+                            {% csrf_token %}
+                            <p>
+                                <label for="{{form.first_name.id_for_label}}">{{form.first_name.label}}</label>
+                                {{form.first_name}}
+                            </p>
+                            <p>
+                                <label for="{{form.last_name.id_for_label}}">{{form.last_name.label}}</label>
+                                {{form.last_name}}
+                            </p>
+
+                            <p>
+                                <label for="{{form.country.id_for_label}}">{{form.country.label}}</label>
+                                {{form.country}}
+                            </p>
+
+                            <p>
+                                <label for="{{form.state.id_for_label}}">{{form.state.label}}</label>
+                                {{form.state}}
+                            </p>
+
+                            <p>
+                                <label for="{{form.city.id_for_label}}">{{form.city.label}}</label>
+                                {{form.city}}
+                            </p>
+
+                            <p class="disvalue">
+                                <label for="{{form.phone.id_for_label}}">{{form.phone.label}}</label>
+                                <span class="prevalue">+91 </span>
+                                {{form.phone}}
+                                {% if instance.form %}
+                                    {% if instance.is_verified %}
+                                        <span class="status-verify verified-button">Verified</span>
+                                    {% else %}
+                                        <a href="{% url 'web:resend_otp' pk=instance.pk %}" class="status-verify verify-link">Verify this number</a>
+                                    {% endif %}
+                                {% endif %}
+                                <span class="message">*This number is used for sending money to your paytm account</span>
+                            </p>
+                            <p>
+                                <label for="{{form.email.email}}">{{form.email.label}}</label>
+                                {{form.email}}
+                            </p>
+                            <p class="last">
+                                <input type="submit" value="Update" class="button">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </section> 
+        </section>
+    </section>
+{% endblock %}
+
+
+{% block static %}
+{% load static %}
+<link href="{% static 'web/css/selectordie.css' %}" rel="stylesheet">
+
+<style>
+    .content-box .card {
+        position: relative;
+    }
+    .content-box .card .remove {
+        padding: 5px 10px;
+        position: absolute;
+        right: 10px;
+        top: 0;
+        border-radius: 50%;
+        border:1px solid #f00;
+        color: #f00;
+    }
+</style>
+<script>
+    var $country = $('#id_country').val();
+    var $state = $('#id_state').val();
+
+    if($country == ""){
+        $('#id_state').html('<option value="">--Select Country first--</option>');
+        $('#id_state').selectOrDie('update');
+    }else{
+
+        showStates($country);
+    }
+
+    $(document).on('change','#id_country', function(){
+        var $country = $(this).val();
+        showStates($country);
+    });
+
+    $(document).on('change','#id_state', function(){
+        var $state = $(this).val();
+        showCities($state);
+    });
+
+    var $state = $('#id_state').val();
+    if($state == ""){
+        $('#id_city').html('<option value="">--Select State first--</option>');
+        $('#id_city').selectOrDie('update');
+    }else{
+        showCities($state);
+    }
+
+    var $city = $('#id_city').val();
+    
+    function showStates($country){              
+        if($country == ""){
+            $('#id_state').html('<option value="">--Select Country first--</option>');
+            $('#id_state').selectOrDie('update');
+        }else{
+            var url = "{% url 'cities:get_states' %}" + "?pk=" + $country;
+            
+            $.getJSON(url, function(models) {
+                var options = '<option value="">---------</option>';
+                for (var i = 0; i < models.length; i++) {
+                    options += '<option value="' + models[i].pk + '">' + models[i].fields['name'] + '</option>';
+                }
+                $('#id_state').html(options);
+                if($state !== ""){
+                    $('#id_state').val($state);
+                    $state = ""
+                }
+                $('#id_state').selectOrDie('update');
+                
+            }).error(function() {  
+                alert("States not loaded. Please refresh page again.");                      
+            });
+        }
+    }
+
+    function showCities($cities){              
+        if($cities == ""){
+            $('#id_city').html('<option value="">--Select State first--</option>');
+            $('#id_city').selectOrDie('update');
+        }else{
+            var url = "{% url 'cities:get_cities' %}" + "?pk=" + $cities;
+            
+            $.getJSON(url, function(models) {
+                var options = '<option value="">---------</option>';
+                for (var i = 0; i < models.length; i++) {
+                    options += '<option value="' + models[i].pk + '">' + models[i].fields['name'] + '</option>';
+                }
+                $('#id_city').html(options);
+                if($city !== ""){
+                    $('#id_city').val($city);
+                    $city = ""
+                }
+                $('#id_city').selectOrDie('update');
+                
+            }).error(function() {  
+                alert("Cities not loaded. Please refresh page again.");                      
+            });
+        }
+    }
+
+    $('input[type=text]').focus(function () { 
+        $(this).select();
+    });
+    $('input[type=text]').mouseup(function (e) { // fix for chrome and safari
+        e.preventDefault();
+    });
+    $('input[type=text]').select(function () {
+        $('.log').append(' Handler for .select() called. ');
+    });
+</script>
+{% endblock %}

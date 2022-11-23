@@ -1,0 +1,180 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block content %}
+	
+    {% include 'web/includes/menu.html' %} 
+    <section id="container" class="offer"> 
+    	<section class="head main-list">
+            <h2>
+                <a class="icon icon-menu left menu button-collapse" href="#" data-activates="slide-out">&nbsp;</a>
+                <img src="{% static 'web/public/images/logo.png' %}" height="22" alt="Offerpedia">
+                <a class="icon icon-user right" href="{% url 'web:profile' %}">&nbsp;</a>
+            </h2>
+
+        </section>
+		<section id="cashback">
+			<div class="top">
+				<span>₹ {{amount|default:"0"}}</span>
+				<p>Total Cashback</p>
+			</div>
+			<div class="bottom">
+				<div class="wrapper">
+					<ul class="widgets" style="list-style: none;">
+						{% for instance in refferer_instances %}
+							{% if instance.is_withdrawed %}
+								<li class="withdrowed">
+									<div class="left">	
+										{% if instance.cashback_type == "to_referrer" %}								
+										<span class="icon1"></span>
+										{% elif instance.cashback_type == "to_user" %}
+										<span class="icon"></span>
+										{% endif %}
+										<p>You won the cashback of</p>
+										<span>₹ {{instance.amount|default:"0"}}</span>
+									</div>
+									<div class="right">
+										<p>Campaign: {{instance.cashback_claim.campaign_view.campaign.title}}</p>
+										<p>Date: {{today}}</p>
+										<p>Expiry Date: {{instance.expiry_date}}</p>
+									</div>
+									<br class="clear" />
+								</li>
+							{% else %}
+								<li class="withdrow">
+									<div class="left">
+										{% if instance.cashback_type == "to_referrer" %}									
+										<span class="icon1"></span>
+										{% elif instance.cashback_type == "to_user" %}
+										<span class="icon"></span>
+										{% endif %}
+										<p>You won the cashback of</p>
+										<span>₹ {{instance.amount|default:"0"}}</span>
+									</div>
+									<div class="right">
+										<p>Campaign: {{instance.cashback_claim.campaign_view.campaign.title}}</p>
+										<p>Date: {{today}}</p>
+										<p>Expiry Date: {{instance.expiry_date}}</p>
+                            			<a href="javascript:void(0);" data-id="{{instance.id}}" class="active-button">Withdraw</a>
+									</div>
+									<br class="clear" />
+								</li>
+							{% endif %}
+						{% endfor %}	
+						{% for user_instance in user_instances %}
+							{% if user_instance.is_withdrawed %}
+								<li class="withdrowed">
+									<div class="left">	
+										{% if user_instance.cashback_type == "to_referrer" %}								
+										<span class="icon1"></span>
+										{% elif user_instance.cashback_type == "to_user" %}
+										<span class="icon"></span>
+										{% endif %}
+										<p>You won the cashback of</p>
+										<span>₹ {{user_instance.amount|default:"0"}}</span>
+									</div>
+									<div class="right">
+										<p>Campaign: {{user_instance.cashback_claim.campaign_view.campaign.title}}</p>
+										<p>Date: {{today}}</p>
+										<p>Expiry Date: {{user_instance.expiry_date}}</p>
+									</div>
+									<br class="clear" />
+								</li>
+							{% else %}
+								<li class="withdrow">
+									<div class="left">
+										{% if user_instance.cashback_type == "to_referrer" %}									
+										<span class="icon1"></span>
+										{% elif user_instance.cashback_type == "to_user" %}
+										<span class="icon"></span>
+										{% endif %}
+										<p>You won the cashback of</p>
+										<span>₹{{user_instance.amount|default:"0"}}</span>
+									</div>
+									<div class="right">
+										<p>Campaign: {{user_instance.cashback_claim.campaign_view.campaign.title}}</p>
+										<p>Date: {{today}}</p>
+										<p>Expiry Date: {{user_instance.expiry_date}}</p>
+										{% if not user_instance.is_withdrawed %}
+                            				<a href="javascript:void(0);" data-id="{{user_instance.id}}" class="active-button">Withdraw</a>
+                            			{% endif %}
+									</div>
+									<br class="clear" />
+								</li>
+							{% endif %}
+						{% endfor %}	
+					</ul>
+				</div>
+			</div>
+		</section>
+	</section>
+{% endblock %}
+{% load static %}
+{% block static %}
+	<style type="text/css">
+		body{
+			background-color: #fff;
+		}
+	</style>
+	<script>
+        $('.button-collapse').sideNav({
+          menuWidth: 300,
+          edge: 'left',
+          closeOnClick: true,
+          draggable: true,
+          onOpen: function(el) {},
+          onClose: function(el) {},
+        });
+	    function amountWithdrawal(id){	    	
+	        var url = "{% url 'payments:cashback_amount_withdrawal_request' %}";
+	        show_loader();
+	        $.ajax({
+	            type : "GET",
+	            url : url,
+	            dataType : 'json',
+	            data : {
+	            	id : id
+	            },
+	            success : function(data) {
+	                remove_popup();
+	                var status = data['status'];
+	                var message = data['message'];
+	                var title = data['title'];
+	                if(status == "true"){
+	                    var app_user_earned = data['app_user_earned'];
+	                    var app_user_paid = data['app_user_paid'];
+	                    var app_user_balance = data['app_user_balance'];
+	                    $('.user_earned').find('span').html(app_user_earned);
+	                    $('.user_paid').find('span').html(app_user_paid);
+	                    $('.user_balance').find('span').html(app_user_balance);
+	                    $('.button-container').html('<a href="javascript:void(0);" onclick="errorPopup();" class="disabled-button">Withdraw Amount</a>')
+	                    swal(title, message, "success");
+
+	                    swal({
+						  title: title,
+						  text: message,
+						  type: "success",
+						  timer: 3000
+						}, function () {
+							window.location.reload();
+						});
+
+	                } else {
+	                    swal(title, message, "error");
+	                }
+	            },
+	            error : function(data){
+	                remove_popup();
+	                var title = "An error occurred";
+	                var message = "An error occurred. Please try again later."; 
+	                swal(title, message, "error");
+	            }
+	        });
+	    }
+	    $('.active-button').click(function(){
+	    	var $this = $(this);
+	    	var id = $this.data('id');
+	        amountWithdrawal(id);
+	    })
+
+	</script>
+{% endblock %}

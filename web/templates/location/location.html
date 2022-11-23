@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% load users_template_tags %}
+{% load tz %}
+{% block content %}
+<section id="content">
+    <div class="container">
+        <div class="c-header">
+            <h2>{{title}}</h2>
+        </div>
+
+        <div class="action-header palette-theme {{current_theme}} bg clearfix">
+            <div class="ah-label hidden-xs palette-White text">{{instance.name}} </div>
+
+            <ul class="ah-actions actions a-alt">
+                <li>
+                    <a title="Edit Location" href="{% url 'web:edit_delivery_location' pk=instance.pk %}">
+                        <i class="zmdi zmdi-edit"></i>
+                    </a>
+                </li>
+                <li>
+                    <a title="Delete Location" data-id="{{instance.pk}}" data-text="{{confirm_delete_message}}"
+                        data-title="Are you sure?" href="{% url 'web:delete_delivery_location' pk=instance.pk %}"
+                        class="action-button redirect">
+                        <i class="zmdi zmdi-delete"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div id="c-grid" class="clearfix" data-columns="2">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Basic Info <small></small></h2>
+                </div>
+
+                <div class="card-body">
+                    <div class="list-group lg-alt c-overflow">
+                        <div class="list-group-item media">
+                            <div class="media-body">
+                                <div class="lgi-heading">Name</div>
+                                <small class="lgi-text">{{instance.name}}</small>
+                            </div>
+                        </div>
+                        <div class="list-group-item media">
+                            <div class="media-body">
+                                <div class="lgi-heading">Zipcode</div>
+                                <small class="lgi-text">{{instance.zip_code}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+</section>
+{% endblock %}
+
+{% block static %}
+{% load static %}
+{% endblock %}

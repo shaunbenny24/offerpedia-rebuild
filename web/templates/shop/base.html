@@ -1,0 +1,1006 @@
+{% load static %}
+{% load main_template_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Offerpedia</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta property="og:image" content="images/og.jpg" />
+	<meta name="description" content="" />
+    <meta name="keywords" content="" />
+	<link rel="stylesheet" href="{% static 'web/shop/css/slick.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'web/shop/css/material.css' %}" type="text/css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'web/shop/images/favicon.jpg' %}" />
+    <link rel="stylesheet" href="{% static 'web/shop/css/fontello.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'web/css/sweetalert.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'web/shop/css/style.css' %}" type="text/css" />
+    <script src="{% static 'web/js/jquery.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'web/js/actions.js' %}" type="text/javascript"></script>
+    <script src="{% static 'web/js/form-validation.js' %}" type="text/javascript"></script>
+    <script src="{% static 'web/js/sweetalert.min.js' %}" type="text/javascript"></script>
+	<script type="text/javascript" src="{% static 'web/shop/js/script.js' %}"></script>
+	<script type="text/javascript" src="{% static 'web/shop/js/slick.js' %}"></script>
+    <link href="{% static 'vendors/bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css' %}" rel="stylesheet">  
+    {% block head %} {% endblock head %}
+</head>
+<body>
+
+    {% block content %} {% endblock content %}
+    <footer>
+		<section class="wrapper">
+			<div class="top">
+				<div class="first">
+					<h1><a href="{{ next_login }}"><img src="{% static 'web/shop/images/white-logo.png' %}" alt="Logo"></a></h1>
+					<p style="text-align: left;">Be a part of Offerpedia and let's  support our local businesses. Share our campaigns to your friends and family. Get cashback everytime you or they purchase. </p><p style="text-align: left; margin-top: 10px;">#Let'sgrowtogether</p>
+				</div>
+				<div class="middle">
+					<h5>Quick Links</h5>
+					<ul>
+						<li><a href="{% url 'web:faq' %}?next={{ next_login }}">FAQ</a></li>
+						<li><a href="{% url 'web:public_index' %}#spotlight">Download App</a></li>
+					</ul>
+				</div>
+				<div class="last">
+					<div class="contact">
+						<h5>Contact</h5>
+						<p>If you have any questions or need help, feel free to contact with our team</p>
+					</div>
+					<div class="icons com-links">
+						<ul>
+							<li><a href="https://instagram.com/offerpedia"><span class="icon icon-instagram"></span></a></li>
+							<li><a href="https://facebook.com/pages/category/Advertising-Marketing/Offerpedia-388019758362297/"><span class="icon icon-facebook"></span></a></li>
+							<!-- <li><a href=""><span class="icon icon-whatsapp"></span></a></li> -->
+						</ul>
+					</div>
+					<div class="phone call">
+                        <a href="tel:+973 39217883">
+                            <span class="phone-icon icon-phone"></span>
+                            <span class="number"> +973 39217883</span>
+                        </a>
+                        <a href="mailto:hello@offerpedia.org" class="email-link">
+                            <span class="zmdi zmdi-email"></span>
+                            <span class="email">hello@offerpedia.org</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="links last">
+                    <div class="icons com-icons">
+                        <ul>
+                            <li><a href="https://instagram.com/offerpedia"><span class="icon icon-instagram"></span></a></li>
+							<li><a href="https://facebook.com/pages/category/Advertising-Marketing/Offerpedia-388019758362297/"><span class="icon icon-facebook"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="phone call-links">
+                        <a href="tel:+973 39217883" class="phone-link">
+                            <span class="phone-icon icon-phone"></span>
+                            <span class="number">+973 39217883</span>
+                        </a>
+                        <a href="mailto:hello@offerpedia.org" class="email-link">
+                            <span class="zmdi zmdi-email"></span>
+                            <span class="email">hello@offerpedia.org</span>
+                        </a>
+                    </div>
+                </div>
+			</div>
+			<div class="bottom">
+				<p> &copy; 2020 OFFERPEDIA. All rights reserved. Created and maintained by <span>Talrop WorkTech</span></p>
+			</div>
+		</section>
+    </footer>
+
+    <section id="overlay-login">
+		<section class="login">
+			
+			<div class="left">
+				<h1 class="Logo"><img src="{% static 'web/shop/images/white-logo.png' %}" alt="Logo" /></h1>
+			</div>
+
+			<div class="right">	
+                <form action="#">	
+                    <div class="Text">
+                        <h1>Welcome</h1>
+                        <!-- <p>Login to your existing account</p> -->
+                    </div>
+                    <div class="Phone">
+                        <span class="zmdi zmdi-phone"></span>
+                        <h5>+973</h5>
+                        <input type="number" placeholder="Enter Phone Number" name="phone-number" required class="phone-number">
+                    </div>
+                    <input type="submit" value="Next" class="button login-user" />
+                    <a href="#" id="close" class="zmdi zmdi-close-circle-o"></a>
+                </form>				
+			</div>
+		</section>
+	</section>
+
+	<section id="overlay-otp">
+		<section class="otp">
+			<div class="left">
+				<h1 class="Logo"><img src="{% static 'web/shop/images/white-logo.png' %}" alt="Logo" /></h1>
+			</div>
+			<div class="right">				
+				<div class="Text">
+					<h1>Enter Verification Code</h1>
+					<p>We have send a 4 digit code to +973 <span class="mobile-number"> 9876543210</span></p>
+				</div>
+
+				<form action="" class="digits">
+                    <div class="form-input">
+                        <input type="number" id="otp1" placeholder="" maxlength="1" required>
+                        <input type="number" id="otp2" placeholder="" maxlength="1" required>
+                        <input type="number" id="otp3" placeholder="" maxlength="1" required>
+                        <input type="number" id="otp4" placeholder="" maxlength="1" required>
+                        <input type="hidden" value="" name="app_user_pk" class="app_user-pk">
+                    </div>
+                    <div class="form-button">
+                        <input type="submit" value="Verify" class="button verify-otp-number" />
+                    </div>
+                </form>
+				<a href="" class="resend-otp"><p>Resend OTP</p></a>
+				<a href="#" id ="close" class="zmdi zmdi-close-circle-o" ></a>
+			</div>
+		</section>
+    </section>
+
+    <section id="already-cart">
+        <div class="al-cart">
+            <h3>Items already in cart</h3>
+            <p>Your cart contains items from other campaign. Would you like to reset your cart for adding items from this campaign?</p>
+            <div class="button">
+                <a href="#" class="ok">NO</a>
+                <!-- <a href="#" class="reset">YES</a> -->
+                <a href="{% url 'orders:add_to_cart' %}" data-id="add-to-cart" data-pk="" data-qty="1" data-reset="true" 
+                    class='add-to-cart btn btn-dark reload button reset'>YES</a>
+            </div>
+        </div>
+    </section> <!-- ( #already-cart ) -->
+
+    <div id="snackbar"></div>
+    <style>
+        #snackbar {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 20px 20px;
+            position: fixed;
+            z-index: 15;
+            top: 85%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+        #snackbar.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+    </style>
+
+    <!-- Check products in Un Authenticated User Cart -->
+    <script>
+        $(document).ready(function () {
+            python = "{% if not user.is_authenicated %}";
+                $('#campaign-product-list ul li').each(function(){
+                    parent = $(this)
+                    var checked_value = ''
+                    pk = parent.attr("data-pk")
+                    if (localStorage.getItem("productDict") !== null) {
+                        const products = JSON.parse(localStorage.getItem('productDict'));
+                        for (const [key, value] of Object.entries(products)) {
+                            product_pk = key
+                            if (product_pk == pk){
+                                varient = value[1]
+                                parent.find("a.button").hide();
+                                parent.find("div.quantity").show();
+                                parent.find(".productQuantity").html(value[0]);
+                                parent.find("div.radio-toolbar input").each(function(){
+                                    checked_value = $(this).val()
+                                    if (varient !== null){
+                                        if (varient == checked_value){
+                                            $(this).prop("checked", true);
+                                        }
+                                        else{
+                                            $(this).prop("checked", false); 
+                                        }
+                                    }
+                                })
+                            } 
+                        }
+                    }
+                })
+            python = "{% endif %}";
+        });
+    </script>
+    <!-- End  -->
+
+    <!-- Login and Verify Otp POpup -->
+    <script>
+        $(document).ready(function () {
+
+
+            $(".app-user-login").click(function(){
+                $("#overlay-login").toggleClass("modal-enabled");
+            });
+            $("#overlay-login .login .right a#close").click(function(){
+                $("#overlay-login").toggleClass("modal-enabled");
+            });
+
+            $("#overlay-otp .otp .right a#close").click(function(){
+                $("#overlay-otp").toggleClass("modal-enable");
+            });
+            
+            $("#home section.wrapper header ul li a.profile").click(function(){
+                $(".loginpop").toggleClass("show");
+            });
+            $("#main-home section.wrapper header ul.right li a.profile ").click(function(){
+                $(".loginpop").toggleClass("show");
+            });
+
+            $(document).on('click', '#home section.wrapper header ul .remove-loginpop', function () {
+                $(".loginpop").removeClass("show");
+            });
+            $(document).on('click', '#main-home section.wrapper header ul .remove-loginpop', function () {
+                $(".loginpop").removeClass("show");
+            });
+
+            $('#overlay-otp .otp .right input').on('keyup', function(event){
+                var KeyID = event.keyCode;
+                var key = $(this).val();
+                var len=key.length;
+                if (len > 1){
+                    var val = key % 10;
+                    $(this).val(val) 
+                }
+                if (KeyID == 8){
+                    $(this).prev().focus();
+                }
+                else{
+                    $(this).next().focus();
+                }
+            });
+        });
+
+        $(document).on('click', '.login-user', function (e) {
+            e.preventDefault();
+            $this = $(this);
+            var phone_number = $('.phone-number').val()
+            $('.mobile-number').html(phone_number)
+            $.ajax({
+                type: "GET",
+                url: '{% url "advertisers:sign_up" %}',
+                dataType: 'json',
+                data: {
+                        phone_number: phone_number
+                    },
+    
+                success: function (data) {
+                    var status = data['status'];
+                    var message = data['message'];
+                    var app_user_pk = data['app_user_pk']
+                    var mobile_number = data['phone_number']
+                    var resend_otp_link = data['resend_otp_link']
+                    if (status == "true"){
+                        
+                        $('.app_user-pk').val(app_user_pk)
+                        $("#overlay-otp").toggleClass("modal-enable");
+                        $("#overlay-login").toggleClass("modal-enabled");
+                        $('.resend-otp').attr('href',resend_otp_link)
+                        
+                    }
+                    
+                    $("#snackbar").html(message);
+                    ShowSnackBar();
+                
+                },
+    
+                error: function (data) {
+                    var title = "An error occurred";
+                    var message = "An error occurred. Please try again later.";
+                    swal(title, message, "error");
+                }
+            });
+        });
+        $(document).on('click', '.verify-otp-number', function (e) {
+            e.preventDefault();
+            $this = $(this);
+            var otp1 = $('#otp1').val()
+            var otp2 = $('#otp2').val()
+            var otp3 = $('#otp3').val()
+            var otp4 = $('#otp4').val()
+            var otp = otp1 + otp2 + otp3 + otp4
+            var app_user_pk = $('.app_user-pk').val()
+            let productDict = ''
+            if (localStorage.getItem("productDict") !== null) {
+                productDict = localStorage.getItem('productDict');
+            }
+            $.ajax({
+                type: "GET",
+                url: '{% url "advertisers:verify_otp" %}',
+                dataType: 'json',
+                data: {
+                        otp_number : otp,
+                        app_user_pk : app_user_pk,
+                        cart : productDict,
+                    },
+    
+                success: function (data) {
+                    var status = data['status'];
+                    var message = data['message'];
+                    if (status == "true"){
+                        localStorage.clear();
+                        location.reload(true)
+                    }
+                    $("#snackbar").html(message);
+                    ShowSnackBar();
+                },
+    
+                error: function (data) {
+                    var title = "An error occurred";
+                    var message = "An error occurred. Please try again later.";
+                    swal(title, message, "error");
+                }
+            });
+        });
+
+        $(document).on('click', '.resend-otp', function (e) {
+            e.preventDefault();
+            $this = $(this);
+            var resend_otp_link = $('.resend-otp').attr('href')
+            $.ajax({
+                type: "GET",
+                url: resend_otp_link,
+                dataType: 'json',
+                
+                success: function (data) {
+                    var status = data['status'];
+                    var message = data['message'];
+                    $("#snackbar").html(message);
+                    ShowSnackBar();
+                
+                },
+    
+                error: function (data) {
+                    var title = "An error occurred";
+                    var message = "An error occurred. Please try again later.";
+                    swal(title, message, "error");
+                }
+            });
+        });
+
+    </script>
+    <!-- End Login Otp Verify Section  -->
+    
+    <!-- Popup -->
+    <script>
+        // location search
+        $("#home section.wrapper header div.logo-container div.address-container").click(function(e){
+            e.preventDefault();
+            parent = $(this).parents("#home section.wrapper header div.logo-container");
+            parent.find("div.address-container").hide();
+            parent.find("div.search-container").show();
+        });
+        // end
+
+        // Cart Already have with a campaign products 
+        $("#already-cart div.al-cart div.button a.ok").click(function(e){
+            e.preventDefault();
+            $("#already-cart div.al-cart").hide();
+        });
+        // end
+    </script>
+    <!-- End Popup -->
+
+    <!-- Category Start -->
+    <script>
+        $(document).on('click', '.product-category', function (e) {
+            e.preventDefault();
+            $this = $(this);
+            var url = '{% url "web:products_related_category" %}';
+            parent = $(this).parents('')
+            let category_pk = $(this).attr("category-pk");
+            let campaign_pk = $(this).attr("campaign-pk");
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+                data: {
+                    category_pk : category_pk,
+                    campaign_pk : campaign_pk
+                },
+                success: function (data) {
+                    var status = data['status'];
+                    var is_user = data['is_user'];
+                    var products = data['products'];
+                    if (status == "true"){
+                        var content = ''
+                        for (i = 0; i < products.length; i++) {
+                            var product_pk = products[i].pk;
+                            var stock = products[i].stock;
+                            stock = parseInt(stock);
+                            var free = products[i].free;
+                            var varients = products[i].varients
+                            var product_varient = null
+                            if (products[i].image != ''){
+                                var image = `${products[i].image}`
+                            }
+                            else{
+                                var image = `{% static 'web/shop/images/product-not-found.jpeg' %}`
+                            }
+                            if (is_user == "true"){
+                                if (products[i].cart_qty == ''){
+                                    var is_product_in_cart = "false"
+                                }
+                                else{
+                                    var quantity = products[i].cart_qty
+                                    var is_product_in_cart = "true"
+                                }
+                                
+                            }
+                            else{
+                                if (localStorage.getItem("productDict") !== null) {
+                                    const productsData = JSON.parse(localStorage.getItem('productDict'));
+                                    var storage_product_qty = 0
+                                    for (const [key, value] of Object.entries(productsData)) {
+                                        if (key == product_pk){
+                                            storage_product_qty = value[0]
+                                            product_varient = value[1]
+                                        } 
+                                    }
+                                    if (storage_product_qty == 0 ){
+                                        var is_product_in_cart = "false"
+                                    }
+                                    else{
+                                        var quantity = storage_product_qty
+                                        var is_product_in_cart = "true"
+                                        
+                                    }
+                                }
+                                else{
+                                    var is_product_in_cart = "false"
+                                }
+                            }
+                            var varients_data = ''
+                            if (varients != undefined){
+                                if (product_varient == null){
+                                    for (j= 0; j < varients.length; j++){
+                                        varients_data += `<input type="radio" id="radio${varients[j]}" name="radio${products[i].name}" value="${varients[j]}" checked>
+                                                        <label for="radio${varients[j]}">${varients[j]}</label>`
+                                    }
+                                }
+                                else{
+                                    for (j= 0; j < varients.length; j++){
+                                        if (varients[j] == product_varient){
+                                            varients_data += `<input type="radio" id="radio${varients[j]}" name="radio${products[i].name}" value="${varients[j]}" checked>
+                                                        <label for="radio${varients[j]}">${varients[j]}</label>`
+                                        }
+                                        else{
+                                            varients_data += `<input type="radio" id="radio${varients[j]}" name="radio${products[i].name}" value="${varients[j]}">
+                                                        <label for="radio${varients[j]}">${varients[j]}</label>`
+                                        }
+                                    }
+                                }
+                            }
+                            else{
+                                varients_data = ''
+                            }
+                            if (is_product_in_cart == "true"){
+                                var add_cart_content = `<a href="{% url 'orders:add_to_cart' %}" data-id="add-to-cart" data-pk="${product_pk}" data-qty="1" 
+                                                class='add-to-cart btn btn-dark reload button' style="display:none">Add to Cart</a>
+                                                <div class="quantity" style="display:block">
+                                                    <a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus" data-stock="${stock}" data-pk="${product_pk}"><span class="icon icon-minus"></span></a>
+                                                    <span class="number productQuantity">${quantity}</span>
+                                                    <a href="{% url 'orders:increment_quantity' %}" class="change-quantity" action="Plus" data-stock="${stock}" data-pk="${product_pk}"><span class="icon icon-plus"></span></a>
+                                                </div>`
+                            }
+                            else{
+                                if (stock >= 1){
+                                    var add_cart_content = `<a href="{% url 'orders:add_to_cart' %}" data-id="add-to-cart" data-pk="${product_pk}" data-qty="1" 
+                                            class='add-to-cart btn btn-dark reload button'>Add to Cart</a>
+                                            <div class="quantity">
+                                                <a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus" data-stock="${stock}" data-pk="${product_pk}"><span class="icon icon-minus"></span></a>
+                                                <span class="number productQuantity">1</span>
+                                                <a href="{% url 'orders:increment_quantity' %}" class="change-quantity" action="Plus" data-stock="${stock}" data-pk="${product_pk}"><span class="icon icon-plus"></span></a>
+                                            </div>`
+                                }
+                                else{
+                                    var add_cart_content = `<a href="javascript:void(0)" class='button-stock'>No Stock</a>
+                                            <div class="quantity">
+                                                <a href="{% url 'orders:decrement_quantity' %}" class="change-quantity" action="Minus" data-pk="${product_pk}"><span class="icon icon-minus"></span></a>
+                                                <span class="number productQuantity">1</span>
+                                                <a href="{% url 'orders:increment_quantity' %}" class="change-quantity" action="Plus" data-pk="${product_pk}"><span class="icon icon-plus"></span></a>
+                                            </div>`
+                                }
+                            }
+
+                            var mrp_content = ''
+                            var price_content = ''
+                            var mrp = products[i].mrp;
+                            console.log("free",free)
+                            if (free){
+                                price_content = '<span>Free</span>'
+                            }
+                            else{
+                                if (mrp > 0){
+                                    mrp_content = `<small class="mark">BD ${mrp}</small>`
+                                }
+                                price_content = `<span>BD ${products[i].price}</span>
+                                                ${mrp_content}`
+                            } 
+                            
+                            content += `<li>
+                                <div class="left">
+                                    <a href="/product-details/${product_pk}/?next={{ next_login }}">
+                                        <div class="title">
+                                            <h5>${products[i].name}</h5>
+                                            <div class="price">
+                                                ${price_content}
+                                            </div>
+                                        </div>
+                                        <div class="content">
+                                            <p>${products[i].description}</p>
+                                        </div>
+                                    </a>
+                                    <div class="radio-toolbar">
+                                        ${varients_data}
+                                    </div>
+                                </div>
+                                <div class="right">
+                                    <a href="/product-details/${product_pk}/?next={{ next_login }}">
+                                        <img src= '${image}' alt="Vel Metus">
+                                    </a>
+                                    ${add_cart_content}
+                                </div>
+                            </li>`
+                        }
+                        $("#campaign-product-list ul").html(content);
+                        $("#pagination").hide();
+                    }
+                    
+                },
+    
+                error: function (data) {
+                    var title = "An error occurred";
+                    var message = "An error occurred. Please try again later.";
+                    swal(title, message, "error");
+                }
+            });
+        });
+    </script>
+    <!-- End Category Start -->
+
+    <!-- Add to cart functionality -->
+    <script>
+        function cartTotalCount(){
+            if (localStorage.getItem("productDict") !== null) {
+                productDict = JSON.parse(localStorage.getItem('productDict'));
+                python = "{% if not user.is_authenticated %}";
+                    $('.cart-products-count').html(Object.keys(productDict).length)
+                    $('.side-cart-count').html(Object.keys(productDict).length)
+                
+                python = "{% else %}";
+                    localStorage.removeItem("productDict")
+                    if (localStorage.getItem("campaign") !== null) {
+                        localStorage.removeItem("campaign")
+                    }
+                    if (localStorage.getItem("referalFriend") !== null) {
+                        localStorage.removeItem("referalFriend")
+                    }
+                python = "{% endif %}";
+            }
+        }
+        $(document).ready(function(){
+                cartTotalCount();
+            
+        });
+
+        $(document).on('click', 'a[data-id="add-to-cart"]', function (e) {
+            e.preventDefault();
+            $this = $(this);
+            var url = $(this).attr("href");
+            var data_qty = $(this).attr("data-qty");
+            var data_reset = $(this).attr("data-reset");
+            var isReload = $this.hasClass("reload");
+            var camapign_pk = python = "{{ campaign_pk }}";
+            let id = $(this).attr("data-pk");
+            var parent = $(this).parents("div.right");
+            var varient_parent = $this.parents("li");
+            var product_name = varient_parent.find("div.title h5").html()
+            var varient = '';
+            varient = varient_parent.find("div.radio-toolbar input:checked").val()
+            if(varient == undefined){
+                varient = $(this).attr("data-varient")
+            }
+            console.log("varient", varient)
+            var window_width = $(window).width();
+            python = "{% if not user.is_authenticated %}";
+                if (data_reset == "true"){
+                    if (localStorage.getItem("productDict") !== null) {
+                        localStorage.removeItem("productDict")
+                        if (localStorage.getItem("campaign") !== null) {
+                            localStorage.removeItem("campaign")
+                        }
+                    }
+                    $("#already-cart div.al-cart").hide();
+                }
+
+                if (localStorage.getItem("productDict") === null) {
+                    productDict = {}
+                    localStorage.setItem('campaign', JSON.stringify(camapign_pk));
+                    localStorage.setItem('productDict', JSON.stringify(productDict));
+                    productDict = JSON.parse(localStorage.getItem('productDict'));
+                    productDict[id] = [parseInt(data_qty), varient];
+                    localStorage.setItem('productDict', JSON.stringify(productDict));
+                    $('.cart-products-count').html(Object.keys(productDict).length)
+                    $('.side-cart-count').html(Object.keys(productDict).length)
+                    // if (window_width <= 768){
+                    //     location.reload()
+                    // }
+                    if (data_reset == "true"){
+                        location.reload()
+                    }
+                    else{
+                        parent.find("a.button").hide();
+                        parent.find("div.quantity").show();
+                        ShowCartSideBar()
+                    }
+                }
+
+                else {
+                    productDict = JSON.parse(localStorage.getItem('productDict'));
+                    if (localStorage.getItem("campaign") !== null) {
+                        campaign = JSON.parse(localStorage.getItem('campaign'));
+                        if (campaign === camapign_pk){
+
+                            if (!(id in productDict)) {
+                                productDict[id] = [parseInt(data_qty), varient];
+                                localStorage.removeItem("productDict")
+                                localStorage.setItem('productDict', JSON.stringify(productDict));
+                                $('.cart-products-count').html(Object.keys(productDict).length)
+                                $('.side-cart-count').html(Object.keys(productDict).length)
+                                parent.find("a.button").hide();
+                                parent.find("div.quantity").show();
+                                ShowCartSideBar()
+
+                            }
+                            else {
+                                productDict = JSON.parse(localStorage.getItem('productDict'));
+                                delete productDict[id];
+                                productDict[id] = [parseInt(data_qty), varient];
+                                localStorage.removeItem("productDict")
+                                localStorage.setItem('productDict', JSON.stringify(productDict));
+                                $('.cart-products-count').html(Object.keys(productDict).length)
+                                $('.side-cart-count').html(Object.keys(productDict).length)
+                                parent.find("a.button").hide();
+                                parent.find("div.quantity").show();
+                                ShowCartSideBar()
+
+                            }
+                        }
+                        else{
+                            var add = $("#already-cart div.al-cart .reset");
+                            add.attr("data-pk",id)
+                            add.attr("data-qty",data_qty)
+                            $("#already-cart div.al-cart").show();
+                        }
+                    }
+                    else{
+                        // Take camapign pk from backend and check condition
+                        console.log("")
+                    }
+                }
+
+
+            python = "{% else %}";
+                if (data_reset == "true"){
+                    var data_url = python = "{% url 'web:user_cart_restart' %}";
+                    $.ajax({
+                        type: "GET",
+                        url: data_url,
+                        dataType: 'json',
+                        success: function (data) {
+                            var status = data['status'];
+                            var message = data['message'];
+                            
+                        },
+            
+                        error: function (data) {
+                            var title = "An error occurred";
+                            var message = "An error occurred. Please try again later.";
+                            swal(title, message, "error");
+                        }
+                    });
+                    $("#already-cart div.al-cart").hide();
+                }
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: 'json',
+                    data: {
+                        pk: id,
+                        quantity : parseInt(data_qty),
+                        varient : varient
+                    },
+                    success: function (data) {
+                        var status = data['status'];
+                        var message = data['message'];
+
+                        var window_width = $(window).width();
+                        var cart_items = 0
+                        var price = 0
+
+                        if (status == "true"){
+                            var cart_item_count = data['cart_item_count'];
+                            var total_amount = data['total']
+                            
+                            $('.cart-products-count').html(cart_item_count)
+                            $('.side-cart-count').html(cart_item_count)
+                            if (data_reset == "true"){
+                                location.reload()
+                            }
+                            else{
+                                parent.find("a.button").hide();
+                                parent.find("div.quantity").show();
+                                ShowCartSideBar()
+                            }
+                            cart_items = cart_item_count
+                            price =  total_amount 
+                            if (window_width <= 550){
+                                if (cart_items >= 1){
+                                    if (cart_items >= 2){
+                                        cart_items = cart_items + " Items: BD ";
+                                    }
+                                    else{
+                                        cart_items = cart_items + " Item: BD ";
+                                    }
+                                    $("#view-cart-data ").show()
+                                    $('#view-cart-data .cart-data .left span.count').html(cart_items)
+                                    $('#view-cart-data .cart-data .left span.price').html(price)
+                                }
+                            }
+                        }
+                        else{
+                            var campaign_exist = data["campaign_exist"]
+                            if (campaign_exist == "Exist"){
+                                var add = $("#already-cart div.al-cart .reset");
+                                add.attr("data-pk",id)
+                                add.attr("data-qty",data_qty)
+                                $("#already-cart div.al-cart").show();
+                            }
+                        }
+                    },
+        
+                    error: function (data) {
+                        var title = "An error occurred";
+                        var message = "An error occurred. Please try again later.";
+                        swal(title, message, "error");
+                    }
+                });
+            python = "{% endif %}";
+
+            var window_width = $(window).width();
+			var cart_items = 0
+			var price = 0
+			python = "{% if not user.is_authenticated %}";
+				if (localStorage.getItem("productDict") !== null) {
+					var products = localStorage.getItem('productDict');
+					if (products != {}){
+						var url = python = "{% url 'web:anonymous_user_cart' %}";
+						$.ajax({
+							type: "GET",
+							url: url,
+							dataType: 'json',
+							data: {
+								products: products
+							},
+				
+							success: function (data) {
+								var status = data['status'];
+								var message = data['message'];
+								var items = data['cart_items'];
+								var total = data['total'];
+								var cart_items = items.length
+								price =  total 
+								if (window_width <= 550){
+									if (cart_items >= 1){
+										if (cart_items >= 2){
+											cart_items = cart_items + " Items: BD ";
+										}
+										else{
+											cart_items = cart_items + " Item: BD ";
+										}
+										$("#view-cart-data ").show()
+										$('#view-cart-data .cart-data .left span.count').html(cart_items)
+										$('#view-cart-data .cart-data .left span.price').html(price)
+									}
+								}
+							}
+						});
+					}
+				}
+			python = "{% endif %}";
+        });
+
+    </script>
+    <!-- end add -->
+
+    <!-- Change Quantity -->
+    <script>
+        $(document).on('click', '.change-quantity', function(e){
+            e.preventDefault();
+            $this = $(this);
+            var url = $(this).attr("href");
+            var isReload = $this.hasClass("reload");
+            let product_pk = $(this).attr("data-pk");
+            let action = $(this).attr("action");
+            var stock = $(this).attr("data-stock");
+            parent = $(this).parents("#products div.products-list ul li div.right");
+            python = "{% if not user.is_authenticated %}";
+
+                if (localStorage.getItem("productDict") !== null) {
+                    productDict = JSON.parse(localStorage.getItem('productDict'));
+                    if (product_pk in productDict) {
+                        var product_data = productDict[product_pk]
+                        var quantity = product_data[0]
+                        var varient = product_data[1]
+                        if (action == "Plus"){
+                            if (quantity < stock){
+                                quantity += 1
+                                productDict[product_pk] = [quantity , varient];
+                            }
+                        }
+                        else if (action == "Minus"){
+                            quantity -= 1
+                            productDict[product_pk] = [quantity , varient];
+                        }                        
+                        localStorage.removeItem("productDict")
+                        localStorage.setItem('productDict', JSON.stringify(productDict));
+                        productDict = JSON.parse(localStorage.getItem('productDict'));
+                        var product_data = productDict[product_pk]
+                        var quantity = product_data[0]
+                        parent.find(".productQuantity").html(quantity)
+                        
+                        if (quantity <= 0){
+                            localStorage.removeItem("productDict")
+                            delete productDict[product_pk];
+                            localStorage.setItem('productDict', JSON.stringify(productDict));
+                            parent.find("a.button").show();
+                            parent.find("div.quantity").hide();
+                            parent.find(".productQuantity").html(1)
+                            $('.cart-products-count').html(Object.keys(productDict).length)
+                            $('.side-cart-count').html(Object.keys(productDict).length)
+                            location.reload()
+
+                        }
+                    }
+                    if ((Object.keys(productDict).length) === 0){
+                        localStorage.removeItem("productDict")
+                        localStorage.removeItem("campaign")
+                    } 
+                }
+            python = "{% else %}";
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: 'json',
+                    data: {
+                        product_pk: product_pk
+                    },
+                    success: function (data) {
+                        var status = data['status'];
+                        var reload = data['is_reload'];
+                        var quantity = data['quantity'];
+                        var total_count = data['total_count'];
+                        var is_count_change = data['is_count_change'];
+                        var total = data['total'];
+                        var cart_items_count = data['cart_items_count'];
+
+                        parent.find(".productQuantity").html(quantity)
+                        if (quantity <= 0){
+                            parent.find("a.button").show();
+                            parent.find("div.quantity").hide();
+                            parent.find(".productQuantity").html(1)
+                            location.reload()
+                        }
+                        if (reload == "true"){
+                            location.reload()
+                        }
+                        if (is_count_change = "true"){
+                            $('.cart-products-count').html(total_count)
+                            $('.side-cart-count').html(total_count)
+                        }
+
+                        var window_width = $(window).width();
+                        var cart_items = 0
+                        var price = 0
+
+                        cart_items = cart_items_count
+                        price =  total 
+                        if (window_width <= 550){
+                            if (cart_items >= 1){
+                                if (cart_items >= 2){
+                                    cart_items = cart_items + " Items: BD ";
+                                }
+                                else{
+                                    cart_items = cart_items + " Item: BD ";
+                                }
+                                $("#view-cart-data ").show()
+                                $('#view-cart-data .cart-data .left span.count').html(cart_items)
+                                $('#view-cart-data .cart-data .left span.price').html(price)
+                            }
+                            else{
+                                $("#view-cart-data ").hide()
+                            }
+                        }
+                        
+                    },
+        
+                    error: function (data) {
+                        var title = "An error occurred";
+                        var message = "An error occurred. Please try again later.";
+                        swal(title, message, "error");
+                    }
+                });
+            python = "{% endif %}";
+
+            var window_width = $(window).width();
+			var cart_items = 0
+			var price = 0
+            python = "{% if not user.is_authenticated %}";
+            
+				if (localStorage.getItem("productDict") !== null) {
+					var products = localStorage.getItem('productDict');
+					if (products != {}){
+						var url = python = "{% url 'web:anonymous_user_cart' %}";
+						$.ajax({
+							type: "GET",
+							url: url,
+							dataType: 'json',
+							data: {
+								products: products
+							},
+				
+							success: function (data) {
+								var status = data['status'];
+								var message = data['message'];
+								var items = data['cart_items'];
+								var total = data['total'];
+                                var cart_items = items.length
+								price =  total 
+								if (window_width <= 550){
+									if (cart_items >= 1){
+										if (cart_items >= 2){
+											cart_items = cart_items + " Items: BD ";
+										}
+										else{
+											cart_items = cart_items + " Item: BD ";
+										}
+										$("#view-cart-data ").show()
+										$('#view-cart-data .cart-data .left span.count').html(cart_items)
+										$('#view-cart-data .cart-data .left span.price').html(price)
+                                    }
+                                    else{
+										$("#view-cart-data ").hide()
+									}
+								}
+							}
+						});
+                    }
+                    else{
+                        $("#view-cart-data ").hide()
+                    }
+				}
+                else{
+                    $("#view-cart-data ").hide()
+                }
+			python = "{% endif %}";
+        });
+
+    </script>
+    <!-- End -->
+    
+</body>
+</html>

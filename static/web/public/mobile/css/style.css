@@ -1,0 +1,989 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    background: transparent;
+    font-weight: normal;
+    text-decoration: none;
+    outline: none;
+}
+ol,
+ul {
+    list-style: none;
+}
+blockquote {
+    quotes: none;
+}
+blockquote:before,
+blockquote:after {
+    content: "";
+    content: none;
+}
+del {
+    text-decoration: line-through;
+}
+header,
+section,
+article,
+aside,
+nav,
+footer,
+address {
+    display: block;
+}
+@font-face {
+    font-family: "poppinsregular";
+    src: url("../fonts/poppins-regular-webfont.woff2") format("woff2"),
+        url("../fonts/poppins-regular-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "poppinsbold";
+    src: url("../fonts/poppins-bold-webfont.woff2") format("woff2"),
+        url("../fonts/poppins-bold-webfont.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+body {
+    font-family: "poppinsregular", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #555;
+    min-width: 320px;
+    overflow-x: hidden;
+}
+input,
+textarea,
+select {
+    font-family: "poppinsregular", Arial, Helvetica, sans-serif;
+}
+a {
+    color: #555;
+}
+a:hover,
+.submit:hover {
+    filter: alpha(opacity = 85);
+    -moz-opacity: 0.85;
+    -khtml-opacity: 0.85;
+    opacity: 0.85;
+}
+.thumb {
+    display: block;
+}
+.thumb img {
+    display: block;
+    width: 100%;
+}
+p {
+    line-height: 1.6em;
+}
+.hidden {
+    display: none;
+}
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+br.clear {
+    clear: both;
+    line-height: 0;
+}
+.wrapper {
+    width: 95%;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+header {
+    padding: 12.5px 0;
+}
+header .top h1 {
+    font-size: 15px;
+    color: green;
+    float: left;
+    line-height: 20px;
+    margin-right: 10px;
+    font-family: "poppinsbold";
+    color: #78cbb0;
+}
+header .top {
+    float: right;
+}
+header a img {
+    height: 20px;
+    display: block;
+}
+#spotlight {
+    text-align: justify;
+}
+#spotlight img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+#main {
+    margin-top: 10px;
+}
+#main h1 {
+    font-family: "poppinsbold";
+    color: #707070;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+#main p {
+    margin: 10px 0;
+}
+#main .buttons {
+    width: 290px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+#main .buttons.one {
+    width: 140px;
+}
+#main .button {
+    display: inline-block;
+    width: 140px;
+    background: linear-gradient(to right, #60c2a2, #00fba9);
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    font-family: "poppinsbold";
+    padding: 13px 0;
+    float: left;
+}
+#main .button.cashback {
+    background: linear-gradient(to right, #ff0000, #cc3189);
+}
+#main .button.voucher {
+    background: linear-gradient(to right, #ff0000, #cc3189);
+}
+#main .button.bill_amount_cashback {
+    background: linear-gradient(to right, #ff0000, #cc3189);
+}
+#main .phone {
+    margin-right: 10px;
+}
+#main .buttons.one .phone {
+    margin-right: 0;
+}
+#main .button.extra {
+    background: #ff0084; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+        to left,
+        #33001b,
+        #ff0084
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+        to left,
+        #33001b,
+        #ff0084
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.mr-10 {
+    margin-right: 10px !important;
+}
+#main .button img {
+    height: 15px;
+    margin-right: 6px;
+    display: inline-block;
+}
+#main .gallery h2 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: "poppinsbold";
+    color: #707070;
+}
+#main .gallery .item {
+    border-radius: 10px;
+    overflow: hidden;
+}
+#main .gallery .item img {
+    width: 100%;
+    display: block;
+}
+#main .promocodes {
+    margin-bottom: 15px;
+}
+#main .promocodes .button {
+    display: block;
+    float: none;
+    background: #c0392b; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+        to right,
+        #8e44ad,
+        #c0392b
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+        to right,
+        #8e44ad,
+        #c0392b
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+#main .promocodes p {
+    font-size: 11px;
+}
+#main .promocodes div.left {
+    width: 43%;
+    margin-right: 5%;
+}
+#main .promocodes div.right {
+    width: 52%;
+}
+#main .promocodes ul li {
+    display: inline-block;
+    margin-right: 10px;
+}
+#main .promocodes ul li span {
+    font-size: 15px;
+    font-family: "poppinsbold";
+}
+#main .promocodes ul li p {
+    font-size: 9px;
+}
+#main .promocodes h2 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: "poppinsbold";
+    color: #707070;
+}
+
+#about {
+    margin-bottom: 10px;
+}
+#about .widget {
+    width: 49%;
+    float: left;
+    margin-right: 2%;
+    text-align: center;
+    padding: 15px 0;
+    background: #f5f5f5;
+}
+#about .widget.last {
+    margin-right: 0;
+}
+#about .widget img {
+    width: 18px;
+    display: block;
+    margin: 0 auto 5px;
+}
+#about .widget p {
+    font-size: 11px;
+    font-size: #707070;
+}
+#map_canvas {
+    width: 100%;
+    height: 150px;
+    margin-top: 5px;
+}
+.overlay_main {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: none;
+}
+#popup-section {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+    width: calc(100% - 20px);
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    padding-top: 20px;
+    z-index: 10001;
+    display: none;
+    transition: all 1s ease-in-out;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#popup-section.open {
+    display: block;
+}
+#popup-section .close {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    font-size: 17px;
+    font-family: "poppinsbold";
+}
+#popup-section .top {
+    text-align: center;
+}
+#popup-section .top p {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+#popup-section .top .code {
+    display: inline-block;
+    padding: 7px 60px;
+    border: 1px solid #707070;
+    font-family: "poppinsbold";
+    border-radius: 50px;
+    font-size: 24px;
+}
+#popup-section .top h4 {
+    font-size: 13px;
+    font-family: "poppinsbold";
+    margin: 15px 0;
+}
+#popup-section .top p.form_field {
+    margin-bottom: 15px;
+    text-align: left;
+}
+#popup-section .top p.form_field label {
+    display: block;
+    font-size: 13px;
+    font-family: "poppinsbold";
+    margin-bottom: 5px;
+}
+#popup-section .top p.form_field input {
+    font-size: 13px;
+    display: block;
+    border: none;
+    outline: none;
+    width: 100%;
+    border-bottom: 1px solid #707070;
+    padding-bottom: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#popup-section .top p.form_field.prefix_added .input_prefix {
+    width: 15%;
+    float: left;
+    line-height: 28px;
+    font-family: "poppinsbold";
+    font-size: 17px;
+}
+#popup-section .top p.form_field.prefix_added input {
+    width: 85%;
+    float: left;
+}
+#popup-section .top .submit {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(to right, #60c2a2, #00fba9);
+    padding: 10px 50px;
+    border-radius: 5px;
+    display: inline-block;
+    outline: none;
+    border: none;
+    font-family: "poppinsbold";
+    float: left;
+}
+
+#popup-section .bottom {
+    margin-top: 15px;
+}
+#popup-section .bottom h4 {
+    font-size: 14px;
+    font-family: "poppinsbold";
+    margin-bottom: 10px;
+}
+#popup-section .bottom ul {
+    height: 140px;
+    overflow-x: scroll;
+}
+#popup-section .bottom li {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+#popup-section1 {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+    width: calc(100% - 20px);
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    padding-top: 20px;
+    z-index: 10001;
+    display: none;
+    transition: all 1s ease-in-out;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#popup-section1.open {
+    display: block;
+}
+#popup-section1 .close {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    font-size: 17px;
+    font-family: "poppinsbold";
+}
+#popup-section1 .top {
+    text-align: center;
+}
+#popup-section1 .top p {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+#popup-section1 .top .code {
+    display: inline-block;
+    padding: 7px 60px;
+    border: 1px solid #707070;
+    font-family: "poppinsbold";
+    border-radius: 50px;
+    font-size: 24px;
+}
+#popup-section1 .top h4 {
+    font-size: 13px;
+    font-family: "poppinsbold";
+    margin: 15px 0;
+}
+#popup-section1 .top p.form_field {
+    margin-bottom: 15px;
+    text-align: left;
+}
+#popup-section1 .top p.form_field label {
+    display: block;
+    font-size: 13px;
+    font-family: "poppinsbold";
+    margin-bottom: 5px;
+}
+#popup-section1 .top p.form_field input {
+    font-size: 13px;
+    display: block;
+    border: none;
+    outline: none;
+    width: 100%;
+    border-bottom: 1px solid #707070;
+    padding-bottom: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#popup-section1 .top p.form_field.prefix_added .input_prefix {
+    width: 15%;
+    float: left;
+    line-height: 28px;
+    font-family: "poppinsbold";
+    font-size: 17px;
+}
+#popup-section1 .top p.form_field.prefix_added input {
+    width: 85%;
+    float: left;
+}
+#popup-section1 .top .submit {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(to right, #60c2a2, #00fba9);
+    padding: 10px 50px;
+    border-radius: 5px;
+    display: inline-block;
+    outline: none;
+    border: none;
+    font-family: "poppinsbold";
+    float: left;
+}
+
+#popup-section1 .bottom {
+    margin-top: 15px;
+}
+#popup-section1 .bottom h4 {
+    font-size: 14px;
+    font-family: "poppinsbold";
+    margin-bottom: 10px;
+}
+#popup-section1 .bottom ul {
+    height: 140px;
+    overflow-x: scroll;
+}
+#popup-section1 .bottom li {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+#popup-section2 {
+    position: absolute;
+    top: 20px;
+    left: 10px;
+    width: calc(100% - 20px);
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    padding-top: 20px;
+    z-index: 10001;
+    display: none;
+    transition: all 1s ease-in-out;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#popup-section2.open {
+    display: block;
+}
+#popup-section2 .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 20px;
+    font-family: "poppinsbold";
+    cursor: pointer;
+}
+#popup-section2 .top {
+    text-align: center;
+}
+#popup-section2 .top p {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+#popup-section2 .top .code {
+    display: inline-block;
+    padding: 7px 60px;
+    border: 1px solid #707070;
+    font-family: "poppinsbold";
+    border-radius: 50px;
+    font-size: 24px;
+}
+#popup-section2 .top h4 {
+    font-size: 13px;
+    font-family: "poppinsbold";
+    margin: 15px 0;
+}
+#popup-section2 .top p.form_field {
+    margin-bottom: 15px;
+    text-align: left;
+}
+#popup-section2 .top p.form_field label {
+    display: block;
+    font-size: 13px;
+    font-family: "poppinsbold";
+    margin-bottom: 5px;
+}
+#popup-section2 .top p.form_field input {
+    font-size: 13px;
+    display: block;
+    border: none;
+    outline: none;
+    width: 100%;
+    border-bottom: 1px solid #707070;
+    padding-bottom: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#popup-section2 .top p.form_field.prefix_added .input_prefix {
+    width: 15%;
+    float: left;
+    line-height: 28px;
+    font-family: "poppinsbold";
+    font-size: 17px;
+}
+#popup-section2 .top p.form_field.prefix_added input {
+    width: 85%;
+    float: left;
+}
+#popup-section2 .top .submit {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(to right, #60c2a2, #00fba9);
+    padding: 10px 50px;
+    border-radius: 5px;
+    display: inline-block;
+    outline: none;
+    border: none;
+    font-family: "poppinsbold";
+    float: left;
+}
+
+#popup-section2 .bottom {
+    margin-top: 15px;
+}
+#popup-section2 .bottom h4 {
+    font-size: 14px;
+    font-family: "poppinsbold";
+    margin-bottom: 10px;
+}
+#popup-section2 .bottom ul {
+    height: 140px;
+    overflow-x: scroll;
+}
+#popup-section2 .bottom li {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 20px;
+    margin-bottom: 10px;
+}
+
+/* Loader form */
+.popup-bg {
+    background: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+}
+
+.popup-box {
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 1000;
+}
+.preloader .plc-path {
+    stroke: #009688;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+.plc-path {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    stroke-linecap: round;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    fill: none;
+}
+
+.preloader.pls-teal .plc-path {
+    stroke: #009688;
+}
+
+.preloader.pls-gray .plc-path {
+    stroke: #9e9e9e;
+}
+
+.preloader.pls-pink .plc-path {
+    stroke: #e91e63;
+}
+
+.preloader.pls-purple .plc-path {
+    stroke: #9c27b0;
+}
+
+.preloader.pls-white .plc-path {
+    stroke: #fff;
+}
+.preloader {
+    position: relative;
+    margin: 0px auto;
+    display: inline-block;
+}
+
+.preloader:not([class*="pl-"]) {
+    width: 40px;
+}
+
+.preloader:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+
+.preloader.pl-xs {
+    width: 20px;
+}
+
+.preloader.pl-sm {
+    width: 30px;
+}
+
+.preloader.pl-lg {
+    width: 50px;
+}
+
+.preloader.pl-xl {
+    width: 80px;
+}
+
+.preloader.pl-xxl {
+    width: 100px;
+}
+
+.preloader:not([class*="pls-"]) .plc-path {
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+}
+
+.preloader[class*="pls-"] .plc-path {
+    animation: dash 1.5s ease-in-out infinite;
+}
+
+.preloader.pls-red .plc-path {
+    stroke: #f44336;
+}
+
+.preloader.pls-blue .plc-path {
+    stroke: #2196f3;
+}
+
+.preloader.pls-green .plc-path {
+    stroke: #4caf50;
+}
+
+.preloader.pls-yellow .plc-path {
+    stroke: #ffeb3b;
+}
+
+.preloader.pls-bluegray .plc-path {
+    stroke: #607d8b;
+}
+
+.preloader.pls-amber .plc-path {
+    stroke: #ffc107;
+}
+html:not(.ismobile) .page-loader .preloader {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.pl-circular {
+    animation: rotate 2s linear infinite;
+    height: 100%;
+    transform-origin: center center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+    }
+
+    100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+    }
+}
+
+@keyframes color {
+    100%,
+    0% {
+        stroke: #f44336;
+    }
+
+    40% {
+        stroke: #2196f3;
+    }
+
+    66% {
+        stroke: #4caf50;
+    }
+
+    80%,
+    90% {
+        stroke: #ffc107;
+    }
+}
+
+/* End loader style */
+
+.popupbg {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 10001;
+    background: rgba(0, 0, 0, 0.7);
+}
+.popup {
+    position: absolute;
+    width: 300px;
+    height: 115px;
+    background: #fff;
+    border-radius: 4px;
+    moz-box-shadow: 0 1px 11px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 1px 11px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 11px rgba(0, 0, 0, 0.2);
+    z-index: 10002;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    padding: 15px;
+    margin: auto;
+}
+.popup .top {
+    color: #000;
+    font-size: 20px;
+    text-align: left;
+}
+.popup .bottom p {
+    display: block;
+    margin-top: 10px;
+    margin-right: 2%;
+}
+.popup .bottom span.cancel {
+    float: right;
+    padding: 7px 25px;
+    border-radius: 25px;
+    border: 1px solid #1fac8a;
+    color: #1fac8a;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+#cashback_code {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    left: 0;
+    right: 0;
+    width: calc(100% - 20px);
+    height: 300px;
+    background: #fff;
+    border-radius: 10px;
+    z-index: 10001;
+    display: none;
+    transition: all 1s ease-in-out;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+#cashback_code.open {
+    display: block;
+}
+#cashback_code .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 20px;
+    font-family: "poppinsbold";
+    cursor: pointer;
+}
+#cashback_code .top {
+    height: 150px;
+    background: #ffeac4;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#cashback_code .top img {
+    display: block;
+    width: 80px;
+}
+#cashback_code .bottom {
+    padding: 20px 0;
+    text-align: center;
+}
+#cashback_code .bottom h3 {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+#cashback_code .bottom span.code {
+    font-size: 36px;
+    font-family: "poppinsbold";
+}
